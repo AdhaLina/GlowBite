@@ -2,22 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GlowBite">
+<meta name="theme-color" content="#C44DFF">
+<meta name="format-detection" content="telephone=no">
 <title>GlowBite — Foods for Glowing Skin</title>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--purple:#C44DFF;--pink:#FF6B9D;--blue:#4D79FF;--green:#00C851;--teal:#00B5AD;--bg:#f5f0ff}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:#333}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:#333;overscroll-behavior-y:none;padding-bottom:env(safe-area-inset-bottom)}
+button,input,select{font-size:16px}
 
 /* HEADER */
-.header{background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);padding:2.2rem 1rem 1.8rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+.header{background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);padding:calc(2.2rem + env(safe-area-inset-top)) 1rem 1.8rem;text-align:center;color:#fff;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,.08);border-radius:50%;top:-100px;left:-80px}
 .header::after{content:'';position:absolute;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%;bottom:-60px;right:-40px}
 .header h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;letter-spacing:-1px;margin-bottom:.3rem;position:relative}
 .header p{font-size:clamp(.88rem,2.5vw,1.05rem);opacity:.88;position:relative}
 
 /* MAIN NAV */
-.main-nav{background:#fff;display:flex;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);position:sticky;top:0;z-index:300;overflow-x:auto}
+.main-nav{background:#fff;display:flex;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);position:sticky;top:0;z-index:300;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .nav-btn{padding:.85rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:700;color:#aaa;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
 .nav-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
 
@@ -29,7 +36,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height
 .ctrl-inner{max-width:1200px;margin:0 auto}
 .search-bar{display:flex;align-items:center;background:var(--bg);border-radius:50px;padding:.5rem 1rem;margin-bottom:.65rem;border:2px solid transparent;transition:border-color .2s}
 .search-bar:focus-within{border-color:var(--purple)}
-.search-bar input{border:none;background:none;width:100%;font-size:.92rem;outline:none;color:#333}
+.search-bar input{border:none;background:none;width:100%;font-size:16px;outline:none;color:#333}
 .search-icon{margin-right:.5rem}
 .filter-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
 .filter-label{font-size:.78rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px}
@@ -121,7 +128,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height
 /* FOOD MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
 .overlay.open{opacity:1;visibility:visible}
-.modal{background:#fff;border-radius:22px;max-width:560px;width:100%;max-height:91vh;overflow-y:auto;transform:translateY(20px) scale(.96);transition:transform .28s;scrollbar-width:thin}
+.modal{background:#fff;border-radius:22px;max-width:560px;width:100%;max-height:91vh;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateY(20px) scale(.96);transition:transform .28s;scrollbar-width:thin;padding-bottom:env(safe-area-inset-bottom)}
 .overlay.open .modal{transform:translateY(0) scale(1)}
 .modal-head{padding:1.8rem 1.4rem 1.4rem;text-align:center;position:relative;color:#fff}
 .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.22);border:none;width:32px;height:32px;border-radius:50%;font-size:.95rem;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
@@ -194,7 +201,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height
 .rem-form{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);padding:1.1rem;margin-bottom:1.4rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end}
 .rem-field{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:140px}
 .rem-field label{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa}
-.rem-field input,.rem-field select{border:2px solid #eee;border-radius:10px;padding:.55rem .7rem;font-size:.88rem;font-family:inherit;outline:none;transition:border-color .2s}
+.rem-field input,.rem-field select{border:2px solid #eee;border-radius:10px;padding:.55rem .7rem;font-size:16px;font-family:inherit;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
 .rem-field input:focus,.rem-field select:focus{border-color:var(--purple)}
 .rem-add-btn{background:linear-gradient(135deg,#FF6B9D,#C44DFF);color:#fff;border:none;border-radius:10px;padding:.6rem 1.2rem;font-weight:800;font-size:.85rem;cursor:pointer;transition:transform .15s}
 .rem-add-btn:hover{transform:translateY(-2px)}

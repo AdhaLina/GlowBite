@@ -8,6 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="GlowBite">
 <meta name="theme-color" content="#C44DFF">
 <meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <title>GlowBite — Foods for Glowing Skin</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -1547,6 +1550,10 @@ renderConcernFilter();
 renderMeals();
 renderReminders();
 updateNotifyNote();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
+}
 </script>
 </body>
 </html>

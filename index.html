@@ -189,6 +189,26 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height
 .skin-benefit-box{background:linear-gradient(135deg,#f5eeff,#fff0f8);border-radius:13px;padding:.9rem;margin-top:.5rem;font-size:.83rem;color:#555;line-height:1.65}
 .skin-benefit-box strong{color:var(--purple)}
 
+/* REMINDERS SECTION */
+.reminders-wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.rem-form{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);padding:1.1rem;margin-bottom:1.4rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end}
+.rem-field{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:140px}
+.rem-field label{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa}
+.rem-field input,.rem-field select{border:2px solid #eee;border-radius:10px;padding:.55rem .7rem;font-size:.88rem;font-family:inherit;outline:none;transition:border-color .2s}
+.rem-field input:focus,.rem-field select:focus{border-color:var(--purple)}
+.rem-add-btn{background:linear-gradient(135deg,#FF6B9D,#C44DFF);color:#fff;border:none;border-radius:10px;padding:.6rem 1.2rem;font-weight:800;font-size:.85rem;cursor:pointer;transition:transform .15s}
+.rem-add-btn:hover{transform:translateY(-2px)}
+.rem-notify-note{font-size:.76rem;color:#aaa;text-align:center;margin-bottom:1rem}
+.rem-list{display:flex;flex-direction:column;gap:.7rem}
+.rem-card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);padding:.85rem 1rem;display:flex;align-items:center;gap:.8rem}
+.rem-emoji{font-size:1.6rem;flex-shrink:0}
+.rem-info{flex:1;min-width:0}
+.rem-text{font-weight:700;font-size:.92rem;color:#333}
+.rem-meta{font-size:.76rem;color:#999;margin-top:.15rem}
+.rem-del{background:#fdf0f5;color:#d63a8a;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.85rem;flex-shrink:0}
+.rem-empty{text-align:center;padding:2.5rem 1rem;color:#aaa}
+.rem-empty .nre{font-size:2.5rem;margin-bottom:.6rem}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   .phase-grid{grid-template-columns:repeat(2,1fr)}
@@ -219,6 +239,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height
   <button class="nav-btn" onclick="switchSection('period',this)">🌙 Period Guide</button>
   <button class="nav-btn" onclick="switchSection('masks',this)">🧖 Face Masks</button>
   <button class="nav-btn" onclick="switchSection('meals',this)">🍽️ Meal Ideas</button>
+  <button class="nav-btn" onclick="switchSection('reminders',this)">⏰ Reminders</button>
 </nav>
 
 <!-- FOODS -->
@@ -282,6 +303,36 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height
     </div>
     <div class="concern-row" id="concernRow"></div>
     <div class="meal-grid" id="mealGrid"></div>
+  </div>
+</div>
+
+<!-- REMINDERS -->
+<div class="section" id="sec-reminders">
+  <div class="reminders-wrap">
+    <div class="sec-hero">
+      <h2>⏰ Glow Reminders</h2>
+      <p>Set daily reminders to eat, hydrate or apply your skincare ritual</p>
+    </div>
+    <div class="rem-form">
+      <div class="rem-field" style="flex:2">
+        <label>Reminder</label>
+        <input type="text" id="remText" placeholder="e.g. Drink water, Apply face mask…" autocomplete="off">
+      </div>
+      <div class="rem-field" style="flex:0 0 110px">
+        <label>Time</label>
+        <input type="time" id="remTime">
+      </div>
+      <div class="rem-field" style="flex:0 0 120px">
+        <label>Repeat</label>
+        <select id="remRepeat">
+          <option value="daily">Daily</option>
+          <option value="once">Once</option>
+        </select>
+      </div>
+      <button class="rem-add-btn" onclick="addReminder()">+ Add</button>
+    </div>
+    <p class="rem-notify-note" id="remNotifyNote"></p>
+    <div class="rem-list" id="remList"></div>
   </div>
 </div>
 
@@ -1385,6 +1436,83 @@ function openMealModal(id){
 function closeMealModal(){document.getElementById('mealOverlay').classList.remove('open');document.body.style.overflow='';}
 
 /* ══════════════════════════════════════
+   REMINDERS
+══════════════════════════════════════ */
+let reminders=JSON.parse(localStorage.getItem('glowbiteReminders')||'[]');
+const remFiredToday={};
+
+function saveReminders(){localStorage.setItem('glowbiteReminders',JSON.stringify(reminders));}
+
+function addReminder(){
+  const text=document.getElementById('remText').value.trim();
+  const time=document.getElementById('remTime').value;
+  const repeat=document.getElementById('remRepeat').value;
+  if(!text||!time)return;
+  reminders.push({id:Date.now(),text,time,repeat});
+  saveReminders();
+  document.getElementById('remText').value='';
+  document.getElementById('remTime').value='';
+  renderReminders();
+  if('Notification' in window && Notification.permission==='default'){Notification.requestPermission();}
+}
+
+function deleteReminder(id){
+  reminders=reminders.filter(r=>r.id!==id);
+  saveReminders();
+  renderReminders();
+}
+
+function renderReminders(){
+  const list=document.getElementById('remList');
+  if(!reminders.length){
+    list.innerHTML='<div class="rem-empty"><div class="nre">⏰</div><h3>No reminders yet</h3><p>Add one above to stay consistent with your glow routine.</p></div>';
+    return;
+  }
+  const sorted=[...reminders].sort((a,b)=>a.time.localeCompare(b.time));
+  list.innerHTML=sorted.map(r=>`
+    <div class="rem-card">
+      <span class="rem-emoji">${r.repeat==='daily'?'🔁':'⏰'}</span>
+      <div class="rem-info">
+        <div class="rem-text">${r.text}</div>
+        <div class="rem-meta">${r.time} · ${r.repeat==='daily'?'Repeats daily':'One-time'}</div>
+      </div>
+      <button class="rem-del" onclick="deleteReminder(${r.id})">✕</button>
+    </div>`).join('');
+}
+
+function checkReminders(){
+  const now=new Date();
+  const hhmm=now.toTimeString().slice(0,5);
+  const todayKey=now.toDateString();
+  reminders.forEach(r=>{
+    if(r.time!==hhmm)return;
+    const fireKey=r.id+'_'+todayKey;
+    if(remFiredToday[fireKey])return;
+    remFiredToday[fireKey]=true;
+    if('Notification' in window && Notification.permission==='granted'){
+      new Notification('✨ GlowBite Reminder',{body:r.text});
+    }else{
+      alert('✨ GlowBite Reminder: '+r.text);
+    }
+    if(r.repeat==='once'){
+      reminders=reminders.filter(x=>x.id!==r.id);
+      saveReminders();
+      renderReminders();
+    }
+  });
+}
+
+function updateNotifyNote(){
+  const note=document.getElementById('remNotifyNote');
+  if(!('Notification' in window)){note.textContent='Browser notifications are not supported here — reminders will show as alerts.';return;}
+  if(Notification.permission==='granted'){note.textContent='🔔 Browser notifications are enabled.';}
+  else if(Notification.permission==='denied'){note.textContent='🔕 Notifications are blocked — reminders will show as alerts instead.';}
+  else{note.textContent='Allow notifications when prompted so reminders can alert you even on another tab.';}
+}
+
+setInterval(checkReminders,1000*30);
+
+/* ══════════════════════════════════════
    EVENTS
 ══════════════════════════════════════ */
 document.getElementById('searchInput').addEventListener('input',e=>{query=e.target.value;renderFoods();});
@@ -1404,6 +1532,8 @@ renderSkinTypeFilter();
 renderMasks();
 renderConcernFilter();
 renderMeals();
+renderReminders();
+updateNotifyNote();
 </script>
 </body>
 </html>

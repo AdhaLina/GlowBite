@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlowBite — Foods for Glowing Skin</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--purple:#C44DFF;--pink:#FF6B9D;--blue:#4D79FF;--green:#00C851;--teal:#00B5AD;--bg:#f5f0ff}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:#333}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);padding:2.2rem 1rem 1.8rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,.08);border-radius:50%;top:-100px;left:-80px}
+.header::after{content:'';position:absolute;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%;bottom:-60px;right:-40px}
+.header h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;letter-spacing:-1px;margin-bottom:.3rem;position:relative}
+.header p{font-size:clamp(.88rem,2.5vw,1.05rem);opacity:.88;position:relative}
+
+/* MAIN NAV */
+.main-nav{background:#fff;display:flex;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);position:sticky;top:0;z-index:300;overflow-x:auto}
+.nav-btn{padding:.85rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:700;color:#aaa;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
+
+/* SECTIONS */
+.section{display:none}.section.active{display:block}
+
+/* FOOD CONTROLS */
+.foods-controls{background:#fff;padding:.8rem 1rem;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.ctrl-inner{max-width:1200px;margin:0 auto}
+.search-bar{display:flex;align-items:center;background:var(--bg);border-radius:50px;padding:.5rem 1rem;margin-bottom:.65rem;border:2px solid transparent;transition:border-color .2s}
+.search-bar:focus-within{border-color:var(--purple)}
+.search-bar input{border:none;background:none;width:100%;font-size:.92rem;outline:none;color:#333}
+.search-icon{margin-right:.5rem}
+.filter-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.filter-label{font-size:.78rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px}
+.toggle-wrap{display:flex;align-items:center;gap:.4rem;cursor:pointer;user-select:none}
+.toggle-label-text{font-size:.86rem;font-weight:600;color:#555}
+.toggle{position:relative;width:44px;height:23px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:#ddd;border-radius:23px;cursor:pointer;transition:background .25s}
+.toggle-slider::before{content:'';position:absolute;width:17px;height:17px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:var(--green)}
+.toggle.halal input:checked+.toggle-slider{background:var(--teal)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(21px)}
+.divider{width:1px;height:18px;background:#e5e5e5}
+
+/* FOOD GRID */
+.main-pad{max-width:1200px;margin:0 auto;padding:1.3rem 1rem 3rem}
+.results-count{font-size:.82rem;color:#999;margin-bottom:.9rem}
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.food-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.food-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
+.card-banner{height:105px;display:flex;align-items:center;justify-content:center;font-size:3.3rem}
+.card-body{padding:.9rem;flex:1}
+.card-name{font-size:1.08rem;font-weight:800;margin-bottom:.3rem}
+.card-desc{font-size:.8rem;color:#666;line-height:1.5;margin-bottom:.65rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-tags{display:flex;gap:.3rem;flex-wrap:wrap}
+.tag{padding:.16rem .5rem;border-radius:50px;font-size:.7rem;font-weight:700}
+.tag-cat{background:#f0e8ff;color:#8B2FC9}
+.tag-veg{background:#e6f9ee;color:#00943b}
+.tag-halal{background:#e0f5f5;color:#007a75}
+.card-footer{padding:.6rem .9rem;border-top:1px solid #f3f3f3;display:flex;justify-content:space-between;align-items:center}
+.card-hint{font-size:.75rem;color:#bbb}
+.card-cta{font-size:.78rem;color:var(--purple);font-weight:700}
+.no-results{grid-column:1/-1;text-align:center;padding:3.5rem 1rem;color:#aaa}
+.no-results .nre{font-size:2.8rem;margin-bottom:.8rem}
+.no-results h3{font-size:1.1rem;color:#888}
+
+/* PERIOD SECTION */
+.period-wrap{max-width:880px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.sec-hero{text-align:center;margin-bottom:1.5rem}
+.sec-hero h2{font-size:1.5rem;font-weight:900;color:#333;margin-bottom:.25rem}
+.sec-hero p{font-size:.88rem;color:#999}
+.phase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-bottom:1.8rem}
+.phase-btn{border:none;cursor:pointer;border-radius:16px;padding:1rem .5rem;text-align:center;font-family:inherit;transition:transform .2s,box-shadow .2s;color:#fff;position:relative}
+.phase-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.14)}
+.phase-btn.sel{box-shadow:0 0 0 3px #fff,0 0 0 5px rgba(0,0,0,.25);transform:translateY(-3px)}
+.phase-moon{font-size:1.9rem;display:block;margin-bottom:.35rem}
+.phase-name{font-size:.82rem;font-weight:800;display:block}
+.phase-days{font-size:.68rem;opacity:.85;display:block;margin-top:.12rem}
+.phase-card{background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.phase-head{padding:1.4rem;color:#fff}
+.phase-head h3{font-size:1.3rem;font-weight:900;margin-bottom:.25rem}
+.phase-head p{font-size:.85rem;opacity:.92;line-height:1.6}
+.phase-body{padding:1.1rem}
+.phase-info-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:1.1rem}
+.pinfo{background:var(--bg);border-radius:13px;padding:.9rem}
+.pinfo h4{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.4rem}
+.pinfo p{font-size:.83rem;color:#555;line-height:1.6}
+.phase-rec-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.7rem}
+.phase-chips{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.phase-chip{display:flex;align-items:center;gap:.35rem;background:#fff;border-radius:50px;padding:.3rem .75rem;font-size:.8rem;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.07);border:2px solid #f0f0f0;transition:transform .15s,border-color .15s}
+.phase-chip:hover{transform:scale(1.05);border-color:var(--purple)}
+.phase-tips-box{background:var(--bg);border-radius:13px;padding:.9rem}
+.phase-tips-box h4{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.6rem}
+.phase-tips-box ul{list-style:none}
+.phase-tips-box li{padding:.3rem 0 .3rem 1.4rem;position:relative;font-size:.83rem;color:#555;line-height:1.55}
+.phase-tips-box li::before{content:'✦';position:absolute;left:0;color:var(--purple);font-size:.6rem;top:.45rem}
+.disclaimer{text-align:center;font-size:.72rem;color:#ccc;padding:.8rem 1rem 0}
+
+/* MASKS SECTION */
+.masks-wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.stype-row{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.4rem}
+.stype-btn{padding:.38rem .95rem;border-radius:50px;border:2px solid #ddd;background:#fff;cursor:pointer;font-size:.82rem;font-weight:700;color:#888;transition:all .2s}
+.stype-btn.active,.stype-btn:hover{background:var(--purple);border-color:var(--purple);color:#fff}
+.mask-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.mask-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.mask-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
+.mask-banner{height:95px;display:flex;align-items:center;justify-content:center;font-size:3rem}
+.mask-body{padding:.9rem;flex:1}
+.mask-name{font-size:1.05rem;font-weight:800;margin-bottom:.25rem}
+.mask-benefit{font-size:.78rem;color:#888;margin-bottom:.6rem}
+.mask-badges{display:flex;gap:.3rem;flex-wrap:wrap}
+.badge-skin{padding:.15rem .5rem;border-radius:50px;font-size:.68rem;font-weight:700;background:#fff0f8;color:#d63a8a}
+.badge-time{padding:.15rem .5rem;border-radius:50px;font-size:.68rem;font-weight:700;background:#f0f8ff;color:#2980b9}
+.mask-footer{padding:.6rem .9rem;border-top:1px solid #f3f3f3;display:flex;justify-content:space-between;align-items:center}
+.mask-hint{font-size:.73rem;color:#bbb}
+.mask-cta{font-size:.78rem;color:var(--purple);font-weight:700}
+
+/* FOOD MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
+.overlay.open{opacity:1;visibility:visible}
+.modal{background:#fff;border-radius:22px;max-width:560px;width:100%;max-height:91vh;overflow-y:auto;transform:translateY(20px) scale(.96);transition:transform .28s;scrollbar-width:thin}
+.overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-head{padding:1.8rem 1.4rem 1.4rem;text-align:center;position:relative;color:#fff}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.22);border:none;width:32px;height:32px;border-radius:50%;font-size:.95rem;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.modal-close:hover{background:rgba(255,255,255,.38)}
+.m-emoji{font-size:4rem;display:block;margin-bottom:.6rem;line-height:1}
+.m-name{font-size:1.7rem;font-weight:900;margin-bottom:.4rem}
+.m-tags{display:flex;justify-content:center;gap:.35rem;flex-wrap:wrap}
+.m-tags .tag{background:rgba(255,255,255,.22);color:#fff}
+.tabs{display:flex;border-bottom:2px solid #f0f0f0;padding:0 .9rem;background:#fff}
+.tab-btn{padding:.8rem .95rem;border:none;background:none;cursor:pointer;font-size:.85rem;font-weight:700;color:#bbb;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap}
+.tab-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
+.tab-content{padding:1.3rem 1.4rem 1.7rem}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.m-desc{color:#555;line-height:1.75;margin-bottom:1.3rem;font-size:.9rem}
+.sh{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#bbb;margin-bottom:.65rem}
+.blist{list-style:none}
+.blist li{padding:.35rem 0 .35rem 1.5rem;position:relative;font-size:.86rem;color:#555;line-height:1.5;border-bottom:1px solid #f8f8f8}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:900}
+.ncard{background:linear-gradient(135deg,#faf8ff,#f3eeff);border-radius:13px;padding:.9rem;margin-bottom:.65rem;border-left:4px solid var(--purple)}
+.ntop{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.3rem}
+.nname{font-weight:800;font-size:.88rem;color:#333}
+.namount{font-size:.7rem;background:var(--purple);color:#fff;padding:.12rem .5rem;border-radius:50px;white-space:nowrap;flex-shrink:0}
+.nskin{font-size:.8rem;color:#666;line-height:1.5}
+.scard{display:flex;align-items:flex-start;gap:.8rem;padding:.9rem;background:linear-gradient(135deg,#fff5fb,#f5eeff);border-radius:13px;margin-bottom:.65rem}
+.sicon{font-size:1.6rem;flex-shrink:0;line-height:1}
+.stitle{font-size:.88rem;font-weight:800;margin-bottom:.25rem;color:#333}
+.sdesc{font-size:.8rem;color:#666;line-height:1.6}
+
+/* MASK MODAL */
+.mask-modal-body{padding:1.3rem 1.4rem}
+.mm-section-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#bbb;margin-bottom:.7rem}
+.ingr-list{margin-bottom:1.3rem}
+.ingr-item{display:flex;gap:.65rem;align-items:flex-start;padding:.5rem 0;border-bottom:1px solid #f5f5f5}
+.ingr-item:last-child{border-bottom:none}
+.ingr-emoji{font-size:1.25rem;flex-shrink:0}
+.ingr-item strong{font-size:.86rem;color:#333;display:block}
+.ingr-item span{font-size:.76rem;color:#aaa}
+.step-list{margin-bottom:1.2rem}
+.step-item{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid #f5f5f5}
+.step-item:last-child{border-bottom:none}
+.step-num{background:var(--purple);color:#fff;border-radius:50%;width:24px;height:24px;font-size:.75rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
+.step-text{font-size:.83rem;color:#555;line-height:1.6}
+.mask-tip{background:linear-gradient(135deg,#fff5fb,#f0e8ff);border-radius:12px;padding:.8rem;font-size:.8rem;color:#555;line-height:1.6;margin-bottom:.5rem}
+.mask-tip strong{color:var(--purple)}
+.patch-note{text-align:center;font-size:.72rem;color:#ccc;padding:.5rem 1rem .9rem}
+
+/* MEALS SECTION */
+.meals-wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.concern-row{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.4rem}
+.concern-btn{padding:.38rem .95rem;border-radius:50px;border:2px solid #ddd;background:#fff;cursor:pointer;font-size:.82rem;font-weight:700;color:#888;transition:all .2s}
+.concern-btn.active,.concern-btn:hover{background:var(--purple);border-color:var(--purple);color:#fff}
+.meal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.meal-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.meal-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
+.meal-banner{height:110px;display:flex;align-items:center;justify-content:center;font-size:3.5rem}
+.meal-body{padding:.9rem;flex:1}
+.meal-name{font-size:1.05rem;font-weight:800;margin-bottom:.25rem}
+.meal-tagline{font-size:.8rem;color:#888;margin-bottom:.65rem;line-height:1.45}
+.meal-meta{display:flex;gap:.4rem;flex-wrap:wrap}
+.badge-concern{padding:.15rem .5rem;border-radius:50px;font-size:.68rem;font-weight:700;background:#f5eeff;color:#8B2FC9}
+.meal-footer{padding:.6rem .9rem;border-top:1px solid #f3f3f3;display:flex;justify-content:space-between;align-items:center}
+.meal-hint{font-size:.75rem;color:#bbb}
+.meal-cta{font-size:.78rem;color:var(--purple);font-weight:700}
+.skin-benefit-box{background:linear-gradient(135deg,#f5eeff,#fff0f8);border-radius:13px;padding:.9rem;margin-top:.5rem;font-size:.83rem;color:#555;line-height:1.65}
+.skin-benefit-box strong{color:var(--purple)}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .phase-grid{grid-template-columns:repeat(2,1fr)}
+  .phase-info-row{grid-template-columns:1fr}
+  .food-grid,.mask-grid{grid-template-columns:repeat(2,1fr);gap:.7rem}
+  .card-banner,.mask-banner{height:80px;font-size:2.4rem}
+  .card-body,.mask-body{padding:.7rem}
+  .card-name,.mask-name{font-size:.92rem}
+  .modal,.overlay .modal{border-radius:18px}
+  .m-emoji{font-size:3rem}
+  .m-name{font-size:1.4rem}
+  .tab-content,.mask-modal-body{padding:1rem}
+  .filter-label{display:none}
+  .nav-btn{padding:.75rem .85rem;font-size:.82rem}
+}
+@media(max-width:360px){.food-grid,.mask-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>✨ GlowBite</h1>
+  <p>Discover foods that nourish your skin from within</p>
+</header>
+
+<nav class="main-nav">
+  <button class="nav-btn active" onclick="switchSection('foods',this)">🥗 Foods</button>
+  <button class="nav-btn" onclick="switchSection('period',this)">🌙 Period Guide</button>
+  <button class="nav-btn" onclick="switchSection('masks',this)">🧖 Face Masks</button>
+  <button class="nav-btn" onclick="switchSection('meals',this)">🍽️ Meal Ideas</button>
+</nav>
+
+<!-- FOODS -->
+<div class="section active" id="sec-foods">
+  <div class="foods-controls">
+    <div class="ctrl-inner">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search food, nutrient, or benefit…" autocomplete="off">
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Filter</span>
+        <label class="toggle-wrap">
+          <span class="toggle"><input type="checkbox" id="vegToggle"><span class="toggle-slider"></span></span>
+          <span class="toggle-label-text">🌿 Vegetarian</span>
+        </label>
+        <div class="divider"></div>
+        <label class="toggle-wrap">
+          <span class="toggle halal"><input type="checkbox" id="halalToggle"><span class="toggle-slider"></span></span>
+          <span class="toggle-label-text">☪️ Halal</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="main-pad">
+    <p class="results-count" id="resultsCount"></p>
+    <div class="food-grid" id="foodGrid"></div>
+  </div>
+</div>
+
+<!-- PERIOD GUIDE -->
+<div class="section" id="sec-period">
+  <div class="period-wrap">
+    <div class="sec-hero">
+      <h2>🌙 Period Guide</h2>
+      <p>Foods to support your skin &amp; health at every phase of your cycle</p>
+    </div>
+    <div class="phase-grid" id="phaseGrid"></div>
+    <div id="phaseDetail"></div>
+  </div>
+</div>
+
+<!-- FACE MASKS -->
+<div class="section" id="sec-masks">
+  <div class="masks-wrap">
+    <div class="sec-hero">
+      <h2>🧖 DIY Face Masks</h2>
+      <p>Natural, food-based masks you can make at home for glowing skin</p>
+    </div>
+    <div class="stype-row" id="stypeRow"></div>
+    <div class="mask-grid" id="maskGrid"></div>
+  </div>
+</div>
+
+<!-- MEALS -->
+<div class="section" id="sec-meals">
+  <div class="meals-wrap">
+    <div class="sec-hero">
+      <h2>🍽️ Meal Ideas</h2>
+      <p>Skin-boosting recipes built around the most powerful glow foods</p>
+    </div>
+    <div class="concern-row" id="concernRow"></div>
+    <div class="meal-grid" id="mealGrid"></div>
+  </div>
+</div>
+
+<!-- FOOD MODAL -->
+<div class="overlay" id="foodOverlay">
+  <div class="modal">
+    <div class="modal-head" id="fmHead">
+      <button class="modal-close" onclick="closeFoodModal()">✕</button>
+      <span class="m-emoji" id="fmEmoji"></span>
+      <h2 class="m-name" id="fmName"></h2>
+      <div class="m-tags" id="fmTags"></div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('ov',this)">Overview</button>
+      <button class="tab-btn" onclick="switchTab('nu',this)">Nutrients</button>
+      <button class="tab-btn" onclick="switchTab('sk',this)">Skin Benefits</button>
+    </div>
+    <div class="tab-content">
+      <div class="tab-panel active" id="tab-ov"></div>
+      <div class="tab-panel" id="tab-nu"></div>
+      <div class="tab-panel" id="tab-sk"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MASK MODAL -->
+<div class="overlay" id="maskOverlay">
+  <div class="modal">
+    <div class="modal-head" id="mmHead">
+      <button class="modal-close" onclick="closeMaskModal()">✕</button>
+      <span class="m-emoji" id="mmEmoji"></span>
+      <h2 class="m-name" id="mmName"></h2>
+      <div class="m-tags" id="mmTags"></div>
+    </div>
+    <div class="mask-modal-body" id="mmBody"></div>
+    <p class="patch-note">⚠️ Always do a patch test 24 h before applying to your face.</p>
+  </div>
+</div>
+
+<!-- MEAL MODAL -->
+<div class="overlay" id="mealOverlay">
+  <div class="modal">
+    <div class="modal-head" id="mlHead">
+      <button class="modal-close" onclick="closeMealModal()">✕</button>
+      <span class="m-emoji" id="mlEmoji"></span>
+      <h2 class="m-name" id="mlName"></h2>
+      <div class="m-tags" id="mlTags"></div>
+    </div>
+    <div class="mask-modal-body" id="mlBody"></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   FOOD DATA
+══════════════════════════════════════ */
+const foods=[
+{id:1,name:"Avocado",emoji:"🥑",category:"Fruit",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
+description:"Avocado is a creamy, nutrient-dense fruit packed with healthy fats and vitamins, used for centuries for culinary and cosmetic purposes due to its remarkable skin-nourishing properties.",
+benefits:["Deeply moisturises dry skin from within","Reduces inflammation and redness","Protects against UV-related skin damage","Promotes skin elasticity and firmness","Speeds up wound healing"],
+nutrients:[
+{name:"Vitamin E",amount:"2.1 mg",skinBenefit:"Powerful antioxidant protecting skin cell membranes from UV and oxidative damage."},
+{name:"Monounsaturated Fats",amount:"15 g",skinBenefit:"Keeps cell membranes flexible, maintaining the skin's moisture barrier and preventing water loss."},
+{name:"Vitamin C",amount:"10 mg",skinBenefit:"Essential for collagen synthesis, keeping skin firm, plump and youthful."},
+{name:"Biotin (B7)",amount:"6 mcg",skinBenefit:"Supports healthy cell turnover and prevents dry, flaky skin."},
+{name:"Potassium",amount:"485 mg",skinBenefit:"Maintains proper hydration in skin cells, preventing chronic dryness."}],
+skinBenefits:[
+{icon:"💧",title:"Deep Moisturisation",desc:"Oleic acid in avocado penetrates deep into skin layers, providing long-lasting hydration that leaves skin soft and supple."},
+{icon:"🛡️",title:"UV Protection",desc:"Carotenoids and Vitamin E reduce skin damage from sun exposure and slow down photoageing."},
+{icon:"⏳",title:"Anti-Ageing",desc:"Antioxidants neutralise free radicals responsible for fine lines and wrinkles, keeping skin looking youthful."}]},
+
+{id:2,name:"Salmon",emoji:"🐟",category:"Fish",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:false,isHalal:true,
+description:"Salmon is celebrated for its exceptional omega-3 fatty acid content. Regular consumption contributes directly to healthy, radiant skin.",
+benefits:["Reduces skin inflammation and redness","Keeps skin firm and moisturised","Helps manage acne","Promotes healthy cell membranes","Supports collagen production"],
+nutrients:[
+{name:"Omega-3 Fatty Acids",amount:"2.2 g",skinBenefit:"Reduce inflammation, strengthen the skin barrier, and keep skin plump and hydrated."},
+{name:"Astaxanthin",amount:"3.6 mg",skinBenefit:"Powerful carotenoid antioxidant improving skin elasticity and reducing UV damage."},
+{name:"Vitamin D",amount:"447 IU",skinBenefit:"Supports skin cell growth, repair and metabolism."},
+{name:"Protein",amount:"25 g",skinBenefit:"Provides amino acids essential for collagen and elastin production."},
+{name:"Selenium",amount:"36 mcg",skinBenefit:"Protects skin from oxidative damage and preserves elastin proteins."}],
+skinBenefits:[
+{icon:"🔥",title:"Anti-Inflammatory",desc:"Omega-3s are among nature's most effective anti-inflammatories, reducing acne, eczema and psoriasis."},
+{icon:"✨",title:"Natural Glow",desc:"Astaxanthin improves skin texture and moisture levels, giving skin a healthy radiance from within."},
+{icon:"🧱",title:"Skin Barrier Repair",desc:"Essential fatty acids reinforce the skin's protective barrier, preventing moisture loss."}]},
+
+{id:3,name:"Blueberries",emoji:"🫐",category:"Berry",color:"linear-gradient(135deg,#667eea,#764ba2)",isVegetarian:true,isHalal:true,
+description:"Blueberries rank among the highest antioxidant-capacity foods. Their deep colour signals an extraordinary concentration of protective compounds.",
+benefits:["Neutralises free radicals causing skin ageing","Improves skin texture and tone","Reduces hyperpigmentation","Supports collagen integrity","Brightens dull complexion"],
+nutrients:[
+{name:"Anthocyanins",amount:"163 mg",skinBenefit:"Potent antioxidants protecting skin from oxidative stress and premature ageing."},
+{name:"Vitamin C",amount:"14 mg",skinBenefit:"Boosts collagen production, brightens skin tone, and reduces dark spots."},
+{name:"Vitamin K",amount:"28 mcg",skinBenefit:"Helps reduce dark circles, bruising and discolouration."},
+{name:"Resveratrol",amount:"0.1 mg",skinBenefit:"Activates skin cell renewal and provides powerful anti-ageing effects."},
+{name:"Manganese",amount:"0.5 mg",skinBenefit:"Activates enzymes needed for collagen synthesis."}],
+skinBenefits:[
+{icon:"🌟",title:"Brightening",desc:"Vitamin C inhibits melanin production, gradually fading dark spots and evening skin tone."},
+{icon:"⏳",title:"Anti-Ageing",desc:"Anthocyanins fight oxidative damage that leads to wrinkles and loss of skin firmness."},
+{icon:"🩹",title:"Skin Repair",desc:"Supports collagen fibre production to repair damaged skin tissue."}]},
+
+{id:4,name:"Sweet Potato",emoji:"🍠",category:"Vegetable",color:"linear-gradient(135deg,#f09158,#f5d56c)",isVegetarian:true,isHalal:true,
+description:"Sweet potatoes are one of the best dietary sources of beta-carotene, giving them their vibrant orange colour and making them a powerhouse for skin health.",
+benefits:["Gives skin a natural healthy glow","Protects against sun damage","Promotes skin cell renewal","Reduces appearance of acne","Improves skin texture and tone"],
+nutrients:[
+{name:"Beta-Carotene",amount:"8509 mcg",skinBenefit:"Converts to Vitamin A, essential for skin cell production and turnover. Acts as a natural internal sunblock."},
+{name:"Vitamin C",amount:"19 mg",skinBenefit:"Stimulates collagen production and protects against oxidative stress."},
+{name:"Vitamin B6",amount:"0.3 mg",skinBenefit:"Helps regulate skin oil production and reduces inflammation linked to acne."},
+{name:"Manganese",amount:"0.5 mg",skinBenefit:"Essential mineral for collagen formation and wound healing."},
+{name:"Copper",amount:"0.2 mg",skinBenefit:"Supports melanin production and collagen formation."}],
+skinBenefits:[
+{icon:"✨",title:"Natural Glow",desc:"Beta-carotene accumulates in the skin, imparting a warm golden tone that creates a healthy, sun-kissed appearance."},
+{icon:"🛡️",title:"Sun Protection",desc:"Beta-carotene acts as an internal sunscreen supplement, reducing UV sensitivity."},
+{icon:"🔄",title:"Cell Renewal",desc:"Vitamin A accelerates skin cell turnover, revealing fresh skin and reducing blemishes."}]},
+
+{id:5,name:"Spinach",emoji:"🥬",category:"Leafy Green",color:"linear-gradient(135deg,#11998e,#38ef7d)",isVegetarian:true,isHalal:true,
+description:"Spinach provides an impressive array of vitamins and minerals crucial for skin health. Its high antioxidant content makes it one of the most skin-protective vegetables.",
+benefits:["Prevents premature skin ageing","Reduces puffiness and dark circles","Supports collagen production","Detoxifies and clarifies skin","Promotes healthy cell turnover"],
+nutrients:[
+{name:"Vitamin A",amount:"469 mcg",skinBenefit:"Regulates sebum production, promotes cell turnover, and reduces fine lines."},
+{name:"Vitamin C",amount:"28 mg",skinBenefit:"Essential for collagen biosynthesis and protection against photoageing."},
+{name:"Iron",amount:"2.7 mg",skinBenefit:"Ensures oxygen delivery to skin cells, promoting a healthy complexion."},
+{name:"Lutein & Zeaxanthin",amount:"12 mg",skinBenefit:"Protect skin from UV damage and improve skin hydration and elasticity."},
+{name:"Folate",amount:"194 mcg",skinBenefit:"Supports DNA repair in skin cells and reduces UV-induced damage."}],
+skinBenefits:[
+{icon:"🌿",title:"Detox & Clarity",desc:"Chlorophyll in spinach has detoxifying properties that purify the blood, reducing breakouts and promoting clearer skin."},
+{icon:"💎",title:"Collagen Support",desc:"High Vitamin C content makes spinach one of the best plant foods for supporting the collagen matrix."},
+{icon:"👁️",title:"Reduces Puffiness",desc:"Vitamin K and antioxidants reduce inflammation and water retention, minimising puffiness and dark circles."}]},
+
+{id:6,name:"Walnuts",emoji:"🥜",category:"Nut",color:"linear-gradient(135deg,#c79081,#dfa579)",isVegetarian:true,isHalal:true,
+description:"Walnuts are the only tree nut with a significant amount of plant-based omega-3 fatty acids, making them exceptional for maintaining a healthy, resilient skin barrier.",
+benefits:["Maintains skin's natural moisture barrier","Reduces skin inflammation","Supports wound healing","Provides essential minerals for skin enzymes","Promotes radiant skin"],
+nutrients:[
+{name:"ALA Omega-3s",amount:"2.5 g",skinBenefit:"Plant-based omega-3s that maintain the skin's lipid barrier, reducing moisture loss and inflammation."},
+{name:"Zinc",amount:"3.1 mg",skinBenefit:"Critical for wound healing, collagen production and regulating oil glands."},
+{name:"Vitamin E",amount:"0.7 mg",skinBenefit:"Antioxidant protecting skin cell membranes from oxidative damage."},
+{name:"Linoleic Acid",amount:"38 g",skinBenefit:"Essential fatty acid that forms ceramides in skin, maintaining the barrier function."},
+{name:"Selenium",amount:"4.9 mcg",skinBenefit:"Maintains skin elasticity and protects against UV-induced oxidative stress."}],
+skinBenefits:[
+{icon:"🏰",title:"Skin Barrier",desc:"Omega-3 and omega-6 fatty acids help build and maintain the skin's protective lipid barrier."},
+{icon:"🩹",title:"Healing & Repair",desc:"Zinc is essential for wound healing, helping skin recover from blemishes and inflammatory damage."},
+{icon:"💦",title:"Moisture Retention",desc:"Essential fatty acids prevent transepidermal water loss, keeping skin plump and resilient."}]},
+
+{id:7,name:"Tomatoes",emoji:"🍅",category:"Vegetable",color:"linear-gradient(135deg,#f7797d,#fbd786)",isVegetarian:true,isHalal:true,
+description:"Tomatoes are rich in lycopene, one of the most potent antioxidants in nature. Cooking increases lycopene bioavailability significantly.",
+benefits:["Provides natural UV protection","Reduces sun damage","Improves skin texture","Minimises pore appearance","Promotes skin clarity"],
+nutrients:[
+{name:"Lycopene",amount:"2573 mcg",skinBenefit:"Powerful antioxidant protecting skin from UV damage and photoageing."},
+{name:"Vitamin C",amount:"21 mg",skinBenefit:"Protects skin cells and promotes collagen synthesis."},
+{name:"Vitamin A",amount:"42 mcg",skinBenefit:"Supports skin cell turnover and helps regulate sebum production."},
+{name:"Potassium",amount:"237 mg",skinBenefit:"Maintains proper moisture levels in skin cells."},
+{name:"Biotin",amount:"4 mcg",skinBenefit:"Supports healthy skin and may help with dry skin conditions."}],
+skinBenefits:[
+{icon:"☀️",title:"Natural Sun Defence",desc:"Lycopene reduces UV-induced inflammation and acts as an internal sunscreen complement."},
+{icon:"🔬",title:"Pore Minimising",desc:"Antioxidants reduce excess sebum production and tighten pores for smoother texture."},
+{icon:"🌹",title:"Even Skin Tone",desc:"Vitamin C and lycopene fade hyperpigmentation and create a more even, glowing complexion."}]},
+
+{id:8,name:"Green Tea",emoji:"🍵",category:"Beverage",color:"linear-gradient(135deg,#43e97b,#38f9d7)",isVegetarian:true,isHalal:true,
+description:"Green tea contains unique antioxidants called catechins that provide powerful skin-protective and anti-inflammatory benefits, revered in Asian cultures for thousands of years.",
+benefits:["Reduces acne and controls excess oil","Protects against UV damage","Reduces signs of ageing","Calms inflammation and redness","Improves hydration and elasticity"],
+nutrients:[
+{name:"EGCG",amount:"200 mg",skinBenefit:"The most powerful catechin in green tea, protecting skin DNA from damage."},
+{name:"L-Theanine",amount:"20 mg",skinBenefit:"Anti-inflammatory amino acid that reduces stress-related skin flare-ups."},
+{name:"Polyphenols",amount:"300 mg",skinBenefit:"Reduce oxidative stress and inflammation in skin cells."},
+{name:"Zinc",amount:"0.5 mg",skinBenefit:"Helps regulate sebum and has antimicrobial properties for acne-prone skin."},
+{name:"Vitamin B2",amount:"0.1 mg",skinBenefit:"Supports collagen maintenance for skin firmness."}],
+skinBenefits:[
+{icon:"🌿",title:"Acne Control",desc:"EGCG reduces sebum production and fights acne-causing bacteria, excellent for oily skin."},
+{icon:"🛡️",title:"Photoprotection",desc:"Polyphenols absorb UV radiation and neutralise free radicals generated by sun exposure."},
+{icon:"😌",title:"Soothing",desc:"Anti-inflammatory compounds reduce redness and irritation associated with rosacea and eczema."}]},
+
+{id:9,name:"Dark Chocolate",emoji:"🍫",category:"Food",color:"linear-gradient(135deg,#3d2010,#a05230)",isVegetarian:true,isHalal:true,
+description:"High-quality dark chocolate (70%+ cacao) is packed with flavonoids that have remarkable benefits for skin health. One of the most pleasurable ways to nourish your skin.",
+benefits:["Increases skin hydration and density","Improves blood flow to skin","Reduces UV damage","Smoothes skin texture","Reduces skin roughness"],
+nutrients:[
+{name:"Flavanols",amount:"170 mg",skinBenefit:"Increase blood flow to skin, improving oxygen and nutrient delivery for a natural glow."},
+{name:"Magnesium",amount:"64 mg",skinBenefit:"Reduces cortisol levels that trigger breakouts."},
+{name:"Iron",amount:"3.1 mg",skinBenefit:"Ensures skin cells receive adequate oxygen."},
+{name:"Zinc",amount:"1.8 mg",skinBenefit:"Supports wound healing and regulates skin oil production."},
+{name:"Manganese",amount:"0.5 mg",skinBenefit:"Activates prolidase enzyme needed for collagen synthesis."}],
+skinBenefits:[
+{icon:"💗",title:"Improved Circulation",desc:"Flavanols increase microcirculation in the skin, delivering more nutrients for a naturally flushed glow."},
+{icon:"💦",title:"Skin Hydration",desc:"Bioactive compounds increase skin hydration and density, making skin softer and more resilient."},
+{icon:"🌟",title:"UV Resilience",desc:"Regular dark chocolate consumption has been shown to double the time before skin reddens under UV light."}]},
+
+{id:10,name:"Carrots",emoji:"🥕",category:"Vegetable",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
+description:"Carrots are famously rich in beta-carotene converted to Vitamin A by the body. A beauty food staple across cultures for skin-brightening properties.",
+benefits:["Creates a natural healthy skin glow","Protects against sun damage","Reduces acne scar appearance","Improves skin tone and texture","Supports wound healing"],
+nutrients:[
+{name:"Beta-Carotene",amount:"8285 mcg",skinBenefit:"Converts to Vitamin A, regulating skin cell growth and imparting a healthy golden glow."},
+{name:"Vitamin A",amount:"835 mcg",skinBenefit:"Essential for skin cell renewal, preventing clogged pores and reducing acne."},
+{name:"Vitamin C",amount:"5.9 mg",skinBenefit:"Supports collagen production and brightens skin tone."},
+{name:"Potassium",amount:"320 mg",skinBenefit:"Maintains skin cell hydration."},
+{name:"Biotin",amount:"6 mcg",skinBenefit:"Supports keratin production for healthy skin structure."}],
+skinBenefits:[
+{icon:"🧡",title:"Skin-Warming Glow",desc:"Beta-carotene deposits in the skin, creating a warm golden tone considered attractive across cultures."},
+{icon:"🔄",title:"Cell Renewal",desc:"Vitamin A speeds up skin cell turnover, fading acne scars, dark spots and uneven pigmentation."},
+{icon:"🛡️",title:"Environmental Shield",desc:"Antioxidants create a protective network against pollution, UV rays and environmental stressors."}]},
+
+{id:11,name:"Almonds",emoji:"🌰",category:"Nut",color:"linear-gradient(135deg,#d4a574,#c4956a)",isVegetarian:true,isHalal:true,
+description:"Almonds are an excellent source of Vitamin E, often called the 'skin vitamin.' A small handful provides most of your daily Vitamin E needs.",
+benefits:["Protects skin from oxidative damage","Maintains skin moisture and softness","Reduces skin inflammation","Supports skin barrier function","May reduce stretch marks"],
+nutrients:[
+{name:"Vitamin E",amount:"7.3 mg",skinBenefit:"Fat-soluble antioxidant protecting skin cell membranes from UV-induced ageing."},
+{name:"Biotin",amount:"49 mcg",skinBenefit:"Supports skin cell health and prevents dry, flaky skin conditions."},
+{name:"Healthy Fats",amount:"14 g",skinBenefit:"Monounsaturated fats maintain skin suppleness and help absorb fat-soluble vitamins."},
+{name:"Zinc",amount:"0.9 mg",skinBenefit:"Supports collagen synthesis and helps regulate skin inflammation."},
+{name:"Magnesium",amount:"76 mg",skinBenefit:"Reduces cortisol-related breakouts and supports restful sleep for skin repair."}],
+skinBenefits:[
+{icon:"🛡️",title:"Antioxidant Defence",desc:"Vitamin E in almonds is the primary lipid-soluble antioxidant in skin, the first line of defence against UV oxidation."},
+{icon:"💧",title:"Lasting Moisture",desc:"Healthy fats and biotin maintain skin's natural oils and prevent transepidermal water loss."},
+{icon:"🌙",title:"Night Recovery",desc:"Magnesium promotes better sleep quality, maximising the skin's overnight repair cycle."}]},
+
+{id:12,name:"Pomegranate",emoji:"🔴",category:"Fruit",color:"linear-gradient(135deg,#c0392b,#e74c3c)",isVegetarian:true,isHalal:true,
+description:"Pomegranate contains unique compounds called punicalagins with 3× the antioxidant power of red wine, making it an extraordinary anti-ageing fruit.",
+benefits:["Powerful protection against skin ageing","Promotes skin cell regeneration","Reduces hyperpigmentation","Supports collagen production","Anti-inflammatory for acne-prone skin"],
+nutrients:[
+{name:"Punicalagins",amount:"1000 mg",skinBenefit:"Unique antioxidants with 3× the power of red wine. Protect skin from free radical damage."},
+{name:"Vitamin C",amount:"17 mg",skinBenefit:"Inhibits tyrosinase to reduce melanin production and brighten hyperpigmented areas."},
+{name:"Ellagic Acid",amount:"80 mg",skinBenefit:"Protects collagen from being broken down by UV radiation."},
+{name:"Anthocyanins",amount:"70 mg",skinBenefit:"Anti-inflammatory flavonoids that reduce skin redness."},
+{name:"Folate",amount:"38 mcg",skinBenefit:"Supports DNA repair in skin cells after UV exposure."}],
+skinBenefits:[
+{icon:"⏰",title:"Anti-Ageing Powerhouse",desc:"Pomegranate activates sirtuins (longevity proteins) in skin cells, significantly slowing visible signs of ageing."},
+{icon:"🌺",title:"Brightening",desc:"Ellagic acid and Vitamin C inhibit excess melanin, fading dark spots and creating a luminous complexion."},
+{icon:"🔬",title:"Collagen Preservation",desc:"Punicalagins inhibit collagenase and elastase enzymes, preserving skin's structural proteins longer."}]},
+
+{id:13,name:"Kiwi",emoji:"🥝",category:"Fruit",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
+description:"Kiwi contains more Vitamin C per gram than oranges — one kiwi meets nearly your full daily Vitamin C needs, making it an extraordinary collagen-boosting fruit.",
+benefits:["Boosts collagen production significantly","Brightens dull tired skin","Reduces oxidative stress","Improves skin texture","Accelerates wound healing"],
+nutrients:[
+{name:"Vitamin C",amount:"92 mg",skinBenefit:"Highest concentration of Vitamin C in common fruit — essential for collagen synthesis and brightening."},
+{name:"Vitamin E",amount:"1.5 mg",skinBenefit:"Works synergistically with Vitamin C for comprehensive antioxidant protection."},
+{name:"Vitamin K",amount:"40 mcg",skinBenefit:"Reduces dark circles, bruising and dark spots."},
+{name:"Folate",amount:"25 mcg",skinBenefit:"Supports cell repair and regeneration."},
+{name:"Actinidin",amount:"present",skinBenefit:"Unique enzyme aiding protein digestion, improving absorption of skin-supporting amino acids."}],
+skinBenefits:[
+{icon:"💎",title:"Collagen Supercharger",desc:"With nearly 100% daily Vitamin C in one fruit, kiwi is one of the most effective foods for maximising collagen production."},
+{icon:"✨",title:"Instant Brightening",desc:"Vitamin C inhibits melanin synthesis and fades discolouration, creating a brighter, more even complexion."},
+{icon:"👁️",title:"Dark Circle Reduction",desc:"Vitamin K reduces dark pigmentation and visible blood vessels that cause dark circles."}]},
+
+{id:14,name:"Turmeric",emoji:"🟡",category:"Spice",color:"linear-gradient(135deg,#f7971e,#FFD700)",isVegetarian:true,isHalal:true,
+description:"Turmeric has been used in Ayurvedic medicine and Asian skincare rituals for over 4,000 years. Its active compound curcumin is one of the most studied natural anti-inflammatory agents.",
+benefits:["Reduces skin inflammation and redness","Brightens skin and reduces dark spots","Anti-acne and antibacterial","Supports wound healing","Helps with psoriasis and eczema"],
+nutrients:[
+{name:"Curcumin",amount:"200 mg",skinBenefit:"Inhibits NF-kB, the master regulator of skin inflammation, providing potent anti-inflammatory effects."},
+{name:"Vitamin C",amount:"26 mg",skinBenefit:"Supports collagen synthesis and skin brightening."},
+{name:"Iron",amount:"55 mg",skinBenefit:"Supports oxygen delivery to skin cells for a vibrant complexion."},
+{name:"Manganese",amount:"8 mg",skinBenefit:"Activates superoxide dismutase, a key antioxidant enzyme protecting skin cells."},
+{name:"Potassium",amount:"2525 mg",skinBenefit:"Supports cellular hydration and skin barrier function."}],
+skinBenefits:[
+{icon:"🔥",title:"Inflammation Fighter",desc:"Curcumin blocks inflammatory pathways in skin cells, relieving acne, eczema, psoriasis and general redness."},
+{icon:"🌟",title:"Skin Brightening",desc:"Traditional turmeric masks brighten skin across South Asia. Curcumin inhibits melanin production and evens tone."},
+{icon:"🔬",title:"Wound Healing",desc:"Curcumin accelerates healing by modulating collagen production, reducing cytokines and promoting new blood vessels."}]},
+
+{id:15,name:"Broccoli",emoji:"🥦",category:"Vegetable",color:"linear-gradient(135deg,#134e5e,#71b280)",isVegetarian:true,isHalal:true,
+description:"Broccoli contains sulforaphane, a unique compound that activates the body's own antioxidant defence systems — a different mechanism to most antioxidant foods.",
+benefits:["Activates internal antioxidant defences","Comprehensive vitamin support for skin","Reduces UV-induced skin damage","Supports collagen production","Promotes skin detoxification"],
+nutrients:[
+{name:"Sulforaphane",amount:"73 mg",skinBenefit:"Activates the Nrf2 pathway — the body's master antioxidant switch — providing long-lasting UV protection."},
+{name:"Vitamin C",amount:"89 mg",skinBenefit:"High concentration supports robust collagen synthesis."},
+{name:"Vitamin K",amount:"102 mcg",skinBenefit:"Supports skin repair and reduces discolouration."},
+{name:"Vitamin A",amount:"31 mcg",skinBenefit:"Regulates skin cell turnover and sebum production."},
+{name:"Glucoraphanin",amount:"present",skinBenefit:"Precursor to sulforaphane, supports skin cell detoxification enzymes."}],
+skinBenefits:[
+{icon:"⚡",title:"Antioxidant Activation",desc:"Sulforaphane activates your body's own antioxidant production system, providing sustained protection for hours."},
+{icon:"☀️",title:"UV Damage Reduction",desc:"Research shows sulforaphane reduces UV-induced redness by up to 37% when consumed regularly."},
+{icon:"🔍",title:"Skin Detox",desc:"Cruciferous compounds activate liver enzymes that eliminate toxins and hormones linked to skin breakouts."}]},
+
+{id:16,name:"Sunflower Seeds",emoji:"🌻",category:"Seed",color:"linear-gradient(135deg,#f6d365,#fda085)",isVegetarian:true,isHalal:true,
+description:"Sunflower seeds are among the richest plant sources of Vitamin E. A single ounce provides nearly all of your daily Vitamin E requirement.",
+benefits:["Maximum Vitamin E skin protection","Maintains skin barrier integrity","Reduces skin inflammation","Supports collagen preservation","Anti-ageing from within"],
+nutrients:[
+{name:"Vitamin E",amount:"7.4 mg",skinBenefit:"Among the highest plant sources — protects skin lipids from oxidation and maintains membrane integrity."},
+{name:"Linoleic Acid",amount:"6.7 g",skinBenefit:"Essential omega-6 fatty acid forming the skin's ceramide barrier, preventing moisture loss."},
+{name:"Selenium",amount:"14 mcg",skinBenefit:"Preserves skin elasticity by protecting elastin proteins from degradation."},
+{name:"Zinc",amount:"1.4 mg",skinBenefit:"Regulates sebum production and supports wound healing."},
+{name:"Copper",amount:"0.5 mg",skinBenefit:"Essential for melanin synthesis and collagen cross-linking."}],
+skinBenefits:[
+{icon:"🌟",title:"Antioxidant Shield",desc:"Concentrated Vitamin E provides exceptional protection against lipid peroxidation in skin cell membranes."},
+{icon:"🏗️",title:"Ceramide Building Block",desc:"Linoleic acid is the key fatty acid in skin ceramides — the 'mortar' between skin cells maintaining the barrier."},
+{icon:"⚖️",title:"Oil Balance",desc:"Zinc helps normalise sebum production, benefiting both dry and oily acne-prone skin."}]},
+
+{id:17,name:"Chickpeas",emoji:"🫘",category:"Legume",color:"linear-gradient(135deg,#f5d367,#e4a94a)",isVegetarian:true,isHalal:true,
+description:"Chickpeas provide an excellent combination of protein, fibre and skin-supportive minerals, central to Middle Eastern, South Asian and Mediterranean cuisines.",
+benefits:["Supports collagen production with protein","Regulates hormones affecting skin","Provides zinc for clear skin","Reduces skin inflammation","Supports skin microbiome health"],
+nutrients:[
+{name:"Protein",amount:"14.5 g",skinBenefit:"Provides amino acids (glycine, proline) that are the building blocks of collagen and elastin."},
+{name:"Zinc",amount:"2.5 mg",skinBenefit:"Essential for wound healing, acne management and collagen synthesis."},
+{name:"Manganese",amount:"1.7 mg",skinBenefit:"Activates prolidase enzyme needed to synthesise collagen."},
+{name:"Folate",amount:"172 mcg",skinBenefit:"Essential for DNA repair in skin cells after UV damage."},
+{name:"Vitamin B6",amount:"0.5 mg",skinBenefit:"Regulates hormonal activity that can trigger acne."}],
+skinBenefits:[
+{icon:"🏗️",title:"Collagen Foundation",desc:"The amino acid profile provides all building blocks for collagen and elastin synthesis."},
+{icon:"🎯",title:"Hormonal Acne Defence",desc:"Zinc and B6 regulate hormones and sebum production, beneficial for hormonal acne sufferers."},
+{icon:"🌿",title:"Gut-Skin Axis",desc:"High fibre nourishes gut bacteria, supporting the gut-skin connection for clearer, calmer skin."}]},
+
+{id:18,name:"Olive Oil",emoji:"🫒",category:"Oil",color:"linear-gradient(135deg,#a8e063,#56ab2f)",isVegetarian:true,isHalal:true,
+description:"Olive oil is the cornerstone of the Mediterranean diet and has been used for skincare for thousands of years. Its high oleic acid and rich polyphenol content make it exceptional for skin.",
+benefits:["Deeply moisturises skin","Reduces oxidative damage","Anti-inflammatory effects","Supports skin barrier","Reduces visible fine lines"],
+nutrients:[
+{name:"Oleic Acid",amount:"73 g",skinBenefit:"Mimics skin's natural sebum, penetrating deeply to hydrate and maintain the skin barrier."},
+{name:"Squalene",amount:"100 mg",skinBenefit:"Powerful antioxidant that protects skin from UV damage and free radicals."},
+{name:"Vitamin E",amount:"14 mg",skinBenefit:"Highest Vitamin E of any cooking oil — protects skin cell membranes."},
+{name:"Oleuropein",amount:"4 mg",skinBenefit:"Anti-inflammatory compound that reduces skin redness and irritation."},
+{name:"Vitamin K",amount:"60 mcg",skinBenefit:"Supports skin repair and reduces dark spots."}],
+skinBenefits:[
+{icon:"🛡️",title:"Skin Barrier",desc:"Oleic acid replenishes the skin's lipid barrier, reducing moisture loss and protecting against environmental damage."},
+{icon:"⏳",title:"Anti-Ageing",desc:"Squalene is a natural component of skin sebum, declining with age — replenishing it reduces signs of ageing."},
+{icon:"💧",title:"Deep Moisture",desc:"Penetrates skin more deeply than many creams, providing lasting hydration for dry and mature skin."}]},
+
+{id:19,name:"Red Bell Pepper",emoji:"🫑",category:"Vegetable",color:"linear-gradient(135deg,#f7797d,#fbd786)",isVegetarian:true,isHalal:true,
+description:"Red bell peppers contain nearly 3× more Vitamin C than oranges, making them one of the most powerful skin-brightening and collagen-boosting vegetables available.",
+benefits:["Boosts collagen production powerfully","Brightens skin tone","Reduces fine lines","Protects against sun damage","Evens skin tone"],
+nutrients:[
+{name:"Vitamin C",amount:"190 mg",skinBenefit:"Highest Vitamin C of any common vegetable — crucial for collagen synthesis and brightening."},
+{name:"Beta-Carotene",amount:"1624 mcg",skinBenefit:"Converts to Vitamin A in body, promoting skin cell renewal and protecting against sun damage."},
+{name:"Capsanthin",amount:"1500 mcg",skinBenefit:"Carotenoid pigment with powerful antioxidant properties that protect against UV damage."},
+{name:"Vitamin B6",amount:"0.4 mg",skinBenefit:"Regulates skin oil production and reduces hormone-related breakouts."},
+{name:"Folate",amount:"46 mcg",skinBenefit:"Supports DNA repair in skin cells exposed to environmental stressors."}],
+skinBenefits:[
+{icon:"💎",title:"Collagen Powerhouse",desc:"190 mg Vitamin C per 100g makes red bell pepper one of the most effective foods for collagen synthesis."},
+{icon:"✨",title:"Brightening",desc:"Combination of Vitamin C and carotenoids inhibits melanin production and fades dark spots progressively."},
+{icon:"🛡️",title:"UV Shield",desc:"Capsanthin and beta-carotene provide internal photoprotection, complementing your daily SPF."}]},
+
+{id:20,name:"Papaya",emoji:"🍈",category:"Tropical Fruit",color:"linear-gradient(135deg,#f7971e,#f5576c)",isVegetarian:true,isHalal:true,
+description:"Papaya contains a unique enzyme called papain that acts as a natural exfoliant, breaking down dead skin cells to reveal fresher, brighter skin. Used in tropical cultures as a beauty treatment for centuries.",
+benefits:["Natural chemical exfoliation","Brightens dull skin","Reduces dark spots","Softens skin texture","Anti-ageing properties"],
+nutrients:[
+{name:"Papain (enzyme)",amount:"present",skinBenefit:"Proteolytic enzyme that breaks down dead skin cells, acting as a natural gentle chemical exfoliant."},
+{name:"Vitamin C",amount:"62 mg",skinBenefit:"Promotes collagen synthesis and helps fade hyperpigmentation."},
+{name:"Beta-Carotene",amount:"274 mcg",skinBenefit:"Converts to Vitamin A to support skin cell renewal."},
+{name:"Vitamin E",amount:"0.7 mg",skinBenefit:"Antioxidant protection for skin cells."},
+{name:"Chymopapain",amount:"present",skinBenefit:"Enzyme that reduces inflammation and may help with eczema and psoriasis."}],
+skinBenefits:[
+{icon:"🔄",title:"Natural Exfoliation",desc:"Papain enzyme gently dissolves the protein bonds holding dead skin cells together, revealing brighter skin beneath."},
+{icon:"🌟",title:"Brightening",desc:"Regular consumption reduces dullness; papain and Vitamin C together tackle hyperpigmentation effectively."},
+{icon:"⏳",title:"Anti-Ageing",desc:"Enzymes and antioxidants work together to improve skin texture, reduce fine lines and promote cell renewal."}]},
+
+{id:21,name:"Ginger",emoji:"🫚",category:"Root",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
+description:"Ginger has been used medicinally for over 2,000 years across Asian cultures. Its active compounds gingerols and shogaols make it one of the most powerful natural anti-inflammatory foods.",
+benefits:["Reduces skin inflammation","Evens skin tone","Antibacterial properties","Improves circulation for better complexion","Anti-ageing effects"],
+nutrients:[
+{name:"Gingerols",amount:"1.5 g",skinBenefit:"Bioactive compounds with potent anti-inflammatory and antioxidant properties."},
+{name:"Shogaols",amount:"0.5 g",skinBenefit:"Even more potent antioxidants than gingerols; form when ginger is dried or cooked."},
+{name:"Magnesium",amount:"43 mg",skinBenefit:"Supports cellular energy production and reduces cortisol-related breakouts."},
+{name:"Potassium",amount:"415 mg",skinBenefit:"Supports skin cell hydration and electrolyte balance."},
+{name:"Vitamin C",amount:"5 mg",skinBenefit:"Contributes to antioxidant defence and collagen support."}],
+skinBenefits:[
+{icon:"🔥",title:"Anti-Inflammatory",desc:"Gingerols directly block inflammatory pathways, providing relief for acne, redness and inflammatory skin conditions."},
+{icon:"💗",title:"Circulation Boost",desc:"Improves blood microcirculation in the skin, delivering more oxygen and nutrients for a natural glow."},
+{icon:"🦠",title:"Antibacterial",desc:"Natural antibacterial properties help fight acne-causing bacteria on the skin and in the gut."}]},
+
+{id:22,name:"Cucumber",emoji:"🥒",category:"Vegetable",color:"linear-gradient(135deg,#11998e,#38ef7d)",isVegetarian:true,isHalal:true,
+description:"Cucumber is 95% water, making it one of the most hydrating foods you can eat. Consuming it provides remarkable skin benefits from the inside out.",
+benefits:["Deeply hydrates skin from within","Reduces puffiness and dark circles","Cooling and soothing effect","Detoxifying properties","Reduces skin oiliness"],
+nutrients:[
+{name:"Water",amount:"95%",skinBenefit:"Exceptionally high water content makes cucumbers uniquely hydrating for skin cells."},
+{name:"Silica",amount:"10 mg",skinBenefit:"Trace mineral essential for collagen formation and maintaining skin elasticity."},
+{name:"Vitamin K",amount:"16 mcg",skinBenefit:"Reduces dark circles and discolouration in skin."},
+{name:"Caffeic Acid",amount:"present",skinBenefit:"Antioxidant that soothes irritated skin and reduces water retention."},
+{name:"Cucurbitacins",amount:"present",skinBenefit:"Anti-inflammatory compounds that reduce skin puffiness and redness."}],
+skinBenefits:[
+{icon:"💧",title:"Skin Hydration",desc:"95% water content helps maintain skin turgor and prevents dehydration-related dullness and fine lines."},
+{icon:"👁️",title:"De-Puffing",desc:"Cucurbitacins and Vitamin K reduce inflammation and water retention, minimising puffiness especially around the eyes."},
+{icon:"🌿",title:"Soothing",desc:"Natural anti-inflammatory compounds soothe redness, irritation and heat-stressed skin from within."}]},
+
+{id:23,name:"Eggs",emoji:"🥚",category:"Protein",color:"linear-gradient(135deg,#f7d365,#f5a623)",isVegetarian:true,isHalal:true,
+description:"Eggs are one of nature's most complete foods, providing all essential amino acids needed for skin protein synthesis and a unique combination of nutrients for skin structure and repair.",
+benefits:["Supports collagen and elastin production","Provides biotin for healthy skin","Maintains skin barrier function","Reduces skin inflammation","Promotes skin cell repair"],
+nutrients:[
+{name:"High-Quality Protein",amount:"13 g",skinBenefit:"Provides all essential amino acids including glycine and proline, the building blocks of collagen."},
+{name:"Biotin (B7)",amount:"10 mcg",skinBenefit:"Essential B vitamin for healthy skin cell turnover and preventing dry, flaky skin."},
+{name:"Lutein & Zeaxanthin",amount:"1.3 mg",skinBenefit:"Carotenoids that protect skin from blue light and UV damage."},
+{name:"Selenium",amount:"15 mcg",skinBenefit:"Preserves skin elasticity and fights oxidative damage."},
+{name:"Choline",amount:"250 mg",skinBenefit:"Maintains cell membrane integrity for a healthy, functional skin barrier."}],
+skinBenefits:[
+{icon:"🏗️",title:"Collagen Building",desc:"Complete amino acid profile provides everything the body needs to synthesise collagen and elastin for firm, resilient skin."},
+{icon:"🛡️",title:"Skin Barrier",desc:"Choline and healthy fats in egg yolk maintain cell membrane integrity, supporting a strong protective skin barrier."},
+{icon:"💆",title:"Skin Repair",desc:"Selenium and biotin work together to support skin repair, reduce inflammation and prevent premature skin ageing."}]},
+
+{id:24,name:"Greek Yogurt",emoji:"🥛",category:"Dairy",color:"linear-gradient(135deg,#84fab0,#8fd3f4)",isVegetarian:true,isHalal:true,
+description:"Greek yogurt is rich in probiotics and protein, both of which benefit skin through the gut-skin axis. Its lactic acid content also provides gentle exfoliation and pH balancing effects.",
+benefits:["Supports healthy skin microbiome","Provides protein for collagen","Hydrates skin from within","Lactic acid gently exfoliates","Reduces skin inflammation"],
+nutrients:[
+{name:"Probiotics",amount:"present",skinBenefit:"Beneficial bacteria that improve the gut-skin axis, reducing inflammatory skin conditions like acne and eczema."},
+{name:"Protein",amount:"17 g",skinBenefit:"Provides amino acids for collagen synthesis and skin repair."},
+{name:"Lactic Acid",amount:"present",skinBenefit:"AHA that gently exfoliates, brightens and improves skin texture."},
+{name:"Calcium",amount:"200 mg",skinBenefit:"Supports skin cell renewal and helps maintain the skin barrier."},
+{name:"Zinc",amount:"0.6 mg",skinBenefit:"Regulates sebum production and supports wound healing."}],
+skinBenefits:[
+{icon:"🦠",title:"Gut-Skin Axis",desc:"Probiotics in Greek yogurt directly improve gut microbiome health, which is strongly linked to reduced acne, eczema and skin inflammation."},
+{icon:"💎",title:"Gentle Exfoliation",desc:"Lactic acid from fermentation acts as a mild AHA, improving skin texture, brightness and moisture retention."},
+{icon:"💧",title:"Skin Hydration",desc:"Protein and moisture content help maintain skin hydration levels when consumed regularly."}]},
+
+{id:25,name:"Watermelon",emoji:"🍉",category:"Fruit",color:"linear-gradient(135deg,#f7797d,#fbd786)",isVegetarian:true,isHalal:true,
+description:"Watermelon is 92% water and packed with lycopene — even more than tomatoes. It's one of the most hydrating and sun-protective foods you can eat.",
+benefits:["Superior skin hydration","UV protection via lycopene","Reduces skin inflammation","Brightens complexion","Anti-ageing antioxidants"],
+nutrients:[
+{name:"Water",amount:"92%",skinBenefit:"Exceptional hydration helps maintain skin cell turgor and prevents dryness-related dullness."},
+{name:"Lycopene",amount:"4500 mcg",skinBenefit:"Higher lycopene than tomatoes — powerful antioxidant protecting skin from UV damage."},
+{name:"Vitamin C",amount:"8.1 mg",skinBenefit:"Supports collagen production and provides antioxidant protection."},
+{name:"Citrulline",amount:"present",skinBenefit:"Amino acid that improves circulation, delivering more nutrients to skin cells."},
+{name:"L-Arginine",amount:"present",skinBenefit:"Precursor to nitric oxide that improves blood flow and skin nutrient delivery."}],
+skinBenefits:[
+{icon:"💧",title:"Superior Hydration",desc:"92% water content combined with natural electrolytes keeps skin cells plump, firm and deeply hydrated."},
+{icon:"☀️",title:"UV Protection",desc:"High lycopene content provides internal photoprotection, reducing UV-related skin damage and redness."},
+{icon:"💗",title:"Radiant Glow",desc:"Citrulline improves microcirculation, delivering oxygen and nutrients to skin for a naturally flushed, healthy glow."}]},
+
+{id:26,name:"Mango",emoji:"🥭",category:"Tropical Fruit",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
+description:"Often called the 'king of fruits', mango provides Vitamins A, C and E — the three key vitamins for skin health — all in a single delicious fruit.",
+benefits:["Boosts collagen with Vitamins A and C","Protects against UV damage","Brightens dull skin","Reduces dark spots","Anti-ageing effects"],
+nutrients:[
+{name:"Vitamin A",amount:"54 mcg",skinBenefit:"Promotes skin cell renewal and helps prevent clogged pores and acne."},
+{name:"Vitamin C",amount:"36 mg",skinBenefit:"Stimulates collagen production and brightens skin tone."},
+{name:"Vitamin E",amount:"0.9 mg",skinBenefit:"Protects skin cell membranes from oxidative damage."},
+{name:"Mangiferin",amount:"92 mg",skinBenefit:"Unique antioxidant found almost exclusively in mango, with powerful anti-inflammatory and anti-ageing properties."},
+{name:"Folate",amount:"43 mcg",skinBenefit:"Supports DNA repair in skin cells."}],
+skinBenefits:[
+{icon:"💎",title:"Triple Vitamin Boost",desc:"Vitamins A, C and E together provide a comprehensive skin-protection trio — collagen support, brightening and antioxidant defence."},
+{icon:"✨",title:"Brightening",desc:"Vitamin C and mangiferin inhibit melanin production, progressively fading dark spots and hyperpigmentation."},
+{icon:"🛡️",title:"Anti-Ageing",desc:"Mangiferin is a uniquely potent antioxidant that protects skin from the oxidative stress driving premature ageing."}]},
+
+{id:27,name:"Oats",emoji:"🌾",category:"Grain",color:"linear-gradient(135deg,#d4a574,#c4956a)",isVegetarian:true,isHalal:true,
+description:"Oats contain a unique fibre called beta-glucan and unique antioxidants called avenanthramides found nowhere else in nature, making them exceptional for sensitive and reactive skin.",
+benefits:["Soothes inflamed and irritated skin","Reduces eczema and psoriasis symptoms","Stabilises blood sugar to reduce acne","Provides unique antioxidants","Supports gut health for clearer skin"],
+nutrients:[
+{name:"Beta-Glucan",amount:"4 g",skinBenefit:"Soluble fibre that slows sugar absorption, reducing acne-causing insulin spikes."},
+{name:"Avenanthramides",amount:"present",skinBenefit:"Unique antioxidants found only in oats with powerful anti-itch and anti-inflammatory properties."},
+{name:"Silicon",amount:"600 mcg",skinBenefit:"Trace mineral that supports collagen synthesis and maintains skin elasticity."},
+{name:"Zinc",amount:"3.1 mg",skinBenefit:"Regulates skin oil production and supports wound healing."},
+{name:"Manganese",amount:"3.6 mg",skinBenefit:"Activates antioxidant enzymes in skin cells."}],
+skinBenefits:[
+{icon:"😌",title:"Soothing",desc:"Avenanthramides have potent anti-itch and anti-inflammatory effects, making oats one of the best foods for sensitive and reactive skin."},
+{icon:"⚖️",title:"Blood Sugar Balance",desc:"Beta-glucan slows glucose absorption, preventing insulin spikes that trigger excess sebum production and acne breakouts."},
+{icon:"🌿",title:"Gut Health",desc:"Prebiotic fibre feeds beneficial gut bacteria, supporting the gut-skin connection for a calmer, clearer complexion."}]},
+
+{id:28,name:"Flaxseeds",emoji:"🌱",category:"Seed",color:"linear-gradient(135deg,#8B7355,#6B5B45)",isVegetarian:true,isHalal:true,
+description:"Flaxseeds are the richest plant source of ALA omega-3 fatty acids and contain lignans — plant compounds with estrogen-balancing properties that directly benefit women's skin throughout the hormonal cycle.",
+benefits:["Balances hormones, reducing hormonal acne","Omega-3s reduce skin inflammation","Hydrates skin from within","Reduces skin sensitivity","Promotes healthy cell membranes"],
+nutrients:[
+{name:"ALA Omega-3s",amount:"22.8 g",skinBenefit:"Richest plant source of ALA omega-3s — reduce skin inflammation and maintain moisture barrier."},
+{name:"Lignans",amount:"300 mg",skinBenefit:"Plant compounds with weak estrogen-like activity that help balance hormones, reducing hormonal acne."},
+{name:"Fibre",amount:"27 g",skinBenefit:"Supports gut health and helps eliminate excess hormones that can trigger skin breakouts."},
+{name:"Vitamin B1",amount:"1.6 mg",skinBenefit:"Supports cellular energy production for efficient skin repair."},
+{name:"Magnesium",amount:"392 mg",skinBenefit:"Reduces cortisol levels and supports healthy sleep for overnight skin repair."}],
+skinBenefits:[
+{icon:"🔄",title:"Hormone Balance",desc:"Lignans mimic estrogen weakly, helping balance hormone levels and reducing hormonal acne — especially beneficial during the luteal phase."},
+{icon:"💧",title:"Skin Hydration",desc:"The highest ALA omega-3 content of any plant food helps maintain the skin's moisture-retaining lipid barrier."},
+{icon:"🛡️",title:"Anti-Inflammatory",desc:"Omega-3s reduce the production of inflammatory prostaglandins, calming acne, redness and skin sensitivity."}]},
+
+{id:29,name:"Pumpkin Seeds",emoji:"🎃",category:"Seed",color:"linear-gradient(135deg,#134e5e,#71b280)",isVegetarian:true,isHalal:true,
+description:"Pumpkin seeds provide one of the highest concentrations of zinc found in any plant food, along with exceptional magnesium levels — making them uniquely beneficial for hormonal acne and skin healing.",
+benefits:["Controls hormonal acne with zinc","Promotes skin wound healing","Reduces skin inflammation","Provides antioxidant minerals","Supports collagen production"],
+nutrients:[
+{name:"Zinc",amount:"7.8 mg",skinBenefit:"One of the highest plant sources of zinc — essential for regulating sebum and preventing acne."},
+{name:"Magnesium",amount:"592 mg",skinBenefit:"Highest magnesium of any common food — reduces cortisol and PMS-related breakouts."},
+{name:"Manganese",amount:"4.5 mg",skinBenefit:"Activates collagen-forming enzymes and provides antioxidant protection."},
+{name:"Tryptophan",amount:"present",skinBenefit:"Precursor to serotonin, promoting restful sleep essential for skin repair."},
+{name:"ALA Omega-3s",amount:"0.1 g",skinBenefit:"Anti-inflammatory fatty acids that calm skin and reduce redness."}],
+skinBenefits:[
+{icon:"🎯",title:"Acne Fighter",desc:"Exceptional zinc content regulates sebum production, reduces inflammation and inhibits acne-causing bacteria — one of the most effective plant foods for acne."},
+{icon:"🩹",title:"Wound Healing",desc:"Zinc and manganese together accelerate skin repair, helping blemishes, cuts and inflammatory damage heal faster."},
+{icon:"🌙",title:"Sleep & Skin",desc:"Tryptophan and magnesium promote deep sleep, maximising the skin's overnight repair cycle when growth hormone peaks."}]}
+];
+
+/* ══════════════════════════════════════
+   PERIOD PHASE DATA
+══════════════════════════════════════ */
+const phases=[
+{id:"menstrual",name:"Menstrual Phase",emoji:"🌑",days:"Days 1–5",
+color:"linear-gradient(135deg,#c0392b,#e74c3c)",
+bodyChanges:"Estrogen and progesterone are at their lowest. The uterine lining sheds. Energy and immunity may dip.",
+skinChanges:"Skin may be dull, more sensitive and prone to breakouts. Inflammatory skin conditions can flare.",
+foodIds:[5,9,17,14,2,13,21,28],
+tips:[
+"Replenish iron lost during bleeding — eat spinach, dark chocolate and chickpeas",
+"Choose anti-inflammatory foods (turmeric, ginger, salmon) to ease cramps and skin flares",
+"Pair iron-rich foods with Vitamin C (kiwi, bell peppers) to boost iron absorption by up to 300%",
+"Stay well hydrated with herbal teas and water to reduce bloating",
+"Avoid excess sugar, alcohol and dairy which can worsen skin inflammation"]},
+
+{id:"follicular",name:"Follicular Phase",emoji:"🌒",days:"Days 6–13",
+color:"linear-gradient(135deg,#f7971e,#ffd200)",
+bodyChanges:"Estrogen begins rising as ovarian follicles develop. Energy improves and mood brightens.",
+skinChanges:"Often your best skin days! Rising estrogen promotes collagen and hyaluronic acid, giving skin a natural radiance.",
+foodIds:[1,3,11,16,5,15,28,29,24],
+tips:[
+"Eat flaxseeds and pumpkin seeds to support healthy estrogen metabolism",
+"Load up on antioxidants (blueberries, spinach) to protect your naturally glowing skin",
+"Include Vitamin E-rich foods (almonds, sunflower seeds) to strengthen the skin barrier",
+"Add Greek yogurt to support gut health and the gut-skin connection",
+"This is an ideal phase to increase leafy greens for comprehensive skin nourishment"]},
+
+{id:"ovulation",name:"Ovulation Phase",emoji:"🌕",days:"Days 14–16",
+color:"linear-gradient(135deg,#11998e,#38ef7d)",
+bodyChanges:"LH surges and an egg is released. Estrogen peaks and testosterone rises briefly. Energy is high.",
+skinChanges:"Skin may become slightly oilier. Pores can appear larger. Some women experience a breakout mid-cycle.",
+foodIds:[3,12,6,17,15,8,29,19],
+tips:[
+"Eat zinc-rich foods (pumpkin seeds, walnuts, chickpeas) to regulate sebum and prevent breakouts",
+"Increase antioxidants (pomegranate, blueberries) to neutralise peak hormone activity on skin",
+"Drink green tea to control oiliness and benefit from its antimicrobial properties",
+"Eat fibre-rich foods (broccoli, chickpeas) to help eliminate excess hormones via the gut",
+"Avoid refined carbohydrates that spike insulin and worsen hormonal acne"]},
+
+{id:"luteal",name:"Luteal Phase",emoji:"🌘",days:"Days 17–28",
+color:"linear-gradient(135deg,#667eea,#764ba2)",
+bodyChanges:"Progesterone rises then drops along with estrogen before your period. PMS symptoms may appear.",
+skinChanges:"The most challenging skin phase — prone to breakouts, puffiness and excess oiliness. Cortisol can spike.",
+foodIds:[9,11,5,2,6,8,27,25,21],
+tips:[
+"Eat magnesium-rich foods (dark chocolate, almonds, pumpkin seeds, spinach) to ease PMS and reduce cortisol",
+"Include omega-3s (salmon, walnuts, flaxseeds) to reduce prostaglandins that cause cramps and skin inflammation",
+"Sip green tea to reduce puffiness and keep excess oil production in check",
+"Reduce sodium and processed foods to minimise water retention and facial puffiness",
+"Eat complex carbs (oats, sweet potato) to stabilise mood and reduce sugar cravings"]}
+];
+
+/* ══════════════════════════════════════
+   FACE MASK DATA
+══════════════════════════════════════ */
+const masks=[
+{id:1,name:"Avocado & Honey Mask",emoji:"🥑",benefit:"Deep moisturising & nourishing",
+color:"linear-gradient(135deg,#56ab2f,#a8e063)",time:"15 min",skinTypes:["dry","normal"],
+ingredients:[
+{emoji:"🥑",item:"½ ripe avocado",purpose:"Vitamin E & healthy fats for deep hydration"},
+{emoji:"🍯",item:"1 tbsp raw honey",purpose:"Natural humectant that locks in moisture & fights bacteria"},
+{emoji:"🫒",item:"1 tsp olive oil",purpose:"Extra nourishment and barrier protection for dry skin"}],
+steps:[
+"Mash the avocado in a bowl until completely smooth with no lumps.",
+"Add honey and olive oil, mixing until well combined into a creamy paste.",
+"Apply evenly to clean, dry face and neck, avoiding the eye area.",
+"Leave on for 15 minutes then rinse with lukewarm water.",
+"Pat dry gently and follow with your regular moisturiser."],
+tip:"Use 2–3 times per week. Refrigerate leftovers in an airtight container for up to 2 days."},
+
+{id:2,name:"Turmeric & Yogurt Mask",emoji:"🟡",benefit:"Brightening & even skin tone",
+color:"linear-gradient(135deg,#f7971e,#FFD700)",time:"10 min",skinTypes:["all"],
+ingredients:[
+{emoji:"🟡",item:"½ tsp ground turmeric",purpose:"Curcumin to inhibit melanin and brighten skin"},
+{emoji:"🥛",item:"2 tbsp plain yogurt",purpose:"Lactic acid to gently exfoliate and even tone"},
+{emoji:"🍯",item:"1 tsp raw honey",purpose:"Moisture and antibacterial protection"}],
+steps:[
+"Mix turmeric powder with yogurt until you get a smooth, uniform paste.",
+"Add honey and stir well — the mask should be golden-yellow.",
+"Apply a thin, even layer to clean skin, avoiding the hairline.",
+"Leave for 10 minutes — rinse immediately if any stinging occurs.",
+"Rinse with cool water and follow with SPF if applying in the morning."],
+tip:"Turmeric can temporarily stain skin yellow. Mix 1 tsp lemon juice into the rinse water to prevent this. Great for dull or hyperpigmented skin."},
+
+{id:3,name:"Green Tea & Oatmeal Mask",emoji:"🍵",benefit:"Calming, purifying & anti-acne",
+color:"linear-gradient(135deg,#43e97b,#38f9d7)",time:"15 min",skinTypes:["sensitive","oily"],
+ingredients:[
+{emoji:"🍵",item:"2 tbsp brewed green tea (cooled)",purpose:"EGCG catechins to control oil and fight acne bacteria"},
+{emoji:"🌾",item:"2 tbsp ground rolled oats",purpose:"Avenanthramides to soothe inflammation and irritation"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Gentle antibacterial moisture without clogging pores"}],
+steps:[
+"Brew green tea and allow it to cool to room temperature.",
+"Grind oats in a blender to a fine powder (or use oat flour).",
+"Mix oat powder with green tea and honey until a smooth paste forms.",
+"Apply gently to clean skin and leave for 15 minutes.",
+"Rinse with cool water using gentle circular motions for mild exfoliation."],
+tip:"This mask is ideal after a breakout or when skin is red and irritated. The cooling green tea reduces inflammation immediately."},
+
+{id:4,name:"Kiwi & Yogurt Mask",emoji:"🥝",benefit:"Brightening & Vitamin C boost",
+color:"linear-gradient(135deg,#56ab2f,#a8e063)",time:"12 min",skinTypes:["all"],
+ingredients:[
+{emoji:"🥝",item:"½ ripe kiwi (mashed)",purpose:"92 mg Vitamin C per 100g — powerful brightening and collagen boost"},
+{emoji:"🥛",item:"2 tbsp plain yogurt",purpose:"Lactic acid for gentle exfoliation and probiotic benefits"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Humectant that draws moisture into skin cells"}],
+steps:[
+"Peel and mash the kiwi thoroughly until it becomes a smooth pulp.",
+"Mix in yogurt and honey until fully combined.",
+"Apply to clean, dry skin in an even layer.",
+"Leave for 12 minutes, then rinse with lukewarm water.",
+"Pat dry and apply a light moisturiser or serum."],
+tip:"Use within 30 minutes of making as Vitamin C oxidises quickly. Ideal for dull, tired or sun-damaged skin."},
+
+{id:5,name:"Papaya Enzyme Mask",emoji:"🍈",benefit:"Natural exfoliation & glow",
+color:"linear-gradient(135deg,#f7971e,#f5576c)",time:"10 min",skinTypes:["normal","combination","oily"],
+ingredients:[
+{emoji:"🍈",item:"3 tbsp ripe papaya (mashed)",purpose:"Papain enzyme naturally dissolves dead skin cells"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Antibacterial and moisturising protection"},
+{emoji:"🍋",item:"3–4 drops lemon juice",purpose:"Vitamin C to enhance brightening effect"}],
+steps:[
+"Mash the ripe papaya thoroughly — the riper, the more active papain it contains.",
+"Mix in honey and a few drops of fresh lemon juice.",
+"Apply to clean skin in a thin, even layer.",
+"Leave for 10 minutes maximum (no longer — the enzyme is active!).",
+"Rinse with cool water and apply SPF if using in the morning."],
+tip:"Do NOT use on sensitive or broken skin. The papain enzyme is powerful — start with 5 minutes your first time. Use weekly for glowing skin."},
+
+{id:6,name:"Tomato & Honey Mask",emoji:"🍅",benefit:"Pore minimising & oil control",
+color:"linear-gradient(135deg,#f7797d,#fbd786)",time:"15 min",skinTypes:["oily","combination"],
+ingredients:[
+{emoji:"🍅",item:"½ blended tomato",purpose:"Lycopene antioxidant and natural astringent to tighten pores"},
+{emoji:"🍯",item:"1 tbsp honey",purpose:"Balances the tomato's acidity and adds moisture"},
+{emoji:"🍋",item:"1 tsp lemon juice",purpose:"Alpha-hydroxy acid to gently exfoliate and brighten"}],
+steps:[
+"Blend or mash the tomato to a smooth purée and strain to remove seeds.",
+"Mix in honey and lemon juice until combined.",
+"Apply to clean skin, focusing on T-zone if combination skin.",
+"Leave for 15 minutes then rinse with cool water.",
+"Follow with an oil-free moisturiser."],
+tip:"The natural acidity of tomatoes acts as a toner. Use 2× per week for visibly smaller pores within 3–4 weeks."},
+
+{id:7,name:"Dark Chocolate & Coffee Mask",emoji:"🍫",benefit:"Anti-ageing & deep circulation",
+color:"linear-gradient(135deg,#3d2010,#a05230)",time:"15 min",skinTypes:["all"],
+ingredients:[
+{emoji:"🍫",item:"2 tbsp dark cocoa powder (70%+)",purpose:"Flavanols to improve microcirculation and skin density"},
+{emoji:"☕",item:"1 tbsp fine ground coffee",purpose:"Caffeine reduces puffiness; coffee grounds exfoliate gently"},
+{emoji:"🍯",item:"2 tbsp honey",purpose:"Locks in moisture and provides antibacterial action"},
+{emoji:"🫒",item:"1 tsp olive oil",purpose:"Squalene and Vitamin E for anti-ageing nourishment"}],
+steps:[
+"Mix cocoa powder and coffee grounds thoroughly in a bowl.",
+"Add honey and olive oil, stirring until a thick paste forms.",
+"Apply to clean face and neck in gentle upward circular motions.",
+"Leave for 15 minutes — you may feel a slight warming from caffeine.",
+"Rinse with warm water then cool water to close pores."],
+tip:"Use once per week. The caffeine visibly reduces puffiness within 10 minutes. A great Saturday morning ritual for mature skin."},
+
+{id:8,name:"Cucumber & Mint Mask",emoji:"🥒",benefit:"Cooling, calming & de-puffing",
+color:"linear-gradient(135deg,#11998e,#38ef7d)",time:"20 min",skinTypes:["sensitive","normal","dry"],
+ingredients:[
+{emoji:"🥒",item:"½ cucumber (blended)",purpose:"Cucurbitacins reduce inflammation; 95% water deeply hydrates"},
+{emoji:"🥛",item:"1 tbsp plain yogurt",purpose:"Probiotics and lactic acid for skin microbiome balance"},
+{emoji:"🌿",item:"4–5 fresh mint leaves (crushed)",purpose:"Menthol provides cooling relief and has mild antibacterial properties"}],
+steps:[
+"Blend cucumber with mint leaves until smooth, then strain through a fine mesh.",
+"Mix the cucumber-mint liquid with yogurt to form a paste.",
+"Apply generously to clean skin, including the eye area if desired.",
+"Lie down and relax for 20 minutes.",
+"Rinse with cool water and pat dry gently."],
+tip:"Store in the fridge and apply cold for maximum de-puffing effect. Ideal for sunburned, reactive or overheated skin."},
+
+{id:9,name:"Carrot & Honey Glow Mask",emoji:"🥕",benefit:"Glow-boosting & brightening",
+color:"linear-gradient(135deg,#f7971e,#ffd200)",time:"15 min",skinTypes:["dry","normal"],
+ingredients:[
+{emoji:"🥕",item:"1 medium carrot (cooked & mashed)",purpose:"Beta-carotene and Vitamin A to promote skin cell renewal"},
+{emoji:"🍯",item:"1 tbsp honey",purpose:"Humectant moisture that brightens and softens skin"},
+{emoji:"🫒",item:"1 tsp olive oil",purpose:"Oleic acid to carry fat-soluble carotenoids into skin"}],
+steps:[
+"Steam or boil the carrot until very soft, then allow to cool completely.",
+"Mash into a smooth paste with no lumps.",
+"Mix in honey and olive oil until a uniform mask forms.",
+"Apply to clean, dry skin in an even layer.",
+"Leave for 15 minutes then rinse with lukewarm water."],
+tip:"Cooking the carrot actually increases beta-carotene bioavailability. Use weekly to gradually build a warm, natural skin glow."},
+
+{id:10,name:"Banana & Olive Oil Mask",emoji:"🍌",benefit:"Deep nourishing for dry skin",
+color:"linear-gradient(135deg,#f7971e,#ffd200)",time:"15 min",skinTypes:["dry"],
+ingredients:[
+{emoji:"🍌",item:"½ ripe banana (mashed)",purpose:"Potassium and Vitamin B6 to hydrate and soothe dry skin"},
+{emoji:"🫒",item:"1 tbsp olive oil",purpose:"Oleic acid and squalene for deep barrier-strengthening nourishment"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Draws moisture from the air into skin cells (humectant)"}],
+steps:[
+"Mash the banana until completely smooth with no lumps.",
+"Add olive oil and honey, mixing until fully incorporated.",
+"Apply to clean, dry face and neck in a generous layer.",
+"Leave for 15 minutes.",
+"Rinse with lukewarm water and follow with your regular moisturiser."],
+tip:"Use overripe bananas (with brown spots) — they have higher sugar and moisture content, making them better for the skin."},
+
+{id:11,name:"Egg White & Lemon Mask",emoji:"🥚",benefit:"Pore tightening & firming",
+color:"linear-gradient(135deg,#f7d365,#f5a623)",time:"20 min",skinTypes:["oily","combination"],
+ingredients:[
+{emoji:"🥚",item:"1 egg white",purpose:"Proteins tighten pores and temporarily firm skin"},
+{emoji:"🍋",item:"1 tbsp fresh lemon juice",purpose:"Vitamin C and citric acid brighten and gently exfoliate"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Prevents the egg white from over-drying the skin"}],
+steps:[
+"Separate the egg white from the yolk carefully into a clean bowl.",
+"Whisk the egg white until slightly frothy.",
+"Add lemon juice and honey, mixing well.",
+"Apply to clean skin with a brush or fingers in upward strokes.",
+"Allow to dry fully (you'll feel the skin tighten) — about 20 minutes.",
+"Rinse with cool water."],
+tip:"The tightening effect is temporary but pores will appear smaller for several hours. Do not use if you have raw or broken skin — lemon juice can sting."},
+
+{id:12,name:"Blueberry & Yogurt Mask",emoji:"🫐",benefit:"Anti-ageing & antioxidant rich",
+color:"linear-gradient(135deg,#667eea,#764ba2)",time:"15 min",skinTypes:["all"],
+ingredients:[
+{emoji:"🫐",item:"2 tbsp fresh blueberries (mashed)",purpose:"163 mg anthocyanins per 100g — powerful antioxidant protection"},
+{emoji:"🥛",item:"2 tbsp plain yogurt",purpose:"Lactic acid for mild exfoliation; probiotics for skin microbiome"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Natural preservative, humectant and antibacterial"}],
+steps:[
+"Mash the blueberries thoroughly using a fork until a deep purple purée forms.",
+"Mix in yogurt and honey until fully combined.",
+"Apply to clean, dry skin in an even layer.",
+"Leave for 15 minutes.",
+"Rinse with lukewarm then cool water."],
+tip:"The deep purple colour washes off easily. Use twice per week for cumulative antioxidant and brightening benefits — especially great before events for an instant glow."}
+];
+
+/* ══════════════════════════════════════
+   MEAL DATA
+══════════════════════════════════════ */
+const meals=[
+{id:1,name:"Glow Smoothie Bowl",emoji:"🥤",
+tagline:"Brightening & antioxidant-packed start to the day",
+color:"linear-gradient(135deg,#667eea,#764ba2)",
+concerns:["brightening","aging"],time:"10 min",servings:1,
+ingredients:[
+{emoji:"🫐",item:"½ cup frozen blueberries",purpose:"Anthocyanins for brightening and antioxidant protection"},
+{emoji:"🥝",item:"1 kiwi (peeled)",purpose:"92 mg Vitamin C for collagen boost and brightening"},
+{emoji:"🥭",item:"½ cup frozen mango chunks",purpose:"Vitamins A, C & E plus unique mangiferin antioxidant"},
+{emoji:"🥛",item:"3 tbsp Greek yogurt",purpose:"Probiotics for gut-skin axis; protein for collagen"},
+{emoji:"🌾",item:"1 tbsp rolled oats (topping)",purpose:"Beta-glucan to stabilise blood sugar"},
+{emoji:"🌻",item:"1 tsp sunflower seeds (topping)",purpose:"Vitamin E antioxidant shield for skin cells"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Natural sweetener with antibacterial properties"}],
+steps:[
+"Add blueberries, mango and kiwi to a blender with the Greek yogurt.",
+"Blend until thick and creamy — add a splash of water if needed to loosen.",
+"Pour into a bowl and smooth the surface.",
+"Top with rolled oats, sunflower seeds and a drizzle of honey.",
+"Eat immediately for maximum Vitamin C potency."],
+skinBenefit:"Anthocyanins, Vitamins A, C and E and probiotics combine to brighten skin tone, boost collagen production and support the gut-skin axis — reducing breakouts from the inside out."},
+
+{id:2,name:"Anti-Acne Power Salad",emoji:"🥗",
+tagline:"Zinc, omega-3s and anti-inflammatory powerhouse",
+color:"linear-gradient(135deg,#11998e,#38ef7d)",
+concerns:["acne"],time:"15 min",servings:1,
+ingredients:[
+{emoji:"🥬",item:"2 large handfuls baby spinach",purpose:"Vitamin A to regulate sebum; iron for skin oxygenation"},
+{emoji:"🫘",item:"½ can chickpeas (drained & rinsed)",purpose:"Zinc and B6 to regulate hormones and sebum"},
+{emoji:"🥜",item:"1 tbsp walnuts (roughly chopped)",purpose:"Omega-3s to reduce skin inflammation"},
+{emoji:"🥝",item:"1 kiwi (sliced)",purpose:"Vitamin C to boost iron absorption by up to 300%"},
+{emoji:"🟡",item:"¼ tsp turmeric powder",purpose:"Curcumin to block inflammatory pathways"},
+{emoji:"🫒",item:"1 tbsp extra virgin olive oil",purpose:"Anti-inflammatory oleic acid as dressing base"},
+{emoji:"🍋",item:"1 tbsp fresh lemon juice",purpose:"Vitamin C and brightening citric acid"}],
+steps:[
+"Place spinach in a large bowl.",
+"Drain and rinse the chickpeas, then add to the bowl.",
+"Add walnuts and sliced kiwi.",
+"Whisk together olive oil, lemon juice and turmeric to make the dressing.",
+"Drizzle dressing over the salad and toss gently to coat.",
+"Serve immediately."],
+skinBenefit:"Zinc from chickpeas and walnuts regulates sebum; omega-3s reduce inflammation; curcumin blocks acne-triggering inflammatory pathways. A comprehensive anti-acne plate in 15 minutes."},
+
+{id:3,name:"Skin Glow Oat Bowl",emoji:"🥣",
+tagline:"Blood sugar balance to keep breakouts at bay",
+color:"linear-gradient(135deg,#d4a574,#c4956a)",
+concerns:["acne","aging"],time:"10 min",servings:1,
+ingredients:[
+{emoji:"🌾",item:"½ cup rolled oats",purpose:"Beta-glucan to stabilise blood sugar and prevent acne-causing spikes"},
+{emoji:"🌱",item:"1 tbsp ground flaxseeds",purpose:"Lignans to balance hormones; richest plant omega-3 source"},
+{emoji:"🫐",item:"½ cup fresh blueberries",purpose:"Anthocyanins for antioxidant and anti-ageing protection"},
+{emoji:"🌰",item:"1 tbsp sliced almonds",purpose:"Vitamin E antioxidant and lasting skin moisture"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Low-GI sweetener with skin-calming antibacterial properties"},
+{emoji:"💧",item:"1 cup water or oat milk",purpose:"For cooking the oats"}],
+steps:[
+"Cook oats with water or oat milk on medium-low heat for 5 minutes, stirring occasionally.",
+"Remove from heat and stir in ground flaxseeds.",
+"Transfer to a bowl.",
+"Top with fresh blueberries and sliced almonds.",
+"Drizzle with honey and serve warm."],
+skinBenefit:"Beta-glucan slows glucose absorption, preventing insulin spikes that trigger excess sebum and breakouts. Flaxseed lignans balance hormones, while blueberry anthocyanins fight skin ageing simultaneously."},
+
+{id:4,name:"Mediterranean Skin Plate",emoji:"🍽️",
+tagline:"Omega-3s, lycopene and deep skin hydration",
+color:"linear-gradient(135deg,#f7971e,#ffd200)",
+concerns:["hydration","aging"],time:"20 min",servings:1,
+ingredients:[
+{emoji:"🐟",item:"120g salmon fillet",purpose:"Omega-3 fatty acids and astaxanthin for skin glow and barrier repair"},
+{emoji:"🥬",item:"1 cup baby spinach",purpose:"Vitamins A and C for collagen and cell renewal"},
+{emoji:"🍅",item:"3 cherry tomatoes (halved)",purpose:"Lycopene antioxidant for UV protection and skin clarity"},
+{emoji:"🫒",item:"1 tbsp extra virgin olive oil",purpose:"Oleic acid and squalene for deep skin barrier nourishment"},
+{emoji:"🍉",item:"1 cup watermelon (cubed, side)",purpose:"92% water and extra lycopene for superior skin hydration"},
+{emoji:"🍋",item:"Lemon juice & fresh herbs",purpose:"Vitamin C and anti-inflammatory phytonutrients"}],
+steps:[
+"Season salmon with lemon juice and fresh herbs of your choice.",
+"Pan-fry salmon in half the olive oil over medium heat, 3–4 minutes each side.",
+"While salmon cooks, toss spinach and cherry tomatoes in remaining olive oil.",
+"Plate the spinach salad and place salmon on top.",
+"Serve with a side of fresh watermelon.",
+"Drizzle any remaining pan juices over the plate."],
+skinBenefit:"Omega-3s from salmon strengthen the skin barrier and reduce inflammation. Lycopene from tomatoes and watermelon provides UV protection, while olive oil and spinach deliver deep anti-ageing nourishment."},
+
+{id:5,name:"Golden Glow Soup",emoji:"🥘",
+tagline:"Beta-carotene warmth for a natural skin glow",
+color:"linear-gradient(135deg,#f09158,#f5d56c)",
+concerns:["brightening","aging"],time:"30 min",servings:2,
+ingredients:[
+{emoji:"🍠",item:"1 medium sweet potato (cubed)",purpose:"8509 mcg beta-carotene — natural skin glow and cell renewal"},
+{emoji:"🥕",item:"2 medium carrots (sliced)",purpose:"Beta-carotene and Vitamin A for brightening and even tone"},
+{emoji:"🫚",item:"1 tsp fresh ginger (grated)",purpose:"Gingerols for circulation boost and anti-inflammatory effects"},
+{emoji:"🟡",item:"1 tsp turmeric powder",purpose:"Curcumin to brighten skin and block inflammation"},
+{emoji:"🥛",item:"200ml coconut milk",purpose:"Healthy fats to carry fat-soluble carotenoids into the body"},
+{emoji:"🧅",item:"1 onion (roughly chopped)",purpose:"Quercetin antioxidant and prebiotic fibre"},
+{emoji:"💧",item:"400ml vegetable stock",purpose:"Soup base"}],
+steps:[
+"Sauté onion in a little oil until soft, about 5 minutes.",
+"Add ginger and turmeric and cook for 1 minute, stirring constantly.",
+"Add sweet potato, carrots and vegetable stock.",
+"Bring to a boil then simmer for 20 minutes until vegetables are very tender.",
+"Add coconut milk and blend until completely smooth.",
+"Season to taste and serve warm."],
+skinBenefit:"Beta-carotene from sweet potato and carrots accumulates in the skin, creating a warm natural glow. Turmeric and ginger reduce inflammation while coconut fats enhance carotenoid absorption significantly."},
+
+{id:6,name:"Probiotic Skin Bowl",emoji:"🫙",
+tagline:"Gut-skin axis for clearer, calmer skin",
+color:"linear-gradient(135deg,#84fab0,#8fd3f4)",
+concerns:["acne","hydration"],time:"10 min",servings:1,
+ingredients:[
+{emoji:"🥛",item:"200g plain Greek yogurt",purpose:"Probiotics for gut-skin axis; lactic acid for gentle exfoliation"},
+{emoji:"🫐",item:"½ cup mixed berries",purpose:"Anthocyanins for antioxidant protection and brightening"},
+{emoji:"🎃",item:"1 tbsp pumpkin seeds",purpose:"Zinc to regulate sebum and inhibit acne bacteria"},
+{emoji:"🌾",item:"2 tbsp granola or rolled oats",purpose:"Beta-glucan for blood sugar stability and gut health"},
+{emoji:"🌱",item:"1 tsp chia seeds",purpose:"Omega-3s and hydration for skin barrier support"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Natural antibacterial and humectant"}],
+steps:[
+"Spoon Greek yogurt into a wide bowl.",
+"Arrange mixed berries on top.",
+"Sprinkle over pumpkin seeds, granola or oats and chia seeds.",
+"Drizzle with honey.",
+"Serve immediately or refrigerate overnight for a breakfast parfait."],
+skinBenefit:"Probiotics in Greek yogurt improve the gut microbiome, directly reducing acne and skin inflammation. Pumpkin seed zinc regulates sebum, and berries provide an antioxidant defence that lasts all day."},
+
+{id:7,name:"Collagen Boost Plate",emoji:"🍱",
+tagline:"Triple Vitamin C hit for maximum collagen synthesis",
+color:"linear-gradient(135deg,#f7797d,#fbd786)",
+concerns:["aging","brightening"],time:"25 min",servings:1,
+ingredients:[
+{emoji:"🥝",item:"1 kiwi (sliced)",purpose:"92 mg Vitamin C — essential cofactor for collagen enzyme activation"},
+{emoji:"🫑",item:"½ red bell pepper (sliced)",purpose:"190 mg Vitamin C — highest of any vegetable for collagen synthesis"},
+{emoji:"🐟",item:"120g salmon",purpose:"Omega-3s and astaxanthin for skin barrier and natural glow"},
+{emoji:"🥦",item:"1 cup broccoli florets",purpose:"Sulforaphane activating the body's Nrf2 antioxidant pathway"},
+{emoji:"🫒",item:"1 tbsp olive oil",purpose:"Carries fat-soluble nutrients; provides anti-inflammatory oleic acid"},
+{emoji:"🍋",item:"Lemon juice & sea salt",purpose:"Extra Vitamin C and mineral support for skin"}],
+steps:[
+"Steam broccoli until just tender, about 5–6 minutes.",
+"Pan-fry salmon in olive oil over medium heat, 3–4 minutes each side.",
+"While salmon rests, sauté red bell pepper slices in the same pan for 2–3 minutes.",
+"Arrange salmon, broccoli and bell pepper on a plate.",
+"Add sliced kiwi as a fresh side.",
+"Squeeze lemon over the salmon and vegetables before serving."],
+skinBenefit:"This plate delivers over 300 mg Vitamin C — more than triple your daily requirement — activating maximum collagen synthesis. Sulforaphane from broccoli adds long-lasting internal antioxidant protection that cream cannot replicate."},
+
+{id:8,name:"Evening Skin Tea Ritual",emoji:"🍵",
+tagline:"Calm inflammation and control oil before bed",
+color:"linear-gradient(135deg,#43e97b,#38f9d7)",
+concerns:["acne","oily"],time:"5 min",servings:1,
+ingredients:[
+{emoji:"🍵",item:"1 green tea bag",purpose:"EGCG catechins to reduce sebum and fight acne-causing bacteria"},
+{emoji:"🫚",item:"2 slices fresh ginger",purpose:"Gingerols for anti-inflammatory and antibacterial effects"},
+{emoji:"🟡",item:"Pinch of turmeric",purpose:"Curcumin to reduce skin inflammation overnight"},
+{emoji:"🍯",item:"1 tsp honey",purpose:"Antimicrobial soothing sweetener"},
+{emoji:"🍋",item:"Small squeeze of lemon juice",purpose:"Vitamin C and brightening citric acid"}],
+steps:[
+"Boil water and allow to cool slightly (about 80°C) to preserve green tea catechins.",
+"Steep the green tea bag for 2 minutes.",
+"Add fresh ginger slices and steep for a further 2 minutes.",
+"Remove the tea bag and ginger.",
+"Stir in a small pinch of turmeric and honey until dissolved.",
+"Add a squeeze of lemon juice and sip slowly, ideally 30 minutes before bed."],
+skinBenefit:"EGCG in green tea reduces sebum production and targets acne bacteria. Ginger and turmeric reduce overnight skin inflammation so your skin can repair more efficiently during sleep — when growth hormone peaks."}
+];
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let vegOnly=false,halalOnly=false,query='',activeSkinType='all',selectedPhase=null;
+
+/* ══════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════ */
+function switchSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════════
+   FOODS
+══════════════════════════════════════ */
+function renderFoods(){
+  const filtered=foods.filter(f=>{
+    const q=query.toLowerCase();
+    const ok=!q||f.name.toLowerCase().includes(q)||f.description.toLowerCase().includes(q)||
+      f.category.toLowerCase().includes(q)||f.nutrients.some(n=>n.name.toLowerCase().includes(q))||
+      f.skinBenefits.some(s=>s.title.toLowerCase().includes(q))||f.benefits.some(b=>b.toLowerCase().includes(q));
+    return ok&&(!vegOnly||f.isVegetarian)&&(!halalOnly||f.isHalal);
+  });
+  document.getElementById('resultsCount').textContent=`Showing ${filtered.length} food${filtered.length!==1?'s':''}`;
+  const g=document.getElementById('foodGrid');
+  if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
+  g.innerHTML=filtered.map(f=>`
+    <div class="food-card" onclick="openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
+      <div class="card-banner" style="background:${f.color}">${f.emoji}</div>
+      <div class="card-body">
+        <h3 class="card-name">${f.name}</h3>
+        <p class="card-desc">${f.description}</p>
+        <div class="card-tags">
+          <span class="tag tag-cat">${f.category}</span>
+          ${f.isVegetarian?'<span class="tag tag-veg">🌿 Vegetarian</span>':''}
+          ${f.isHalal?'<span class="tag tag-halal">☪️ Halal</span>':''}
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
+        <span class="card-cta">View →</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════
+   FOOD MODAL
+══════════════════════════════════════ */
+function openFoodModal(id){
+  const f=foods.find(x=>x.id===id);if(!f)return;
+  document.getElementById('fmEmoji').textContent=f.emoji;
+  document.getElementById('fmName').textContent=f.name;
+  document.getElementById('fmHead').style.background=f.color;
+  document.getElementById('fmTags').innerHTML=
+    `<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">${f.category}</span>`+
+    (f.isVegetarian?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">🌿 Vegetarian</span>`:'')+
+    (f.isHalal?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">☪️ Halal</span>`:'');
+  document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  document.getElementById('tab-nu').innerHTML=f.nutrients.map(n=>`<div class="ncard"><div class="ntop"><span class="nname">${n.name}</span><span class="namount">${n.amount} / 100g</span></div><p class="nskin">🔬 ${n.skinBenefit}</p></div>`).join('');
+  document.getElementById('tab-sk').innerHTML=f.skinBenefits.map(s=>`<div class="scard"><span class="sicon">${s.icon}</span><div><p class="stitle">${s.title}</p><p class="sdesc">${s.desc}</p></div></div>`).join('');
+  switchTab('ov',document.querySelector('#foodOverlay .tab-btn'));
+  document.getElementById('foodOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeFoodModal(){document.getElementById('foodOverlay').classList.remove('open');document.body.style.overflow='';}
+
+function switchTab(name,btn){
+  document.querySelectorAll('#foodOverlay .tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#foodOverlay .tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════════
+   PERIOD SECTION
+══════════════════════════════════════ */
+function renderPhaseButtons(){
+  document.getElementById('phaseGrid').innerHTML=phases.map(p=>`
+    <button class="phase-btn" id="pbtn-${p.id}" style="background:${p.color}" onclick="selectPhase('${p.id}')">
+      <span class="phase-moon">${p.emoji}</span>
+      <span class="phase-name">${p.name}</span>
+      <span class="phase-days">${p.days}</span>
+    </button>`).join('');
+}
+
+function selectPhase(id){
+  const p=phases.find(x=>x.id===id);if(!p)return;
+  document.querySelectorAll('.phase-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('pbtn-'+id).classList.add('sel');
+  selectedPhase=id;
+  const recFoods=p.foodIds.map(fid=>foods.find(f=>f.id===fid)).filter(Boolean);
+  document.getElementById('phaseDetail').innerHTML=`
+    <div class="phase-card">
+      <div class="phase-head" style="background:${p.color}">
+        <h3>${p.emoji} ${p.name} <span style="font-size:.75rem;font-weight:600;opacity:.85">${p.days}</span></h3>
+        <p>Select your current cycle phase to see personalised food & skin guidance</p>
+      </div>
+      <div class="phase-body">
+        <div class="phase-info-row">
+          <div class="pinfo"><h4>🫀 Your body</h4><p>${p.bodyChanges}</p></div>
+          <div class="pinfo"><h4>🌸 Your skin</h4><p>${p.skinChanges}</p></div>
+        </div>
+        <p class="phase-rec-title">✨ Recommended foods for this phase</p>
+        <div class="phase-chips">${recFoods.map(f=>`<div class="phase-chip" onclick="openFoodModal(${f.id})">${f.emoji} ${f.name}</div>`).join('')}</div>
+        <div class="phase-tips-box">
+          <h4>💡 Tips for your skin this phase</h4>
+          <ul>${p.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <p class="disclaimer">ℹ️ This is general nutritional guidance, not medical advice. Consult your healthcare provider for personal recommendations.</p>
+    </div>`;
+}
+
+/* ══════════════════════════════════════
+   MASKS SECTION
+══════════════════════════════════════ */
+const skinTypeLabels=['All Types','Dry','Oily','Sensitive','Combination'];
+const skinTypeValues=['all','dry','oily','sensitive','combination'];
+
+function renderSkinTypeFilter(){
+  document.getElementById('stypeRow').innerHTML=skinTypeLabels.map((l,i)=>`
+    <button class="stype-btn${i===0?' active':''}" onclick="setSkinType('${skinTypeValues[i]}',this)">${l}</button>`).join('');
+}
+
+function setSkinType(val,btn){
+  activeSkinType=val;
+  document.querySelectorAll('.stype-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMasks();
+}
+
+function renderMasks(){
+  const filtered=masks.filter(m=>{
+    if(activeSkinType==='all')return true;
+    return m.skinTypes.includes(activeSkinType)||m.skinTypes.includes('all');
+  });
+  document.getElementById('maskGrid').innerHTML=filtered.map(m=>`
+    <div class="mask-card" onclick="openMaskModal(${m.id})">
+      <div class="mask-banner" style="background:${m.color}">${m.emoji}</div>
+      <div class="mask-body">
+        <h3 class="mask-name">${m.name}</h3>
+        <p class="mask-benefit">${m.benefit}</p>
+        <div class="mask-badges">
+          ${m.skinTypes.map(s=>`<span class="badge-skin">${s==='all'?'All skin types':s.charAt(0).toUpperCase()+s.slice(1)+' skin'}</span>`).join('')}
+          <span class="badge-time">⏱ ${m.time}</span>
+        </div>
+      </div>
+      <div class="mask-footer">
+        <span class="mask-hint">🧴 ${m.ingredients.length} ingredients</span>
+        <span class="mask-cta">See recipe →</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════
+   MASK MODAL
+══════════════════════════════════════ */
+function openMaskModal(id){
+  const m=masks.find(x=>x.id===id);if(!m)return;
+  document.getElementById('mmEmoji').textContent=m.emoji;
+  document.getElementById('mmName').textContent=m.name;
+  document.getElementById('mmHead').style.background=m.color;
+  document.getElementById('mmTags').innerHTML=
+    m.skinTypes.map(s=>`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">${s==='all'?'All skin types':s.charAt(0).toUpperCase()+s.slice(1)+' skin'}</span>`).join('')+
+    `<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">⏱ ${m.time}</span>`;
+  document.getElementById('mmBody').innerHTML=`
+    <p class="mm-section-title">🧴 Ingredients</p>
+    <div class="ingr-list">${m.ingredients.map(i=>`<div class="ingr-item"><span class="ingr-emoji">${i.emoji}</span><div><strong>${i.item}</strong><span>${i.purpose}</span></div></div>`).join('')}</div>
+    <p class="mm-section-title">📋 How to make</p>
+    <div class="step-list">${m.steps.map((s,i)=>`<div class="step-item"><span class="step-num">${i+1}</span><p class="step-text">${s}</p></div>`).join('')}</div>
+    <div class="mask-tip"><strong>💡 Pro tip:</strong> ${m.tip}</div>`;
+  document.getElementById('maskOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMaskModal(){document.getElementById('maskOverlay').classList.remove('open');document.body.style.overflow='';}
+
+/* ══════════════════════════════════════
+   MEALS SECTION
+══════════════════════════════════════ */
+const concernLabels=[
+  {label:'All Concerns',val:'all'},
+  {label:'🔴 Acne',val:'acne'},
+  {label:'✨ Brightening',val:'brightening'},
+  {label:'💧 Hydration',val:'hydration'},
+  {label:'⏳ Anti-Ageing',val:'aging'},
+  {label:'🫧 Oily Skin',val:'oily'}
+];
+let activeConcern='all';
+
+function renderConcernFilter(){
+  document.getElementById('concernRow').innerHTML=concernLabels.map((c,i)=>
+    `<button class="concern-btn${i===0?' active':''}" onclick="setConcern('${c.val}',this)">${c.label}</button>`).join('');
+}
+
+function setConcern(val,btn){
+  activeConcern=val;
+  document.querySelectorAll('.concern-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMeals();
+}
+
+function renderMeals(){
+  const filtered=activeConcern==='all'?meals:meals.filter(m=>m.concerns.includes(activeConcern));
+  const g=document.getElementById('mealGrid');
+  if(!filtered.length){g.innerHTML='<div class="no-results"><div class="nre">🍽️</div><h3>No meals for this concern</h3><p>Try a different filter.</p></div>';return;}
+  g.innerHTML=filtered.map(m=>`
+    <div class="meal-card" onclick="openMealModal(${m.id})">
+      <div class="meal-banner" style="background:${m.color}">${m.emoji}</div>
+      <div class="meal-body">
+        <h3 class="meal-name">${m.name}</h3>
+        <p class="meal-tagline">${m.tagline}</p>
+        <div class="meal-meta">
+          <span class="badge-time">⏱ ${m.time}</span>
+          ${m.concerns.map(c=>{const cl=concernLabels.find(l=>l.val===c);return cl?`<span class="badge-concern">${cl.label}</span>`:''}).join('')}
+        </div>
+      </div>
+      <div class="meal-footer">
+        <span class="meal-hint">🍴 ${m.ingredients.length} ingredients</span>
+        <span class="meal-cta">See recipe →</span>
+      </div>
+    </div>`).join('');
+}
+
+function openMealModal(id){
+  const m=meals.find(x=>x.id===id);if(!m)return;
+  document.getElementById('mlEmoji').textContent=m.emoji;
+  document.getElementById('mlName').textContent=m.name;
+  document.getElementById('mlHead').style.background=m.color;
+  document.getElementById('mlTags').innerHTML=
+    m.concerns.map(c=>{const cl=concernLabels.find(l=>l.val===c);return cl?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">${cl.label}</span>`:''}).join('')+
+    `<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">⏱ ${m.time}</span>`+
+    `<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">🍽️ ${m.servings} serving${m.servings>1?'s':''}</span>`;
+  document.getElementById('mlBody').innerHTML=`
+    <p class="mm-section-title">🧴 Ingredients</p>
+    <div class="ingr-list">${m.ingredients.map(i=>`<div class="ingr-item"><span class="ingr-emoji">${i.emoji}</span><div><strong>${i.item}</strong><span>${i.purpose}</span></div></div>`).join('')}</div>
+    <p class="mm-section-title">📋 Method</p>
+    <div class="step-list">${m.steps.map((s,idx)=>`<div class="step-item"><span class="step-num">${idx+1}</span><p class="step-text">${s}</p></div>`).join('')}</div>
+    <div class="skin-benefit-box"><strong>🌟 Skin benefit:</strong> ${m.skinBenefit}</div>`;
+  document.getElementById('mealOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMealModal(){document.getElementById('mealOverlay').classList.remove('open');document.body.style.overflow='';}
+
+/* ══════════════════════════════════════
+   EVENTS
+══════════════════════════════════════ */
+document.getElementById('searchInput').addEventListener('input',e=>{query=e.target.value;renderFoods();});
+document.getElementById('vegToggle').addEventListener('change',e=>{vegOnly=e.target.checked;renderFoods();});
+document.getElementById('halalToggle').addEventListener('change',e=>{halalOnly=e.target.checked;renderFoods();});
+document.getElementById('foodOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('foodOverlay'))closeFoodModal();});
+document.getElementById('maskOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('maskOverlay'))closeMaskModal();});
+document.getElementById('mealOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('mealOverlay'))closeMealModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();}});
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+renderFoods();
+renderPhaseButtons();
+renderSkinTypeFilter();
+renderMasks();
+renderConcernFilter();
+renderMeals();
+</script>
+</body>
+</html>

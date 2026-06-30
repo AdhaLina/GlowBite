@@ -1438,7 +1438,13 @@ function closeMealModal(){document.getElementById('mealOverlay').classList.remov
 /* ══════════════════════════════════════
    REMINDERS
 ══════════════════════════════════════ */
-let reminders=JSON.parse(localStorage.getItem('glowbiteReminders')||'[]');
+let reminders;
+if(localStorage.getItem('glowbiteReminders')===null){
+  reminders=[{id:Date.now(),text:'💧 Drink water',time:'09:00',repeat:'daily'}];
+  localStorage.setItem('glowbiteReminders',JSON.stringify(reminders));
+}else{
+  reminders=JSON.parse(localStorage.getItem('glowbiteReminders'));
+}
 const remFiredToday={};
 
 function saveReminders(){localStorage.setItem('glowbiteReminders',JSON.stringify(reminders));}

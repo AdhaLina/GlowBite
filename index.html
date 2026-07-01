@@ -21,10 +21,14 @@ html{-webkit-text-size-adjust:100%}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:#333;overscroll-behavior-y:none;padding-bottom:env(safe-area-inset-bottom)}
 button,input,select{font-size:16px}
 
-/* HEADER */
-.header{background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);padding:calc(2.2rem + env(safe-area-inset-top)) 1rem 1.8rem;text-align:center;color:#fff;position:relative;overflow:hidden}
-.header::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,.08);border-radius:50%;top:-100px;left:-80px}
-.header::after{content:'';position:absolute;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%;bottom:-60px;right:-40px}
+/* HEADER — animated gradient */
+.header{background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);background-size:300% 300%;animation:headerShift 8s ease infinite;padding:calc(2.2rem + env(safe-area-inset-top)) 1rem 1.8rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+@keyframes headerShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+/* Floating blobs */
+.header::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,.08);border-radius:50%;top:-100px;left:-80px;animation:blobDrift1 7s ease-in-out infinite}
+.header::after{content:'';position:absolute;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%;bottom:-60px;right:-40px;animation:blobDrift2 9s ease-in-out infinite}
+@keyframes blobDrift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(18px,-14px) scale(1.08)}}
+@keyframes blobDrift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-14px,12px) scale(1.12)}}
 .header h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;letter-spacing:-1px;margin-bottom:.3rem;position:relative}
 .header p{font-size:clamp(.88rem,2.5vw,1.05rem);opacity:.88;position:relative}
 
@@ -47,8 +51,17 @@ button,input,select{font-size:16px}
 .sidebar-brand-name{font-size:1.15rem;font-weight:900;color:#333;letter-spacing:-0.5px}
 .sidebar-brand-sub{font-size:.7rem;color:#aaa;font-weight:500}
 
-/* NAV BUTTONS */
-.nav-btn{display:flex;align-items:center;gap:.85rem;padding:.8rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.92rem;font-weight:700;color:#999;width:100%;text-align:left;border-radius:0;transition:background .18s,color .18s;border-left:3px solid transparent;white-space:nowrap}
+/* NAV BUTTONS — stagger slide-in */
+.nav-btn{display:flex;align-items:center;gap:.85rem;padding:.8rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.92rem;font-weight:700;color:#999;width:100%;text-align:left;border-radius:0;transition:background .18s,color .18s;border-left:3px solid transparent;white-space:nowrap;opacity:0;transform:translateX(-18px)}
+.main-nav.open .nav-btn{animation:navSlideIn .32s ease forwards}
+@keyframes navSlideIn{to{opacity:1;transform:translateX(0)}}
+.main-nav.open .nav-btn:nth-child(2){animation-delay:.04s}
+.main-nav.open .nav-btn:nth-child(3){animation-delay:.08s}
+.main-nav.open .nav-btn:nth-child(4){animation-delay:.12s}
+.main-nav.open .nav-btn:nth-child(5){animation-delay:.16s}
+.main-nav.open .nav-btn:nth-child(6){animation-delay:.20s}
+.main-nav.open .nav-btn:nth-child(7){animation-delay:.24s}
+.main-nav.open .nav-btn:nth-child(8){animation-delay:.28s}
 .nav-btn .nb-icon{font-size:1.4rem;flex-shrink:0;transition:transform .2s}
 .nav-btn:hover{background:#faf5ff;color:#555}
 .nav-btn.active{color:var(--purple);background:#f5eeff;border-left-color:var(--purple)}
@@ -81,6 +94,15 @@ button,input,select{font-size:16px}
 .main-pad{max-width:1200px;margin:0 auto;padding:1.3rem 1rem 3rem}
 .results-count{font-size:.82rem;color:#999;margin-bottom:.9rem}
 .food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+/* Staggered card entrance */
+.card-enter{opacity:0;transform:translateY(22px);animation:cardEnter .38s ease forwards}
+@keyframes cardEnter{to{opacity:1;transform:translateY(0)}}
+/* Twinkling sparkle */
+.sparkle{display:inline-block;animation:sparklePulse 2s ease-in-out infinite}
+@keyframes sparklePulse{0%,100%{transform:scale(1) rotate(0deg);filter:drop-shadow(0 0 0 transparent)}50%{transform:scale(1.25) rotate(12deg);filter:drop-shadow(0 0 6px rgba(255,200,80,.8))}}
+/* Active phase moon bob */
+.phase-btn.sel .phase-moon{animation:moonBob .7s ease-in-out infinite alternate}
+@keyframes moonBob{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-5px) rotate(4deg)}}
 .food-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
 .food-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
 .food-card.tapped{animation:cardTap .38s cubic-bezier(.36,.07,.19,.97)}
@@ -425,7 +447,7 @@ button,input,select{font-size:16px}
     <span></span><span></span><span></span>
   </button>
   <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fsBtn" title="Full screen">⛶</button>
-  <h1>✨ GlowBite</h1>
+  <h1><span class="sparkle">✨</span> GlowBite</h1>
   <p>Discover foods that nourish your skin from within</p>
 </header>
 
@@ -1930,8 +1952,8 @@ function renderFoods(){
   document.getElementById('resultsCount').textContent=`Showing ${filtered.length} food${filtered.length!==1?'s':''}`;
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
-  g.innerHTML=filtered.map(f=>`
-    <div class="food-card" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
+  g.innerHTML=filtered.map((f,i)=>`
+    <div class="food-card card-enter" style="animation-delay:${i*40}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
       <div class="card-banner" style="background:${f.color}">${f.emoji}
         <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
       </div>
@@ -1997,8 +2019,8 @@ function selectPhase(id){
   document.getElementById('pbtn-'+id).classList.add('sel');
   selectedPhase=id;
   const recFoods=p.foodIds.map(fid=>foods.find(f=>f.id===fid)).filter(Boolean);
-  document.getElementById('phaseDetail').innerHTML=`
-    <div class="phase-card">
+  const _pd=document.getElementById('phaseDetail');
+  _pd.innerHTML=`<div class="phase-card" id="phaseCardEl">
       <div class="phase-head" style="background:${p.color}">
         <h3>${p.emoji} ${p.name} <span style="font-size:.75rem;font-weight:600;opacity:.85">${p.days}</span></h3>
         <p>Select your current cycle phase to see personalised food & skin guidance</p>
@@ -2017,6 +2039,9 @@ function selectPhase(id){
       </div>
       <p class="disclaimer">ℹ️ This is general nutritional guidance, not medical advice. Consult your healthcare provider for personal recommendations.</p>
     </div>`;
+  // retrigger fade-up animation every phase switch
+  const _el=document.getElementById('phaseCardEl');
+  if(_el){_el.style.animation='none';_el.offsetHeight;_el.style.animation='';}
 }
 
 /* ══════════════════════════════════════
@@ -2042,8 +2067,8 @@ function renderMasks(){
     if(activeSkinType==='all')return true;
     return m.skinTypes.includes(activeSkinType)||m.skinTypes.includes('all');
   });
-  document.getElementById('maskGrid').innerHTML=filtered.map(m=>`
-    <div class="mask-card" onclick="openMaskModal(${m.id})">
+  document.getElementById('maskGrid').innerHTML=filtered.map((m,i)=>`
+    <div class="mask-card card-enter" style="animation-delay:${i*40}ms" onclick="openMaskModal(${m.id})">
       <div class="mask-banner" style="background:${m.color}">${m.emoji}</div>
       <div class="mask-body">
         <h3 class="mask-name">${m.name}</h3>

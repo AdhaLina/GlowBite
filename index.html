@@ -18,7 +18,13 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--purple:#C44DFF;--pink:#FF6B9D;--blue:#4D79FF;--green:#00C851;--teal:#00B5AD;--bg:#f5f0ff}
 html{-webkit-text-size-adjust:100%}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:#333;overscroll-behavior-y:none;padding-bottom:env(safe-area-inset-bottom)}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:#333;overscroll-behavior-y:none;padding-bottom:env(safe-area-inset-bottom);position:relative}
+/* FULL PAGE BACKGROUND BUBBLES */
+.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-bubble{position:absolute;border-radius:50%;opacity:.13;animation:bgFloat var(--bdur,12s) ease-in-out var(--bdel,0s) infinite alternate}
+@keyframes bgFloat{0%{transform:translate(0,0) scale(1)}100%{transform:translate(var(--bx,20px),var(--by,-30px)) scale(var(--bs,1.1))}}
+/* all sections sit above bubbles */
+.section,.header,#installBanner,#splash,.sidebar-overlay,.main-nav,.overlay,.jmodal-overlay{position:relative;z-index:1}
 button,input,select{font-size:16px}
 
 /* HEADER — animated gradient */
@@ -426,6 +432,9 @@ button,input,select{font-size:16px}
 </style>
 </head>
 <body>
+
+<!-- BACKGROUND BUBBLES -->
+<div class="bg-bubbles" id="bgBubbles"></div>
 
 <!-- SPLASH SCREEN -->
 <div id="splash">
@@ -2668,6 +2677,30 @@ document.getElementById('journalOverlay').addEventListener('click',e=>{
 });
 
 renderJournal();
+
+/* BACKGROUND BUBBLES */
+(function(){
+  const colours=['#C44DFF','#FF6B9D','#4D79FF','#FFB3DE','#A78BFA','#67E8F9','#FDE68A'];
+  const wrap=document.getElementById('bgBubbles');
+  const bubbles=[
+    {s:320,x:'12%',y:'8%',bx:'28px',by:'-22px',bs:1.08,dur:'14s',del:'0s'},
+    {s:180,x:'72%',y:'5%',bx:'-18px',by:'24px',bs:1.12,dur:'11s',del:'1.5s'},
+    {s:240,x:'85%',y:'38%',bx:'20px',by:'-28px',bs:1.06,dur:'16s',del:'3s'},
+    {s:140,x:'5%',y:'42%',bx:'16px',by:'20px',bs:1.15,dur:'9s',del:'0.8s'},
+    {s:280,x:'45%',y:'62%',bx:'-24px',by:'-18px',bs:1.09,dur:'13s',del:'2.2s'},
+    {s:200,x:'20%',y:'75%',bx:'22px',by:'16px',bs:1.07,dur:'18s',del:'4s'},
+    {s:160,x:'65%',y:'80%',bx:'-16px',by:'-24px',bs:1.13,dur:'10s',del:'1s'},
+    {s:360,x:'38%',y:'20%',bx:'14px',by:'22px',bs:1.05,dur:'20s',del:'5s'},
+    {s:120,x:'90%',y:'68%',bx:'-20px',by:'18px',bs:1.18,dur:'8s',del:'2.8s'},
+    {s:220,x:'55%',y:'90%',bx:'18px',by:'-20px',bs:1.1,dur:'15s',del:'3.5s'},
+  ];
+  bubbles.forEach((b,i)=>{
+    const el=document.createElement('div');
+    el.className='bg-bubble';
+    el.style.cssText=`width:${b.s}px;height:${b.s}px;left:${b.x};top:${b.y};background:${colours[i%colours.length]};--bx:${b.bx};--by:${b.by};--bs:${b.bs};--bdur:${b.dur};--bdel:${b.del};filter:blur(${Math.round(b.s*.28)}px)`;
+    wrap.appendChild(el);
+  });
+})();
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});

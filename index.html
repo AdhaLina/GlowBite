@@ -335,6 +335,57 @@ button,input,select{font-size:16px}
 .scan-retake-btn{background:#f5eeff;color:var(--purple);border:none;border-radius:12px;padding:.7rem;font-size:.85rem;font-weight:700;cursor:pointer;width:100%;margin-top:1.1rem}
 @media(max-width:500px){.scan-meals-grid{grid-template-columns:1fr}}
 
+/* SKIN JOURNAL */
+.journal-wrap{max-width:720px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.journal-add-btn{width:100%;background:linear-gradient(135deg,#FF6B9D,#C44DFF);color:#fff;border:none;border-radius:16px;padding:.9rem;font-size:1rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.3rem;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(196,77,255,.35)}
+.journal-add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,77,255,.45)}
+.journal-add-btn:active{transform:scale(.97)}
+.journal-entries{display:flex;flex-direction:column;gap:.9rem}
+.journal-empty{text-align:center;padding:3rem 1rem;color:#aaa}
+.journal-empty .je-icon{font-size:3rem;margin-bottom:.7rem}
+.journal-empty p{font-size:.9rem}
+.journal-card{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);overflow:hidden;animation:fadeUp .32s ease}
+.jc-header{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem .75rem;border-bottom:1px solid #f5f5f5}
+.jc-rating{font-size:1.6rem;flex-shrink:0}
+.jc-meta{flex:1;min-width:0}
+.jc-date{font-size:.78rem;font-weight:700;color:#bbb}
+.jc-mood{font-size:.84rem;font-weight:800;color:#333;margin-top:.05rem}
+.jc-actions{display:flex;gap:.4rem;flex-shrink:0}
+.jc-edit-btn,.jc-del-btn{border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.jc-edit-btn{background:#f0e8ff;color:var(--purple)}
+.jc-del-btn{background:#fff0f5;color:#d63a8a}
+.jc-edit-btn:hover,.jc-del-btn:hover{transform:scale(1.15)}
+.jc-body{padding:.85rem 1rem}
+.jc-note{font-size:.88rem;color:#555;line-height:1.65;margin-bottom:.7rem;white-space:pre-wrap}
+.jc-skin-row{display:flex;gap:.4rem;flex-wrap:wrap}
+.jc-skin-tag{padding:.18rem .55rem;border-radius:50px;font-size:.7rem;font-weight:700;background:#f0e8ff;color:#8B2FC9}
+.jc-photo{width:100%;max-height:200px;object-fit:cover;display:block;border-radius:0 0 18px 18px;cursor:pointer}
+
+/* JOURNAL MODAL */
+.jmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
+.jmodal-overlay.open{opacity:1;visibility:visible}
+.jmodal{background:#fff;border-radius:22px 22px 0 0;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.4rem 1.4rem calc(1.4rem + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1)}
+.jmodal-overlay.open .jmodal{transform:translateY(0)}
+.jmodal-handle{width:36px;height:4px;background:#e0e0e0;border-radius:4px;margin:0 auto 1.2rem}
+.jmodal h3{font-size:1.1rem;font-weight:900;color:#333;margin-bottom:1.2rem;text-align:center}
+.jfield{margin-bottom:1rem}
+.jfield label{display:block;font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.35rem}
+.jfield textarea,.jfield input[type=text]{width:100%;border:2px solid #eee;border-radius:12px;padding:.65rem .85rem;font-size:16px;font-family:inherit;outline:none;resize:vertical;transition:border-color .2s;color:#333}
+.jfield textarea:focus,.jfield input[type=text]:focus{border-color:var(--purple)}
+.jfield textarea{min-height:90px}
+.rating-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.rating-opt{border:2px solid #eee;border-radius:50px;padding:.35rem .8rem;background:#fff;cursor:pointer;font-size:.88rem;font-weight:700;color:#888;transition:all .2s;white-space:nowrap}
+.rating-opt.sel{border-color:var(--purple);background:#f0e8ff;color:var(--purple)}
+.skin-tag-row{display:flex;gap:.4rem;flex-wrap:wrap}
+.skin-tag-opt{border:2px solid #eee;border-radius:50px;padding:.3rem .75rem;background:#fff;cursor:pointer;font-size:.8rem;font-weight:700;color:#888;transition:all .2s}
+.skin-tag-opt.sel{border-color:var(--purple);background:#f0e8ff;color:var(--purple)}
+.jphoto-btn{display:flex;align-items:center;gap:.5rem;background:var(--bg);border:2px dashed #d0c4f5;border-radius:12px;padding:.75rem 1rem;cursor:pointer;font-size:.85rem;font-weight:700;color:#888;width:100%;justify-content:center;transition:border-color .2s}
+.jphoto-btn:hover{border-color:var(--purple);color:var(--purple)}
+.jphoto-preview{width:100%;max-height:160px;object-fit:cover;border-radius:12px;margin-top:.6rem;display:none}
+.jmodal-save{width:100%;background:linear-gradient(135deg,#FF6B9D,#C44DFF);color:#fff;border:none;border-radius:14px;padding:.85rem;font-size:1rem;font-weight:800;cursor:pointer;margin-top:.5rem;transition:transform .15s}
+.jmodal-save:hover{transform:translateY(-2px)}
+.jmodal-cancel{width:100%;background:#f5f5f5;color:#888;border:none;border-radius:14px;padding:.75rem;font-size:.88rem;font-weight:700;cursor:pointer;margin-top:.5rem}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   .phase-grid{grid-template-columns:repeat(2,1fr)}
@@ -396,6 +447,7 @@ button,input,select{font-size:16px}
   <button class="nav-btn" onclick="switchSection('meals',this)"><span class="nb-icon">🍽️</span>Meal Ideas</button>
   <button class="nav-btn" onclick="switchSection('reminders',this)"><span class="nb-icon">⏰</span>Reminders</button>
   <button class="nav-btn" onclick="switchSection('scanner',this)"><span class="nb-icon">📸</span>AI Scanner</button>
+  <button class="nav-btn" onclick="switchSection('journal',this)"><span class="nb-icon">📓</span>Skin Journal</button>
 </nav>
 
 <!-- FOODS -->
@@ -555,6 +607,66 @@ button,input,select{font-size:16px}
       <div class="scan-meals-grid" id="scanMealsGrid"></div>
       <button class="scan-retake-btn" onclick="clearScan()">📸 Scan new ingredients</button>
     </div>
+  </div>
+</div>
+
+<!-- SKIN JOURNAL -->
+<div class="section" id="sec-journal">
+  <div class="journal-wrap">
+    <div class="sec-hero">
+      <h2>📓 Skin Journal</h2>
+      <p>Track your skin's journey — daily mood, notes &amp; photos</p>
+    </div>
+    <button class="journal-add-btn" onclick="openJournalModal()">✏️ Add Today's Entry</button>
+    <div class="journal-entries" id="journalEntries"></div>
+  </div>
+</div>
+
+<!-- JOURNAL MODAL -->
+<div class="jmodal-overlay" id="journalOverlay">
+  <div class="jmodal" id="journalModal">
+    <div class="jmodal-handle"></div>
+    <h3 id="jmodalTitle">Today's Skin Entry</h3>
+
+    <div class="jfield">
+      <label>Skin rating</label>
+      <div class="rating-row" id="ratingRow">
+        <button class="rating-opt" data-val="😍 Glowing">😍 Glowing</button>
+        <button class="rating-opt" data-val="😊 Good">😊 Good</button>
+        <button class="rating-opt" data-val="😐 Okay">😐 Okay</button>
+        <button class="rating-opt" data-val="😟 Rough">😟 Rough</button>
+        <button class="rating-opt" data-val="😩 Breakout">😩 Breakout</button>
+      </div>
+    </div>
+
+    <div class="jfield">
+      <label>Skin concerns today</label>
+      <div class="skin-tag-row" id="skinTagRow">
+        <button class="skin-tag-opt" data-val="Acne">Acne</button>
+        <button class="skin-tag-opt" data-val="Dryness">Dryness</button>
+        <button class="skin-tag-opt" data-val="Oiliness">Oiliness</button>
+        <button class="skin-tag-opt" data-val="Redness">Redness</button>
+        <button class="skin-tag-opt" data-val="Dullness">Dullness</button>
+        <button class="skin-tag-opt" data-val="Puffiness">Puffiness</button>
+        <button class="skin-tag-opt" data-val="Glowing">Glowing ✨</button>
+        <button class="skin-tag-opt" data-val="Even tone">Even tone</button>
+      </div>
+    </div>
+
+    <div class="jfield">
+      <label>Notes — what did you eat, drink or do?</label>
+      <textarea id="jNotes" placeholder="e.g. Drank 2L water, ate salmon and avocado toast. Noticed skin felt softer after the turmeric mask…"></textarea>
+    </div>
+
+    <div class="jfield">
+      <label>Add a photo (optional)</label>
+      <button class="jphoto-btn" onclick="document.getElementById('jPhotoInput').click()">📷 Take or choose photo</button>
+      <input type="file" id="jPhotoInput" accept="image/*" style="display:none" onchange="handleJournalPhoto(this)">
+      <img id="jPhotoPreview" class="jphoto-preview" alt="Skin photo">
+    </div>
+
+    <button class="jmodal-save" onclick="saveJournalEntry()">💾 Save Entry</button>
+    <button class="jmodal-cancel" onclick="closeJournalModal()">Cancel</button>
   </div>
 </div>
 
@@ -2378,6 +2490,159 @@ function renderScanResults(data){
 }
 
 initApiKeyUI();
+
+/* ══════════════════════════════════════
+   SKIN JOURNAL
+══════════════════════════════════════ */
+let journalEntries = JSON.parse(localStorage.getItem('glowbiteJournal') || '[]');
+let editingJournalId = null;
+let journalPhotoB64 = null;
+
+function vibe(pattern){if(navigator.vibrate)navigator.vibrate(pattern);}
+
+function openJournalModal(id){
+  editingJournalId = id || null;
+  journalPhotoB64 = null;
+  const overlay = document.getElementById('journalOverlay');
+  document.getElementById('jmodalTitle').textContent = id ? 'Edit Entry' : "Today's Skin Entry";
+  document.getElementById('jNotes').value = '';
+  document.getElementById('jPhotoPreview').style.display = 'none';
+  document.getElementById('jPhotoPreview').src = '';
+  document.querySelectorAll('.rating-opt').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.skin-tag-opt').forEach(b=>b.classList.remove('sel'));
+
+  if(id){
+    const entry = journalEntries.find(e=>e.id===id);
+    if(entry){
+      document.querySelectorAll('.rating-opt').forEach(b=>{if(b.dataset.val===entry.rating)b.classList.add('sel');});
+      (entry.tags||[]).forEach(t=>{document.querySelectorAll('.skin-tag-opt').forEach(b=>{if(b.dataset.val===t)b.classList.add('sel');});});
+      document.getElementById('jNotes').value = entry.notes || '';
+      if(entry.photo){
+        journalPhotoB64 = entry.photo;
+        const pv = document.getElementById('jPhotoPreview');
+        pv.src = entry.photo;
+        pv.style.display = 'block';
+      }
+    }
+  }
+  overlay.classList.add('open');
+  vibe(30);
+}
+
+function closeJournalModal(){
+  document.getElementById('journalOverlay').classList.remove('open');
+  vibe(15);
+}
+
+function handleJournalPhoto(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    journalPhotoB64 = e.target.result;
+    const pv = document.getElementById('jPhotoPreview');
+    pv.src = journalPhotoB64;
+    pv.style.display = 'block';
+    vibe([20,10,20]);
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveJournalEntry(){
+  const rating = document.querySelector('.rating-opt.sel')?.dataset.val || '';
+  const tags = [...document.querySelectorAll('.skin-tag-opt.sel')].map(b=>b.dataset.val);
+  const notes = document.getElementById('jNotes').value.trim();
+  if(!rating && !notes){vibe([40,20,40]);alert('Add a skin rating or a note first.');return;}
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  if(editingJournalId){
+    const idx = journalEntries.findIndex(e=>e.id===editingJournalId);
+    if(idx>-1){
+      journalEntries[idx] = {...journalEntries[idx], rating, tags, notes, photo: journalPhotoB64||journalEntries[idx].photo};
+    }
+  } else {
+    journalEntries.unshift({id:Date.now(), date:dateStr, time:timeStr, rating, tags, notes, photo:journalPhotoB64});
+  }
+
+  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));
+  closeJournalModal();
+  renderJournal();
+  vibe([30,20,60]);
+}
+
+function deleteJournalEntry(id){
+  if(!confirm('Delete this journal entry?')) return;
+  journalEntries = journalEntries.filter(e=>e.id!==id);
+  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));
+  renderJournal();
+  vibe([20,10,20,10,40]);
+}
+
+function renderJournal(){
+  const container = document.getElementById('journalEntries');
+  if(!container) return;
+  if(!journalEntries.length){
+    container.innerHTML = '<div class="journal-empty"><div class="je-icon">📓</div><p>No entries yet.<br>Start tracking your skin today!</p></div>';
+    return;
+  }
+  const ratingEmoji = r => r ? r.split(' ')[0] : '📝';
+  container.innerHTML = journalEntries.map(e=>`
+    <div class="journal-card" id="jcard-${e.id}">
+      <div class="jc-header">
+        <div class="jc-rating">${ratingEmoji(e.rating)}</div>
+        <div class="jc-meta">
+          <div class="jc-date">${e.date}${e.time?' · '+e.time:''}</div>
+          <div class="jc-mood">${e.rating||'No rating'}</div>
+        </div>
+        <div class="jc-actions">
+          <button class="jc-edit-btn" onclick="openJournalModal(${e.id})" title="Edit">✏️</button>
+          <button class="jc-del-btn" onclick="deleteJournalEntry(${e.id})" title="Delete">🗑️</button>
+        </div>
+      </div>
+      ${e.notes||e.tags?.length ? `<div class="jc-body">
+        ${e.notes?`<div class="jc-note">${e.notes}</div>`:''}
+        ${e.tags?.length?`<div class="jc-skin-row">${e.tags.map(t=>`<span class="jc-skin-tag">${t}</span>`).join('')}</div>`:''}
+      </div>`:''}
+      ${e.photo?`<img class="jc-photo" src="${e.photo}" alt="Skin photo" onclick="openPhotoViewer('${e.id}')">`:''}
+    </div>
+  `).join('');
+}
+
+function openPhotoViewer(id){
+  const entry = journalEntries.find(e=>e.id==id);
+  if(!entry?.photo) return;
+  const ov = document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer';
+  ov.innerHTML=`<img src="${entry.photo}" style="max-width:96vw;max-height:96vh;border-radius:12px;object-fit:contain">`;
+  ov.onclick=()=>document.body.removeChild(ov);
+  document.body.appendChild(ov);
+  vibe(20);
+}
+
+// Rating & tag toggle
+document.getElementById('ratingRow').addEventListener('click',e=>{
+  const btn = e.target.closest('.rating-opt');
+  if(!btn) return;
+  document.querySelectorAll('.rating-opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  vibe(25);
+});
+document.getElementById('skinTagRow').addEventListener('click',e=>{
+  const btn = e.target.closest('.skin-tag-opt');
+  if(!btn) return;
+  btn.classList.toggle('sel');
+  vibe(20);
+});
+
+// Close journal modal on overlay tap outside modal
+document.getElementById('journalOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('journalOverlay')) closeJournalModal();
+});
+
+renderJournal();
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});

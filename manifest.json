@@ -4,7 +4,7 @@
   "description": "Discover foods, masks, meals and reminders for glowing, healthy skin.",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#f5f0ff",
   "theme_color": "#C44DFF",

@@ -10,6 +10,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="msapplication-TileColor" content="#C44DFF">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <title>GlowBite — Foods for Glowing Skin</title>
 <style>
@@ -219,6 +221,24 @@ button,input,select{font-size:16px}
 .rem-empty{text-align:center;padding:2.5rem 1rem;color:#aaa}
 .rem-empty .nre{font-size:2.5rem;margin-bottom:.6rem}
 
+/* SPLASH SCREEN */
+#splash{position:fixed;inset:0;background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+#splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash-logo{font-size:5rem;margin-bottom:.5rem;animation:splashPop .6s cubic-bezier(.34,1.56,.64,1)}
+.splash-title{font-size:2rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:.3rem}
+.splash-sub{font-size:.9rem;color:rgba(255,255,255,.8)}
+@keyframes splashPop{from{transform:scale(0.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* INSTALL BANNER */
+#installBanner{background:linear-gradient(135deg,#C44DFF,#4D79FF);color:#fff;padding:.75rem 1rem;display:none;align-items:center;gap:.7rem;position:sticky;top:0;z-index:400}
+#installBanner p{flex:1;font-size:.82rem;font-weight:600;line-height:1.4}
+.install-btn{background:#fff;color:var(--purple);border:none;border-radius:50px;padding:.4rem .9rem;font-size:.78rem;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.install-dismiss{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.1rem;cursor:pointer;flex-shrink:0;padding:.2rem}
+
+/* FULLSCREEN BTN */
+.fullscreen-btn{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:10}
+.fullscreen-btn:hover{background:rgba(255,255,255,.35)}
+
 /* SCANNER SECTION */
 .scanner-wrap{max-width:720px;margin:0 auto;padding:1.5rem 1rem 3rem}
 .api-setup-card{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);padding:1.1rem;margin-bottom:1.2rem}
@@ -281,7 +301,22 @@ button,input,select{font-size:16px}
 </head>
 <body>
 
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <div class="splash-logo">✨</div>
+  <div class="splash-title">GlowBite</div>
+  <div class="splash-sub">Foods for glowing skin</div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="installBanner">
+  <p>📲 Add GlowBite to your Home Screen for the full app experience!</p>
+  <button class="install-btn" id="installBtn" onclick="triggerInstall()">Install</button>
+  <button class="install-dismiss" onclick="dismissInstallBanner()">✕</button>
+</div>
+
 <header class="header">
+  <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fsBtn" title="Full screen">⛶</button>
   <h1>✨ GlowBite</h1>
   <p>Discover foods that nourish your skin from within</p>
 </header>
@@ -1656,6 +1691,60 @@ renderConcernFilter();
 renderMeals();
 renderReminders();
 updateNotifyNote();
+
+/* ══════════════════════════════════════
+   SPLASH SCREEN
+══════════════════════════════════════ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('splash').classList.add('hidden'),1600);
+});
+
+/* ══════════════════════════════════════
+   INSTALL / FULLSCREEN
+══════════════════════════════════════ */
+let deferredInstallPrompt=null;
+const isStandalone=()=>window.matchMedia('(display-mode:standalone)').matches||window.navigator.standalone;
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  if(!isStandalone()&&!sessionStorage.getItem('installDismissed')){
+    document.getElementById('installBanner').style.display='flex';
+  }
+});
+
+function triggerInstall(){
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(()=>{deferredInstallPrompt=null;dismissInstallBanner();});
+  }else{
+    alert('To install GlowBite:\n\n1. Tap the Share button in Safari\n2. Tap "Add to Home Screen"\n3. Tap Add');
+  }
+}
+
+function dismissInstallBanner(){
+  document.getElementById('installBanner').style.display='none';
+  sessionStorage.setItem('installDismissed','1');
+}
+
+function toggleFullscreen(){
+  const btn=document.getElementById('fsBtn');
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();
+    btn.textContent='✕';btn.title='Exit full screen';
+  }else{
+    document.exitFullscreen&&document.exitFullscreen();
+    btn.textContent='⛶';btn.title='Full screen';
+  }
+}
+document.addEventListener('fullscreenchange',()=>{
+  if(!document.fullscreenElement)document.getElementById('fsBtn').textContent='⛶';
+});
+
+// Show install banner on iOS Safari if not already installed
+if(!isStandalone()&&/iphone|ipad|ipod/i.test(navigator.userAgent)&&!sessionStorage.getItem('installDismissed')){
+  setTimeout(()=>{document.getElementById('installBanner').style.display='flex';},2000);
+}
 
 /* ══════════════════════════════════════
    AI SCANNER

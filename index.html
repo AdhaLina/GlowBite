@@ -28,10 +28,14 @@ button,input,select{font-size:16px}
 .header h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;letter-spacing:-1px;margin-bottom:.3rem;position:relative}
 .header p{font-size:clamp(.88rem,2.5vw,1.05rem);opacity:.88;position:relative}
 
-/* MAIN NAV */
-.main-nav{background:#fff;display:flex;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);position:sticky;top:0;z-index:300;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.nav-btn{padding:.85rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:700;color:#aaa;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
-.nav-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
+/* MAIN NAV — bottom tab bar */
+.main-nav{background:#fff;display:flex;justify-content:space-around;box-shadow:0 -2px 16px rgba(0,0,0,.09);position:fixed;bottom:0;left:0;right:0;z-index:300;padding-bottom:env(safe-area-inset-bottom);-webkit-overflow-scrolling:touch}
+.nav-btn{flex:1;padding:.6rem .2rem .5rem;border:none;background:none;cursor:pointer;font-size:.58rem;font-weight:700;color:#bbb;white-space:nowrap;transition:color .2s,transform .15s;display:flex;flex-direction:column;align-items:center;gap:.18rem;border-top:3px solid transparent}
+.nav-btn .nb-icon{font-size:1.45rem;line-height:1;transition:transform .2s}
+.nav-btn.active{color:var(--purple);border-top-color:var(--purple)}
+.nav-btn.active .nb-icon{transform:scale(1.18)}
+.nav-btn:active .nb-icon{transform:scale(.88)}
+body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
 
 /* SECTIONS */
 .section{display:none}.section.active{display:block}
@@ -62,6 +66,8 @@ button,input,select{font-size:16px}
 .food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
 .food-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
 .food-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
+.food-card.tapped{animation:cardTap .38s cubic-bezier(.36,.07,.19,.97)}
+@keyframes cardTap{0%{transform:scale(1)}25%{transform:scale(.94)}60%{transform:scale(1.06) translateY(-4px)}100%{transform:scale(1)}}
 .card-banner{height:105px;display:flex;align-items:center;justify-content:center;font-size:3.3rem}
 .card-body{padding:.9rem;flex:1}
 .card-name{font-size:1.08rem;font-weight:800;margin-bottom:.3rem}
@@ -335,12 +341,12 @@ button,input,select{font-size:16px}
 </header>
 
 <nav class="main-nav">
-  <button class="nav-btn active" onclick="switchSection('foods',this)">🥗 Foods</button>
-  <button class="nav-btn" onclick="switchSection('period',this)">🌙 Period Guide</button>
-  <button class="nav-btn" onclick="switchSection('masks',this)">🧖 Face Masks</button>
-  <button class="nav-btn" onclick="switchSection('meals',this)">🍽️ Meal Ideas</button>
-  <button class="nav-btn" onclick="switchSection('reminders',this)">⏰ Reminders</button>
-  <button class="nav-btn" onclick="switchSection('scanner',this)">📸 AI Scanner</button>
+  <button class="nav-btn active" onclick="switchSection('foods',this)"><span class="nb-icon">🥗</span>Foods</button>
+  <button class="nav-btn" onclick="switchSection('period',this)"><span class="nb-icon">🌙</span>Period</button>
+  <button class="nav-btn" onclick="switchSection('masks',this)"><span class="nb-icon">🧖</span>Masks</button>
+  <button class="nav-btn" onclick="switchSection('meals',this)"><span class="nb-icon">🍽️</span>Meals</button>
+  <button class="nav-btn" onclick="switchSection('reminders',this)"><span class="nb-icon">⏰</span>Reminders</button>
+  <button class="nav-btn" onclick="switchSection('scanner',this)"><span class="nb-icon">📸</span>Scanner</button>
 </nav>
 
 <!-- FOODS -->
@@ -958,7 +964,288 @@ nutrients:[
 skinBenefits:[
 {icon:"🎯",title:"Acne Fighter",desc:"Exceptional zinc content regulates sebum production, reduces inflammation and inhibits acne-causing bacteria — one of the most effective plant foods for acne."},
 {icon:"🩹",title:"Wound Healing",desc:"Zinc and manganese together accelerate skin repair, helping blemishes, cuts and inflammatory damage heal faster."},
-{icon:"🌙",title:"Sleep & Skin",desc:"Tryptophan and magnesium promote deep sleep, maximising the skin's overnight repair cycle when growth hormone peaks."}]}
+{icon:"🌙",title:"Sleep & Skin",desc:"Tryptophan and magnesium promote deep sleep, maximising the skin's overnight repair cycle when growth hormone peaks."}]},
+
+/* ── 20 NEW FOODS ── */
+{id:30,name:"Chicken Breast",emoji:"🍗",category:"Meat",color:"linear-gradient(135deg,#f7d365,#f5a623)",isVegetarian:false,isHalal:true,
+description:"Chicken breast is one of the leanest, highest-protein meats available. Its rich amino acid profile directly supports the skin's structural proteins, collagen and elastin.",
+benefits:["Provides complete protein for collagen synthesis","Rich in skin-repairing B vitamins","Supports healthy cell turnover","Reduces skin sagging with protein","Boosts overnight skin repair"],
+nutrients:[
+{name:"Protein",amount:"31 g",skinBenefit:"Complete amino acid profile including glycine and proline — the direct building blocks of collagen and elastin fibres."},
+{name:"Niacin (B3)",amount:"14 mg",skinBenefit:"Essential for DNA repair in skin cells and maintaining the skin barrier; deficiency causes rough, inflamed skin."},
+{name:"Selenium",amount:"27 mcg",skinBenefit:"Antioxidant mineral that preserves skin elasticity and protects against UV-induced oxidative damage."},
+{name:"Phosphorus",amount:"220 mg",skinBenefit:"Supports cellular energy for efficient skin repair and renewal."},
+{name:"Vitamin B6",amount:"0.9 mg",skinBenefit:"Regulates hormonal activity that can trigger acne and excess sebum."}],
+skinBenefits:[
+{icon:"🏗️",title:"Collagen Builder",desc:"The highest-protein lean meat provides every amino acid needed to synthesise and repair the collagen matrix that keeps skin firm and youthful."},
+{icon:"🔋",title:"Cell Energy",desc:"B vitamins support cellular metabolism so skin cells can repair and renew efficiently overnight."},
+{icon:"🛡️",title:"Antioxidant Shield",desc:"Selenium protects skin proteins from oxidative breakdown, maintaining firmness and elasticity over time."}]},
+
+{id:31,name:"Beef Liver",emoji:"🥩",category:"Meat",color:"linear-gradient(135deg,#8B1A1A,#c0392b)",isVegetarian:false,isHalal:true,
+description:"Gram for gram, beef liver is one of the most nutrient-dense foods on earth. It delivers retinol (pre-formed Vitamin A) at levels impossible to match from plant sources.",
+benefits:["Highest natural source of Vitamin A for skin","Exceptional B12 for skin cell renewal","Iron for radiant complexion","Supports collagen production","Anti-ageing nutrient powerhouse"],
+nutrients:[
+{name:"Retinol (Vitamin A)",amount:"4968 mcg",skinBenefit:"Pre-formed Vitamin A directly activates skin cell turnover, reduces fine lines and regulates sebum — far more bioavailable than beta-carotene."},
+{name:"Vitamin B12",amount:"59 mcg",skinBenefit:"Essential for red blood cell production ensuring skin cells receive adequate oxygen for a vibrant complexion."},
+{name:"Iron",amount:"6.5 mg",skinBenefit:"Haem iron is highly absorbable, directly improving oxygen delivery to skin cells and reducing pallor."},
+{name:"Copper",amount:"9.8 mg",skinBenefit:"Activates lysyl oxidase enzyme essential for cross-linking collagen and elastin fibres."},
+{name:"CoQ10",amount:"3.3 mg",skinBenefit:"Antioxidant that powers mitochondria in skin cells, reducing oxidative ageing."}],
+skinBenefits:[
+{icon:"✨",title:"Vitamin A Goldmine",desc:"A single serving of liver provides weeks worth of Vitamin A — the most proven dietary nutrient for reducing wrinkles, acne and uneven skin tone."},
+{icon:"💗",title:"Radiant Complexion",desc:"Haem iron and B12 together maximise oxygen delivery to skin, eliminating dullness and pallor within weeks."},
+{icon:"⏳",title:"Anti-Ageing",desc:"Copper activates the enzymes that rebuild collagen and elastin, directly countering skin sagging and wrinkling."}]},
+
+{id:32,name:"Turkey",emoji:"🦃",category:"Meat",color:"linear-gradient(135deg,#c79081,#dfa579)",isVegetarian:false,isHalal:true,
+description:"Turkey is uniquely rich in tryptophan, the amino acid that converts to serotonin and melatonin — hormones that regulate sleep and directly affect skin repair quality.",
+benefits:["Improves sleep quality for overnight skin repair","High protein for collagen synthesis","Zinc for clear acne-free skin","Selenium antioxidant protection","Reduces stress-related breakouts"],
+nutrients:[
+{name:"Tryptophan",amount:"0.4 g",skinBenefit:"Precursor to melatonin and serotonin, promoting deep restorative sleep when skin growth hormone peaks."},
+{name:"Protein",amount:"29 g",skinBenefit:"Complete protein supporting collagen, elastin and keratin synthesis for structural skin health."},
+{name:"Zinc",amount:"3.1 mg",skinBenefit:"Regulates sebum production and accelerates wound healing from blemishes."},
+{name:"Selenium",amount:"32 mcg",skinBenefit:"Protects skin cells from UV oxidative damage and preserves elastin proteins."},
+{name:"Niacin (B3)",amount:"11 mg",skinBenefit:"Supports the skin barrier and has anti-inflammatory effects on acne and rosacea."}],
+skinBenefits:[
+{icon:"🌙",title:"Sleep & Glow",desc:"Tryptophan promotes melatonin production and deep sleep — the period when growth hormone repairs skin cells most actively."},
+{icon:"🎯",title:"Clear Skin",desc:"Zinc and selenium together regulate oil production, reduce inflammation and accelerate healing of existing blemishes."},
+{icon:"💪",title:"Skin Structure",desc:"Complete protein delivers every amino acid needed for collagen and keratin, the structural proteins of firm, resilient skin."}]},
+
+{id:33,name:"Sardines",emoji:"🐠",category:"Fish",color:"linear-gradient(135deg,#4D79FF,#667eea)",isVegetarian:false,isHalal:true,
+description:"Sardines are one of the most complete skin foods available — small but extraordinarily dense in omega-3s, calcium, Vitamin D and protein. Eaten whole with bones, they're unmatched.",
+benefits:["Highest omega-3 of any small fish","Reduces skin inflammation","Strengthens skin barrier","Calcium for skin cell signalling","Reduces acne and redness"],
+nutrients:[
+{name:"Omega-3 Fatty Acids",amount:"1.5 g",skinBenefit:"EPA and DHA reduce inflammatory prostaglandins that cause acne, eczema and skin redness."},
+{name:"Vitamin D",amount:"272 IU",skinBenefit:"Regulates skin cell growth, supports immune function in skin and reduces inflammatory skin conditions."},
+{name:"Calcium",amount:"382 mg",skinBenefit:"Triggers skin cell differentiation and renewal signals, maintaining a healthy turnover rate."},
+{name:"Vitamin B12",amount:"8.9 mcg",skinBenefit:"Supports DNA synthesis in rapidly dividing skin cells."},
+{name:"Coenzyme Q10",amount:"present",skinBenefit:"Cellular antioxidant reducing oxidative damage in skin mitochondria."}],
+skinBenefits:[
+{icon:"🔥",title:"Anti-Inflammatory",desc:"EPA and DHA are nature's most potent anti-inflammatories — reducing redness, acne and flare-ups of eczema and psoriasis."},
+{icon:"🏰",title:"Barrier Strength",desc:"Omega-3s reinforce the lipid barrier between skin cells, preventing moisture loss and environmental penetration."},
+{icon:"⚡",title:"Cellular Energy",desc:"CoQ10 powers mitochondria in skin cells, enabling faster repair and reducing visible signs of cellular ageing."}]},
+
+{id:34,name:"Tuna",emoji:"🐟",category:"Fish",color:"linear-gradient(135deg,#2980b9,#6dd5fa)",isVegetarian:false,isHalal:true,
+description:"Tuna is an exceptional source of selenium — a mineral that forms the backbone of the body's antioxidant enzyme system, directly protecting skin from ageing.",
+benefits:["Powerful selenium antioxidant for skin","High protein for skin repair","Omega-3 anti-inflammatory","Reduces UV skin damage","Maintains skin elasticity"],
+nutrients:[
+{name:"Selenium",amount:"90 mcg",skinBenefit:"Forms selenoproteins including glutathione peroxidase — the master antioxidant enzyme protecting skin from UV oxidative damage."},
+{name:"Protein",amount:"30 g",skinBenefit:"High-quality complete protein providing amino acids for collagen and elastin repair."},
+{name:"Omega-3 Fatty Acids",amount:"0.5 g",skinBenefit:"Reduce skin inflammation and maintain the moisture barrier."},
+{name:"Niacin (B3)",amount:"18 mg",skinBenefit:"Highest niacin of common foods — reduces skin redness, improves barrier function and has proven anti-ageing effects topically and internally."},
+{name:"Iodine",amount:"40 mcg",skinBenefit:"Supports thyroid hormone production which regulates skin cell renewal rate."}],
+skinBenefits:[
+{icon:"🛡️",title:"Antioxidant Enzyme",desc:"Selenium in tuna activates glutathione peroxidase — the body's own antioxidant enzyme system — providing enduring cellular protection."},
+{icon:"✨",title:"Anti-Ageing",desc:"Niacin has been shown in studies to reduce hyperpigmentation, fine lines and skin roughness when consumed regularly."},
+{icon:"💧",title:"Hydration & Barrier",desc:"Protein and omega-3s together maintain skin's structural integrity and moisture-retaining lipid barrier."}]},
+
+{id:35,name:"Kale",emoji:"🥬",category:"Leafy Green",color:"linear-gradient(135deg,#134e5e,#71b280)",isVegetarian:true,isHalal:true,
+description:"Kale delivers more Vitamin C per calorie than almost any other vegetable, combined with Vitamin K, lutein and zeaxanthin — making it exceptional for collagen production and skin protection.",
+benefits:["Highest Vitamin C among leafy greens","Powerful collagen support","Reduces dark circles and puffiness","Protects against UV damage","Anti-inflammatory for clearer skin"],
+nutrients:[
+{name:"Vitamin C",amount:"93 mg",skinBenefit:"Highest Vitamin C among leafy greens — essential for collagen hydroxylation and brightening."},
+{name:"Vitamin K",amount:"817 mcg",skinBenefit:"Reduces dark circles, bruising and discolouration in skin; supports wound healing."},
+{name:"Lutein & Zeaxanthin",amount:"18 mg",skinBenefit:"Shield skin from UV and blue-light damage; improve skin hydration and elasticity."},
+{name:"Vitamin A",amount:"241 mcg",skinBenefit:"Promotes skin cell turnover and regulates sebum production."},
+{name:"Sulforaphane",amount:"present",skinBenefit:"Activates the Nrf2 antioxidant pathway for long-lasting cellular protection."}],
+skinBenefits:[
+{icon:"💎",title:"Collagen King",desc:"93mg Vitamin C per 100g — near the highest of any vegetable — maximises the collagen synthesis your skin needs for firmness."},
+{icon:"👁️",title:"Dark Circle Fighter",desc:"Vitamin K reduces the visible blood vessels and pigmentation that cause dark undereye circles and general discolouration."},
+{icon:"🛡️",title:"UV Defence",desc:"Lutein, zeaxanthin and sulforaphane create a multi-layered internal shield against UV and environmental skin damage."}]},
+
+{id:36,name:"Beetroot",emoji:"🫀",category:"Vegetable",color:"linear-gradient(135deg,#c0392b,#8e44ad)",isVegetarian:true,isHalal:true,
+description:"Beetroot is one of the richest dietary sources of nitrates, which the body converts to nitric oxide — dramatically improving blood flow and skin nutrient delivery for a natural flush.",
+benefits:["Boosts blood flow for natural skin glow","Powerful antioxidant betalains","Detoxifies skin from within","Reduces inflammation","Brightens dull complexion"],
+nutrients:[
+{name:"Dietary Nitrates",amount:"250 mg",skinBenefit:"Convert to nitric oxide in the body, expanding blood vessels and delivering more nutrients and oxygen to skin cells."},
+{name:"Betalains",amount:"present",skinBenefit:"Unique red-purple antioxidants with potent anti-inflammatory and detoxifying properties."},
+{name:"Folate",amount:"109 mcg",skinBenefit:"Supports DNA repair in skin cells after UV exposure and promotes healthy cell division."},
+{name:"Vitamin C",amount:"4.9 mg",skinBenefit:"Supports collagen synthesis and brightens skin tone."},
+{name:"Manganese",amount:"0.3 mg",skinBenefit:"Activates superoxide dismutase antioxidant enzyme in skin cells."}],
+skinBenefits:[
+{icon:"💗",title:"Natural Flush",desc:"Nitrates expand capillaries in skin, dramatically improving circulation and delivering a natural rosy glow that creams cannot replicate."},
+{icon:"🔴",title:"Betalain Power",desc:"Betalains are unique antioxidants found almost only in beetroot with exceptional anti-inflammatory and liver-detoxifying properties that clear skin."},
+{icon:"🌿",title:"Skin Detox",desc:"Betaine in beetroot supports liver detoxification of excess hormones and toxins linked to acne and dull skin."}]},
+
+{id:37,name:"Asparagus",emoji:"🌱",category:"Vegetable",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
+description:"Asparagus is one of the best dietary sources of glutathione — often called the body's master antioxidant — which directly protects skin from ageing and UV damage.",
+benefits:["Provides the master antioxidant glutathione","Powerful anti-ageing effects","Reduces puffiness with diuretic properties","Supports liver detox for clearer skin","Rich in folate for cell repair"],
+nutrients:[
+{name:"Glutathione",amount:"28 mg",skinBenefit:"The body's master antioxidant — neutralises free radicals, recycles other antioxidants and protects skin DNA from UV damage."},
+{name:"Folate",amount:"149 mcg",skinBenefit:"Essential for DNA repair in rapidly dividing skin cells and protection from UV mutagenesis."},
+{name:"Vitamin K",amount:"41 mcg",skinBenefit:"Supports wound healing and reduces skin discolouration and dark circles."},
+{name:"Vitamin E",amount:"1.1 mg",skinBenefit:"Fat-soluble antioxidant protecting cell membrane lipids from oxidative breakdown."},
+{name:"Saponins",amount:"present",skinBenefit:"Prebiotic compounds feeding beneficial gut bacteria, supporting the gut-skin axis for calmer skin."}],
+skinBenefits:[
+{icon:"⚡",title:"Master Antioxidant",desc:"Glutathione recycles Vitamins C and E for reuse, multiplying their antioxidant effect and providing exceptional protection against skin ageing."},
+{icon:"💧",title:"De-Puffing",desc:"Natural diuretic properties reduce water retention and facial puffiness, especially effective for undereye bags."},
+{icon:"🌿",title:"Liver Support",desc:"Asparagine and saponins support liver detoxification, reducing the hormone and toxin load that causes acne and dull skin."}]},
+
+{id:38,name:"Garlic",emoji:"🧄",category:"Vegetable",color:"linear-gradient(135deg,#f5f5f0,#c8c8a0)",isVegetarian:true,isHalal:true,
+description:"Garlic has been used medicinally for over 5,000 years. Its active compound allicin is one of the most potent natural antibacterial and antifungal agents known, with remarkable skin benefits.",
+benefits:["Powerful antibacterial for acne-prone skin","Allicin reduces skin inflammation","Supports collagen via sulphur","Improves circulation for better complexion","Anti-ageing antioxidants"],
+nutrients:[
+{name:"Allicin",amount:"3.7 mg",skinBenefit:"Potent antibacterial and antifungal compound that directly targets acne-causing bacteria from within."},
+{name:"Sulphur Compounds",amount:"present",skinBenefit:"Sulphur is a key structural component of collagen and keratin — essential for skin elasticity and hair health."},
+{name:"Vitamin C",amount:"31 mg",skinBenefit:"Supports collagen synthesis and provides antioxidant protection to skin cells."},
+{name:"Selenium",amount:"14 mcg",skinBenefit:"Preserves skin elasticity and works with Vitamin E to protect cell membranes."},
+{name:"Quercetin",amount:"present",skinBenefit:"Flavonoid antioxidant that reduces skin inflammation and inhibits UV-induced skin damage."}],
+skinBenefits:[
+{icon:"🦠",title:"Antibacterial",desc:"Allicin kills acne-causing P. acnes bacteria both topically and systemically — one of nature's most effective natural antibiotics for skin."},
+{icon:"🏗️",title:"Collagen Sulphur",desc:"Sulphur compounds in garlic provide the sulphur backbone needed for collagen and keratin structure, keeping skin firm and resilient."},
+{icon:"🔥",title:"Anti-Inflammatory",desc:"Quercetin and diallyl disulphide reduce inflammatory cytokines in skin, calming redness, eczema and acne flare-ups."}]},
+
+{id:39,name:"Zucchini",emoji:"🥒",category:"Vegetable",color:"linear-gradient(135deg,#43e97b,#38f9d7)",isVegetarian:true,isHalal:true,
+description:"Zucchini is exceptionally low in calories yet high in antioxidants and water content, making it one of the most effective vegetables for hydrating skin from within while reducing inflammation.",
+benefits:["Hydrates skin from within","Rich in skin-protective antioxidants","Reduces skin inflammation","Lutein for UV protection","Supports collagen with Vitamin C"],
+nutrients:[
+{name:"Water",amount:"94%",skinBenefit:"Near-equivalent to cucumber, making it exceptionally hydrating for skin cells."},
+{name:"Lutein & Zeaxanthin",amount:"2.1 mg",skinBenefit:"Carotenoids that accumulate in skin, protecting it from UV and blue-light oxidative damage."},
+{name:"Vitamin C",amount:"17 mg",skinBenefit:"Supports collagen production and provides antioxidant protection."},
+{name:"Potassium",amount:"261 mg",skinBenefit:"Maintains electrolyte balance for proper skin cell hydration."},
+{name:"Manganese",amount:"0.2 mg",skinBenefit:"Activates collagen-forming enzymes in skin cells."}],
+skinBenefits:[
+{icon:"💧",title:"Deep Hydration",desc:"94% water content hydrates skin cells from inside, plumping fine lines and reducing the dullness caused by dehydration."},
+{icon:"☀️",title:"UV Shield",desc:"Lutein and zeaxanthin accumulate in skin and act as internal filters against UV and blue-light oxidative stress."},
+{icon:"😌",title:"Soothing",desc:"Anti-inflammatory compounds reduce skin redness and irritation, complementing topical skincare from the inside."}]},
+
+{id:40,name:"Brussels Sprouts",emoji:"🥦",category:"Vegetable",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
+description:"Brussels sprouts contain sulforaphane levels comparable to broccoli, plus exceptional Vitamin C and Vitamin K — making them one of the most comprehensive skin-protective vegetables.",
+benefits:["Activates internal antioxidant defences","Exceptional Vitamin C for collagen","Reduces UV damage","Supports skin cell detoxification","Reduces inflammation"],
+nutrients:[
+{name:"Vitamin C",amount:"85 mg",skinBenefit:"Near the highest Vitamin C of any vegetable — essential for collagen hydroxylation and skin brightening."},
+{name:"Sulforaphane",amount:"present",skinBenefit:"Activates the Nrf2 antioxidant pathway, providing long-lasting protection against UV and oxidative skin damage."},
+{name:"Vitamin K",amount:"177 mcg",skinBenefit:"Supports skin repair and reduces visible discolouration and dark spots."},
+{name:"Folate",amount:"61 mcg",skinBenefit:"Supports DNA repair in skin cells after UV exposure."},
+{name:"Kaempferol",amount:"present",skinBenefit:"Flavonoid antioxidant with anti-inflammatory and UV-protective effects on skin."}],
+skinBenefits:[
+{icon:"⚡",title:"Antioxidant Activation",desc:"Sulforaphane switches on the Nrf2 pathway — your body's own master antioxidant system — providing hours of skin cell protection."},
+{icon:"💎",title:"Collagen Boost",desc:"85mg Vitamin C rivals broccoli and bell pepper — maximising the collagen synthesis that keeps skin firm and youthful."},
+{icon:"🔬",title:"Skin Detox",desc:"Cruciferous compounds activate liver enzymes that clear skin-disrupting hormones and environmental toxins."}]},
+
+{id:41,name:"Strawberries",emoji:"🍓",category:"Berry",color:"linear-gradient(135deg,#f7797d,#fbd786)",isVegetarian:true,isHalal:true,
+description:"Strawberries deliver more Vitamin C per serving than oranges, combined with unique ellagic acid — an antioxidant that specifically inhibits collagen destruction caused by UV rays.",
+benefits:["More Vitamin C than oranges","Ellagic acid prevents UV collagen damage","Brightens and evens skin tone","Reduces hyperpigmentation","Anti-ageing antioxidants"],
+nutrients:[
+{name:"Vitamin C",amount:"59 mg",skinBenefit:"More than an orange per serving — essential for collagen synthesis and skin brightening."},
+{name:"Ellagic Acid",amount:"83 mg",skinBenefit:"Specifically inhibits the MMP enzymes that break down collagen after UV exposure — a uniquely targeted anti-ageing compound."},
+{name:"Anthocyanins",amount:"35 mg",skinBenefit:"Flavonoids protecting skin from oxidative stress and improving microcirculation."},
+{name:"Folate",amount:"24 mcg",skinBenefit:"Supports DNA repair in skin cells after UV exposure."},
+{name:"Manganese",amount:"0.4 mg",skinBenefit:"Activates superoxide dismutase, a key skin antioxidant enzyme."}],
+skinBenefits:[
+{icon:"💎",title:"Collagen Defender",desc:"Ellagic acid specifically blocks the enzymes that destroy collagen after sun exposure — a mechanism unique to berries and pomegranate."},
+{icon:"✨",title:"Brightening",desc:"Vitamin C and ellagic acid together inhibit melanin production, progressively fading dark spots and hyperpigmentation."},
+{icon:"🌟",title:"Anti-Ageing",desc:"Combined antioxidants neutralise the free radicals responsible for wrinkles, loss of elasticity and skin dullness."}]},
+
+{id:42,name:"Orange",emoji:"🍊",category:"Fruit",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
+description:"The iconic Vitamin C fruit — one orange meets your full daily Vitamin C need. But oranges also contain hesperidin, a flavonoid that strengthens capillaries and reduces skin redness.",
+benefits:["Meets full daily Vitamin C in one fruit","Hesperidin strengthens skin capillaries","Reduces redness and rosacea","Brightens skin tone","Supports collagen production"],
+nutrients:[
+{name:"Vitamin C",amount:"53 mg",skinBenefit:"Meets 100% of daily requirement — essential for collagen enzyme activation and antioxidant protection."},
+{name:"Hesperidin",amount:"28 mg",skinBenefit:"Flavonoid that strengthens capillary walls, reducing redness, visible veins and bruising in skin."},
+{name:"Beta-Carotene",amount:"71 mcg",skinBenefit:"Converts to Vitamin A, supporting skin cell renewal."},
+{name:"Folate",amount:"30 mcg",skinBenefit:"Supports DNA synthesis and repair in skin cells."},
+{name:"Potassium",amount:"181 mg",skinBenefit:"Maintains skin cell hydration and electrolyte balance."}],
+skinBenefits:[
+{icon:"💎",title:"Collagen Synthesis",desc:"Vitamin C is the essential cofactor for the enzymes that hydroxylate proline and lysine — without it, collagen simply cannot form properly."},
+{icon:"🌹",title:"Capillary Strength",desc:"Hesperidin reinforces the tiny blood vessels under skin, reducing redness, rosacea flushes and visible thread veins."},
+{icon:"✨",title:"Brightening",desc:"Vitamin C inhibits tyrosinase, the enzyme that produces melanin, gradually fading dark spots and creating a luminous complexion."}]},
+
+{id:43,name:"Pineapple",emoji:"🍍",category:"Tropical Fruit",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
+description:"Pineapple contains bromelain, a powerful enzyme complex that reduces skin inflammation and swelling, and has been used clinically to accelerate wound healing and reduce bruising.",
+benefits:["Bromelain reduces skin inflammation","Accelerates wound and blemish healing","Rich in Vitamin C for collagen","Reduces puffiness","Anti-ageing antioxidants"],
+nutrients:[
+{name:"Bromelain",amount:"present",skinBenefit:"Proteolytic enzyme complex that breaks down inflammatory proteins, reduces post-injury swelling and accelerates skin healing."},
+{name:"Vitamin C",amount:"47 mg",skinBenefit:"Supports collagen production and provides antioxidant brightening."},
+{name:"Manganese",amount:"0.9 mg",skinBenefit:"Activates prolidase enzyme needed to synthesise the proline in collagen."},
+{name:"Beta-Carotene",amount:"35 mcg",skinBenefit:"Converts to Vitamin A to support skin cell renewal."},
+{name:"Thiamine (B1)",amount:"0.1 mg",skinBenefit:"Supports cellular energy production for efficient skin repair."}],
+skinBenefits:[
+{icon:"🩹",title:"Healing Accelerator",desc:"Bromelain is clinically used to reduce post-surgical swelling — the same mechanism accelerates healing of blemishes and inflammatory skin damage."},
+{icon:"🔥",title:"Anti-Inflammatory",desc:"Bromelain blocks inflammatory cytokine cascades in skin, reducing redness, swelling and acne severity."},
+{icon:"💎",title:"Collagen Support",desc:"Manganese and Vitamin C together form the enzymatic team that builds and cross-links collagen fibres for firm skin."}]},
+
+{id:44,name:"Grapes",emoji:"🍇",category:"Fruit",color:"linear-gradient(135deg,#667eea,#764ba2)",isVegetarian:true,isHalal:true,
+description:"Grapes — especially red and black varieties — contain resveratrol in their skins, one of the most studied anti-ageing compounds in nutrition science, alongside oligomeric proanthocyanidins (OPCs).",
+benefits:["Resveratrol activates anti-ageing genes","OPCs are 50× stronger than Vitamin E","Reduces UV damage","Improves skin elasticity","Brightens complexion"],
+nutrients:[
+{name:"Resveratrol",amount:"0.5 mg",skinBenefit:"Activates SIRT1 longevity genes in skin cells, slowing the hallmarks of cellular ageing."},
+{name:"OPCs (proanthocyanidins)",amount:"120 mg",skinBenefit:"50× more potent than Vitamin E as antioxidants — protect collagen and elastin from free radical breakdown."},
+{name:"Vitamin C",amount:"10 mg",skinBenefit:"Supports collagen synthesis and works synergistically with OPCs."},
+{name:"Vitamin K",amount:"14 mcg",skinBenefit:"Reduces discolouration and supports skin healing."},
+{name:"Anthocyanins",amount:"165 mg",skinBenefit:"Improve microcirculation and reduce oxidative damage in skin cells."}],
+skinBenefits:[
+{icon:"⏰",title:"Anti-Ageing Genes",desc:"Resveratrol activates the SIRT1 sirtuin pathway, considered one of the most promising dietary approaches to slowing skin cell ageing."},
+{icon:"🛡️",title:"Super Antioxidant",desc:"OPCs from grape seed are among the most potent antioxidants known — outperforming Vitamins C and E in protecting collagen from oxidation."},
+{icon:"💗",title:"Microcirculation",desc:"Anthocyanins improve blood flow in tiny skin vessels, delivering more nutrients for a naturally flushed, healthy-looking complexion."}]},
+
+{id:45,name:"Lemon",emoji:"🍋",category:"Fruit",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
+description:"Lemons are extraordinary sources of Vitamin C and contain unique flavonoids called limonoids that have been shown to reduce collagen breakdown and protect skin from UV damage.",
+benefits:["Concentrated Vitamin C for collagen","Limonoids protect against UV damage","Brightens dull skin","Natural skin-lightening properties","Antioxidant protection"],
+nutrients:[
+{name:"Vitamin C",amount:"53 mg",skinBenefit:"Essential for collagen synthesis and inhibiting melanin production for a brighter complexion."},
+{name:"Limonoids",amount:"present",skinBenefit:"Unique citrus compounds that inhibit MMP enzymes which break down collagen after UV exposure."},
+{name:"Hesperidin",amount:"30 mg",skinBenefit:"Strengthens capillary walls and reduces skin redness and visible veins."},
+{name:"Citric Acid",amount:"present",skinBenefit:"Natural AHA that gently exfoliates and brightens skin when consumed; supports kidney health for toxin elimination."},
+{name:"Rutin",amount:"present",skinBenefit:"Flavonoid antioxidant that protects skin against free radical damage and improves capillary integrity."}],
+skinBenefits:[
+{icon:"✨",title:"Brightening",desc:"Vitamin C inhibits melanin production and combined with citric acid creates a brightening effect visible over several weeks of regular consumption."},
+{icon:"🛡️",title:"UV Collagen Guard",desc:"Limonoids specifically inhibit the collagenase enzymes activated by UV exposure, protecting skin structure from sun damage."},
+{icon:"💧",title:"Gentle Detox",desc:"Citric acid supports kidney detoxification, helping eliminate the toxins and excess hormones that contribute to acne and dull skin."}]},
+
+{id:46,name:"Cherries",emoji:"🍒",category:"Berry",color:"linear-gradient(135deg,#c0392b,#e74c3c)",isVegetarian:true,isHalal:true,
+description:"Cherries are one of the only dietary sources of melatonin, the sleep hormone. Combined with their exceptional anthocyanin content, they provide a unique combination of sleep-enhancing and antioxidant skin benefits.",
+benefits:["Melatonin improves sleep for skin repair","Anthocyanins reduce skin inflammation","Reduces exercise-induced skin inflammation","Brightens complexion","Anti-ageing antioxidants"],
+nutrients:[
+{name:"Melatonin",amount:"0.013 mg",skinBenefit:"One of the only dietary sources — promotes deep restorative sleep when skin repair peaks; also acts as a direct antioxidant in skin cells."},
+{name:"Anthocyanins",amount:"82 mg",skinBenefit:"Potent antioxidants that reduce skin inflammation and inhibit melanin overproduction."},
+{name:"Vitamin C",amount:"7 mg",skinBenefit:"Supports collagen synthesis and antioxidant skin protection."},
+{name:"Potassium",amount:"222 mg",skinBenefit:"Maintains skin cell hydration and reduces water retention puffiness."},
+{name:"Quercetin",amount:"2.6 mg",skinBenefit:"Flavonoid that reduces histamine-driven skin inflammation and UV-induced skin damage."}],
+skinBenefits:[
+{icon:"🌙",title:"Sleep Hormone",desc:"Cherries are one of the only foods with measurable melatonin — improving sleep quality and the overnight repair window when skin growth hormone peaks."},
+{icon:"🔥",title:"Anti-Inflammatory",desc:"Anthocyanins and quercetin inhibit COX inflammatory enzymes, reducing skin redness, acne inflammation and eczema flare-ups."},
+{icon:"✨",title:"Antioxidant Glow",desc:"Combined anthocyanins, Vitamin C and quercetin neutralise free radicals and protect skin DNA from damage for a clear, luminous complexion."}]},
+
+{id:47,name:"Sweet Corn",emoji:"🌽",category:"Vegetable",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
+description:"Sweet corn is unusually rich in lutein and zeaxanthin, carotenoids that are directly deposited in skin tissue where they absorb UV radiation and reduce photo-oxidative damage.",
+benefits:["Lutein & zeaxanthin protect skin from UV","Reduces UV-related skin ageing","Provides ferulic acid antioxidant","Supports skin hydration","Anti-inflammatory properties"],
+nutrients:[
+{name:"Lutein & Zeaxanthin",amount:"1.1 mg",skinBenefit:"Carotenoids that accumulate in skin tissue, absorbing UV radiation and reducing photo-oxidative stress."},
+{name:"Ferulic Acid",amount:"present",skinBenefit:"Potent antioxidant that doubles the effectiveness of Vitamins C and E when combined — often used in premium skincare serums."},
+{name:"Vitamin C",amount:"6.8 mg",skinBenefit:"Supports collagen synthesis and antioxidant protection."},
+{name:"Beta-Carotene",amount:"52 mcg",skinBenefit:"Converts to Vitamin A supporting skin cell renewal and sebum regulation."},
+{name:"Thiamine (B1)",amount:"0.2 mg",skinBenefit:"Supports cellular energy production for efficient skin repair."}],
+skinBenefits:[
+{icon:"☀️",title:"UV Skin Shield",desc:"Lutein and zeaxanthin from corn accumulate directly in skin cells, acting as internal UV filters reducing photoageing damage."},
+{icon:"⚡",title:"Ferulic Acid",desc:"Ferulic acid is one of the few dietary antioxidants that potentiates the action of Vitamins C and E, amplifying their skin-protective effects."},
+{icon:"💧",title:"Skin Hydration",desc:"High water and fibre content supports gut health and skin hydration, reducing the dullness associated with dehydration."}]},
+
+{id:48,name:"Celery",emoji:"🌿",category:"Vegetable",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
+description:"Celery is 95% water and uniquely rich in silica and phthalides — compounds that improve circulation and are rarely found in other vegetables, making it a distinctive skin hydration and glow food.",
+benefits:["Silica strengthens skin structure","Improves circulation for glowing skin","Deeply hydrates skin from within","Reduces puffiness","Anti-inflammatory phytonutrients"],
+nutrients:[
+{name:"Silica",amount:"4 mg",skinBenefit:"Trace mineral essential for collagen cross-linking and maintaining skin elasticity and firmness."},
+{name:"Phthalides",amount:"present",skinBenefit:"Unique compounds that relax blood vessel walls, improving circulation and skin nutrient delivery."},
+{name:"Water",amount:"95%",skinBenefit:"Very high water content contributes to maintaining skin turgor and preventing dehydration-related dullness."},
+{name:"Vitamin K",amount:"29 mcg",skinBenefit:"Reduces skin discolouration and supports wound healing processes."},
+{name:"Apigenin",amount:"present",skinBenefit:"Flavonoid with anti-inflammatory properties that reduce skin redness and irritation."}],
+skinBenefits:[
+{icon:"🏗️",title:"Silica for Structure",desc:"Silica is the mineral backbone of collagen fibres — celery is one of the best dietary sources for maintaining skin firmness and elasticity."},
+{icon:"💗",title:"Circulation Boost",desc:"Phthalides relax arterial walls, improving blood flow through skin capillaries and delivering a natural, healthy glow."},
+{icon:"💧",title:"Intense Hydration",desc:"95% water content combined with natural electrolytes makes celery one of the most effective foods for maintaining plump, hydrated skin."}]},
+
+{id:49,name:"Apricots",emoji:"🍑",category:"Fruit",color:"linear-gradient(135deg,#f7971e,#f5576c)",isVegetarian:true,isHalal:true,
+description:"Apricots have one of the highest beta-carotene concentrations of any common fruit. Just three fresh apricots provide almost a full day's Vitamin A needs for glowing, renewed skin.",
+benefits:["Exceptional beta-carotene for skin glow","Vitamin A promotes cell renewal","Protects against UV damage","Reduces acne scar appearance","Brightens dull complexion"],
+nutrients:[
+{name:"Beta-Carotene",amount:"1094 mcg",skinBenefit:"Converts to Vitamin A in body — promotes cell renewal, reduces sebum and imparts a warm golden tone to skin."},
+{name:"Vitamin C",amount:"10 mg",skinBenefit:"Supports collagen synthesis and works synergistically with beta-carotene for comprehensive skin protection."},
+{name:"Vitamin E",amount:"0.9 mg",skinBenefit:"Fat-soluble antioxidant working synergistically with beta-carotene to protect skin cell membranes."},
+{name:"Potassium",amount:"259 mg",skinBenefit:"Maintains skin cell hydration and electrolyte balance."},
+{name:"Lycopene",amount:"5 mcg",skinBenefit:"Provides additional antioxidant UV protection."}],
+skinBenefits:[
+{icon:"🧡",title:"Skin-Warming Glow",desc:"Beta-carotene deposits in skin tissue, creating a warm golden tone that research shows is perceived as more attractive than UV tanning."},
+{icon:"🔄",title:"Cell Renewal",desc:"Vitamin A accelerates skin cell turnover, fading acne scars, dark spots and uneven pigmentation for a more even complexion."},
+{icon:"🛡️",title:"UV Protection",desc:"Beta-carotene and lycopene together act as internal photoprotectors, reducing UV sensitivity and sun damage."}]}
 ];
 
 /* ══════════════════════════════════════
@@ -1371,6 +1658,8 @@ function switchSection(id,btn){
 /* ══════════════════════════════════════
    FOODS
 ══════════════════════════════════════ */
+function tapCard(el){el.classList.remove("tapped");void el.offsetWidth;el.classList.add("tapped");}
+
 function renderFoods(){
   const filtered=foods.filter(f=>{
     const q=query.toLowerCase();
@@ -1383,7 +1672,7 @@ function renderFoods(){
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
   g.innerHTML=filtered.map(f=>`
-    <div class="food-card" onclick="openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
+    <div class="food-card" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
       <div class="card-banner" style="background:${f.color}">${f.emoji}</div>
       <div class="card-body">
         <h3 class="card-name">${f.name}</h3>

@@ -270,6 +270,25 @@ button,input,select{font-size:16px}
 .install-btn{background:#fff;color:var(--purple);border:none;border-radius:50px;padding:.4rem .9rem;font-size:.78rem;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .install-dismiss{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.1rem;cursor:pointer;flex-shrink:0;padding:.2rem}
 
+/* DAILY GLOW TIP */
+.glow-tip-card{background:linear-gradient(135deg,#FF6B9D,#C44DFF);border-radius:18px;padding:1rem 1.1rem;margin-bottom:1rem;display:flex;align-items:flex-start;gap:.8rem;position:relative;overflow:hidden;animation:fadeUp .4s ease}
+.glow-tip-card::before{content:'';position:absolute;width:160px;height:160px;background:rgba(255,255,255,.08);border-radius:50%;top:-60px;right:-40px}
+.glow-tip-icon{font-size:2rem;flex-shrink:0;line-height:1;margin-top:.1rem}
+.glow-tip-content{flex:1;min-width:0}
+.glow-tip-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.75);margin-bottom:.2rem}
+.glow-tip-text{font-size:.88rem;font-weight:600;color:#fff;line-height:1.55}
+.glow-tip-close{background:rgba(255,255,255,.2);border:none;border-radius:50%;width:26px;height:26px;color:#fff;font-size:.75rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.glow-tip-close:hover{background:rgba(255,255,255,.35)}
+
+/* HEART / FAVOURITES */
+.heart-btn{position:absolute;top:.5rem;right:.5rem;background:rgba(255,255,255,.25);border:none;border-radius:50%;width:30px;height:30px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;line-height:1}
+.heart-btn:hover{transform:scale(1.15)}
+.heart-btn.faved{animation:heartPop .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+.card-banner{position:relative}
+.fav-filter-btn{padding:.3rem .85rem;border-radius:50px;border:2px solid #ddd;background:#fff;cursor:pointer;font-size:.8rem;font-weight:700;color:#888;transition:all .2s;display:flex;align-items:center;gap:.3rem}
+.fav-filter-btn.active{background:#fff0f5;border-color:#FF6B9D;color:#d63a8a}
+
 /* FULLSCREEN BTN */
 .fullscreen-btn{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:10}
 .fullscreen-btn:hover{background:rgba(255,255,255,.35)}
@@ -398,10 +417,13 @@ button,input,select{font-size:16px}
           <span class="toggle halal"><input type="checkbox" id="halalToggle"><span class="toggle-slider"></span></span>
           <span class="toggle-label-text">☪️ Halal</span>
         </label>
+        <div class="divider"></div>
+        <button class="fav-filter-btn" id="favFilterBtn" onclick="toggleFavFilter()">❤️ Saved</button>
       </div>
     </div>
   </div>
   <div class="main-pad">
+    <div id="glowTipWrap"></div>
     <p class="results-count" id="resultsCount"></p>
     <div class="food-grid" id="foodGrid"></div>
   </div>
@@ -1702,20 +1724,105 @@ function switchSection(id,btn){
 ══════════════════════════════════════ */
 function tapCard(el){el.classList.remove("tapped");void el.offsetWidth;el.classList.add("tapped");}
 
+/* ══════════════════════════════════════
+   DAILY GLOW TIPS
+══════════════════════════════════════ */
+const glowTips=[
+  {icon:"💧",tip:"Drink at least 8 glasses of water today — hydrated skin is plumper, clearer and naturally more radiant."},
+  {icon:"🐟",tip:"Add omega-3 rich fish like salmon or sardines to a meal this week to calm inflammation and strengthen your skin barrier."},
+  {icon:"🍋",tip:"Start your morning with warm lemon water — Vitamin C on an empty stomach is absorbed fastest for maximum collagen support."},
+  {icon:"🥑",tip:"Eat half an avocado today. Its oleic acid penetrates deep into skin layers for lasting hydration cream can't match."},
+  {icon:"🌿",tip:"Swap your afternoon snack for a handful of walnuts — the omega-3s reduce skin inflammation overnight."},
+  {icon:"🍵",tip:"Drink green tea instead of coffee today. EGCG reduces sebum production and fights acne-causing bacteria from within."},
+  {icon:"🥬",tip:"Add a handful of spinach to your lunch. Its iron + Vitamin C combo delivers oxygen to skin cells for a healthy glow."},
+  {icon:"🍫",tip:"One square of 70%+ dark chocolate counts as skincare — flavanols improve microcirculation for a natural flush."},
+  {icon:"🌻",tip:"Sprinkle sunflower seeds on your salad today — one tablespoon covers most of your daily Vitamin E for antioxidant skin protection."},
+  {icon:"🍠",tip:"Eat sweet potato this week. Beta-carotene builds up in your skin over time, creating a warm, healthy-looking golden tone."},
+  {icon:"🫐",tip:"A cup of blueberries today delivers 163mg of anthocyanins — among the most powerful skin anti-ageing compounds in nature."},
+  {icon:"🧄",tip:"Add garlic to your dinner — allicin fights acne-causing bacteria from the inside out."},
+  {icon:"🥝",tip:"One kiwi meets your full daily Vitamin C — eat it in the morning when collagen synthesis is most active."},
+  {icon:"🍅",tip:"Cook your tomatoes in olive oil today. Heat releases more lycopene AND fat helps absorb it — double the UV skin protection."},
+  {icon:"🥦",tip:"Eat broccoli lightly steamed, not boiled. Steaming preserves sulforaphane, the compound that activates your skin's own antioxidant system."},
+  {icon:"🌱",tip:"Add ground flaxseeds to your breakfast — they're the richest plant source of omega-3s and contain lignans that balance skin hormones."},
+  {icon:"🫒",tip:"Use extra virgin olive oil as your dressing today. Squalene in olive oil is a natural skin anti-ageing compound that declines with age."},
+  {icon:"🍳",tip:"Eat eggs for breakfast — the complete protein provides every amino acid needed to build collagen and repair skin overnight."},
+  {icon:"🥛",tip:"A bowl of Greek yogurt supports your gut-skin axis. Better gut bacteria = fewer breakouts and calmer, clearer skin."},
+  {icon:"🎃",tip:"Pumpkin seeds are the highest plant source of zinc — eat a handful to regulate sebum and speed blemish healing."},
+  {icon:"🍇",tip:"Red and black grapes contain resveratrol, which activates longevity genes in skin cells. Eat the skins for maximum benefit."},
+  {icon:"🥕",tip:"Eat your carrots with a little fat today. Beta-carotene is fat-soluble — a drizzle of olive oil increases absorption by up to 300%."},
+  {icon:"🍓",tip:"Strawberries contain ellagic acid, a compound that specifically blocks the enzyme that destroys collagen after sun exposure."},
+  {icon:"🍍",tip:"Pineapple's bromelain enzyme reduces skin inflammation and accelerates healing — great to eat after any skin irritation."},
+  {icon:"🫚",tip:"Add fresh ginger to your tea or stir-fry — gingerols improve skin microcirculation and have antibacterial effects on acne."},
+  {icon:"🥒",tip:"Cucumber is 95% water — eating it hydrates skin cells directly, plumping fine lines better than any topical cream."},
+  {icon:"🍒",tip:"Cherries are one of the only foods with measurable melatonin. Eat a handful in the evening to improve sleep and overnight skin repair."},
+  {icon:"🌽",tip:"Sweet corn contains ferulic acid — a rare antioxidant that doubles the effectiveness of Vitamins C and E in protecting your skin."},
+  {icon:"🍑",tip:"Three fresh apricots provide nearly a full day's Vitamin A — eat them regularly to speed up skin cell renewal."},
+  {icon:"🫀",tip:"Beetroot juice or roasted beets dramatically improve blood flow to skin within 2 hours — try it before a big event for an instant glow."}
+];
+
+function renderGlowTip(){
+  const wrap=document.getElementById('glowTipWrap');
+  const todayKey='glowTipDismissed_'+new Date().toDateString();
+  if(sessionStorage.getItem(todayKey)){wrap.innerHTML='';return;}
+  const idx=Math.floor(Date.now()/86400000)%glowTips.length;
+  const t=glowTips[idx];
+  wrap.innerHTML=`
+    <div class="glow-tip-card">
+      <span class="glow-tip-icon">${t.icon}</span>
+      <div class="glow-tip-content">
+        <div class="glow-tip-label">✨ Daily Glow Tip</div>
+        <div class="glow-tip-text">${t.tip}</div>
+      </div>
+      <button class="glow-tip-close" onclick="dismissGlowTip()">✕</button>
+    </div>`;
+}
+function dismissGlowTip(){
+  sessionStorage.setItem('glowTipDismissed_'+new Date().toDateString(),'1');
+  document.getElementById('glowTipWrap').innerHTML='';
+}
+
+/* ══════════════════════════════════════
+   FAVOURITES
+══════════════════════════════════════ */
+let favourites=new Set(JSON.parse(localStorage.getItem('glowbiteFavs')||'[]'));
+let favOnly=false;
+
+function saveFavs(){localStorage.setItem('glowbiteFavs',JSON.stringify([...favourites]));}
+
+function toggleFav(id,btn){
+  if(favourites.has(id)){
+    favourites.delete(id);
+    btn.textContent='🤍';btn.classList.remove('faved');
+  }else{
+    favourites.add(id);
+    btn.textContent='❤️';btn.classList.add('faved');
+  }
+  saveFavs();
+  if(favOnly)renderFoods();
+}
+
+function toggleFavFilter(){
+  favOnly=!favOnly;
+  document.getElementById('favFilterBtn').classList.toggle('active',favOnly);
+  renderFoods();
+}
+
 function renderFoods(){
   const filtered=foods.filter(f=>{
     const q=query.toLowerCase();
     const ok=!q||f.name.toLowerCase().includes(q)||f.description.toLowerCase().includes(q)||
       f.category.toLowerCase().includes(q)||f.nutrients.some(n=>n.name.toLowerCase().includes(q))||
       f.skinBenefits.some(s=>s.title.toLowerCase().includes(q))||f.benefits.some(b=>b.toLowerCase().includes(q));
-    return ok&&(!vegOnly||f.isVegetarian)&&(!halalOnly||f.isHalal);
+    return ok&&(!vegOnly||f.isVegetarian)&&(!halalOnly||f.isHalal)&&(!favOnly||favourites.has(f.id));
   });
   document.getElementById('resultsCount').textContent=`Showing ${filtered.length} food${filtered.length!==1?'s':''}`;
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
   g.innerHTML=filtered.map(f=>`
     <div class="food-card" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
-      <div class="card-banner" style="background:${f.color}">${f.emoji}</div>
+      <div class="card-banner" style="background:${f.color}">${f.emoji}
+        <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
+      </div>
       <div class="card-body">
         <h3 class="card-name">${f.name}</h3>
         <p class="card-desc">${f.description}</p>
@@ -2027,6 +2134,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();cl
 /* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
+renderGlowTip();
 renderFoods();
 renderPhaseButtons();
 renderSkinTypeFilter();

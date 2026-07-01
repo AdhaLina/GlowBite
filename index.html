@@ -317,13 +317,22 @@ button,input,select{font-size:16px}
 .glow-tip-close{background:rgba(255,255,255,.2);border:none;border-radius:50%;width:26px;height:26px;color:#fff;font-size:.75rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .glow-tip-close:hover{background:rgba(255,255,255,.35)}
 
-/* CYCLE PHASE ON FOOD CARDS */
-.cycle-mini{display:flex;gap:.3rem;flex-wrap:wrap;padding:.45rem .9rem .55rem;border-top:1px solid #f3f3f3}
-.cyc-pill{display:flex;align-items:center;gap:.2rem;padding:.13rem .45rem;border-radius:50px;font-size:.65rem;font-weight:700}
-.cyc-m{background:#ffe4f0;color:#c0175c}
-.cyc-f{background:#fff3e0;color:#e65100}
-.cyc-o{background:#e8f5e9;color:#2e7d32}
-.cyc-l{background:#ede7f6;color:#5e35b1}
+/* FLIP CARD WRAPPER */
+.food-card-wrap{perspective:1000px;border-radius:18px}
+.food-card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,0,.2,1)}
+.food-card-wrap.flipped .food-card-inner{transform:rotateY(180deg)}
+.food-card-front,.food-card-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;overflow:hidden}
+.food-card-front{background:#fff;box-shadow:0 3px 14px rgba(0,0,0,.08)}
+.food-card-back{position:absolute;inset:0;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1rem;box-shadow:0 3px 14px rgba(0,0,0,.13)}
+/* flip hint badge */
+.flip-hint{position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.3);border-radius:50px;padding:.18rem .6rem;font-size:.65rem;font-weight:700;color:#fff;white-space:nowrap;pointer-events:none;backdrop-filter:blur(4px)}
+/* back side cycle pills */
+.back-phase{display:flex;align-items:flex-start;gap:.5rem;background:rgba(255,255,255,.18);border-radius:12px;padding:.5rem .65rem}
+.back-phase-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
+.back-phase-info{flex:1;min-width:0}
+.back-phase-name{font-size:.72rem;font-weight:900;color:#fff;opacity:.9;margin-bottom:.08rem}
+.back-phase-text{font-size:.7rem;color:rgba(255,255,255,.85);line-height:1.45}
+.back-close-hint{text-align:center;font-size:.65rem;color:rgba(255,255,255,.6);margin-top:.3rem}
 /* CYCLE TAB IN MODAL */
 .cy-phase-block{border-radius:16px;overflow:hidden;margin-bottom:.85rem}
 .cy-phase-head{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;color:#fff}
@@ -2473,10 +2482,28 @@ const defaultCycleData=[
   {phase:'l',benefit:'Supports progesterone function and helps reduce common PMS symptoms.',tip:'Include regularly in the week before your period.'},
 ];
 
-function cycleCardPills(foodId){
-  const data=foodCycleData[foodId]||defaultCycleData;
-  const pills=data.map(d=>`<span class="cyc-pill ${cyclePhaseInfo[d.phase].pill}">${cyclePhaseInfo[d.phase].emoji} ${cyclePhaseInfo[d.phase].label}</span>`).join('');
-  return `<div class="cycle-mini">${pills}</div>`;
+function cycleCardPills(foodId){return '';}// removed — now on card back
+
+function cycleCardBack(foodId){
+  const data=(foodCycleData[foodId]||defaultCycleData).slice(0,3);
+  return data.map(d=>{
+    const ph=cyclePhaseInfo[d.phase];
+    return `<div class="back-phase">
+      <span class="back-phase-icon">${ph.emoji}</span>
+      <div class="back-phase-info">
+        <div class="back-phase-name">${ph.label} · ${ph.days}</div>
+        <div class="back-phase-text">${d.benefit.length>90?d.benefit.slice(0,90)+'…':d.benefit}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function flipCard(e,id){
+  e.stopPropagation();
+  const wrap=document.getElementById('fci-'+id)?.closest('.food-card-wrap');
+  if(!wrap)return;
+  wrap.classList.toggle('flipped');
+  if(navigator.vibrate)navigator.vibrate(25);
 }
 
 function cycleTabHTML(foodId){
@@ -2532,23 +2559,36 @@ function renderFoods(){
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
   g.innerHTML=filtered.map((f,i)=>`
-    <div class="food-card card-enter" style="animation-delay:${i*40}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
-      <div class="card-banner" style="background:${f.color}">${f.emoji}
-        <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
-      </div>
-      <div class="card-body">
-        <h3 class="card-name">${f.name}</h3>
-        <p class="card-desc">${f.description}</p>
-        <div class="card-tags">
-          <span class="tag tag-cat">${f.category}</span>
-          ${f.isVegetarian?'<span class="tag tag-veg">🌿 Vegetarian</span>':''}
-          ${f.isHalal?'<span class="tag tag-halal">☪️ Halal</span>':''}
+    <div class="food-card-wrap card-enter" style="animation-delay:${i*40}ms">
+      <div class="food-card-inner" id="fci-${f.id}">
+
+        <!-- FRONT -->
+        <div class="food-card-front food-card">
+          <div class="card-banner" style="background:${f.color}">${f.emoji}
+            <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
+            <span class="flip-hint">🌙 Tap for cycle</span>
+          </div>
+          <div class="card-body" onclick="openFoodModal(${f.id})">
+            <h3 class="card-name">${f.name}</h3>
+            <p class="card-desc">${f.description}</p>
+            <div class="card-tags">
+              <span class="tag tag-cat">${f.category}</span>
+              ${f.isVegetarian?'<span class="tag tag-veg">🌿 Vegetarian</span>':''}
+              ${f.isHalal?'<span class="tag tag-halal">☪️ Halal</span>':''}
+            </div>
+          </div>
+          <div class="card-footer" onclick="flipCard(event,${f.id})">
+            <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
+            <span class="card-cta">🌙 Cycle →</span>
+          </div>
         </div>
-      </div>
-      ${cycleCardPills(f.id)}
-      <div class="card-footer">
-        <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
-        <span class="card-cta">View →</span>
+
+        <!-- BACK -->
+        <div class="food-card-back" style="background:${f.color}" onclick="flipCard(event,${f.id})">
+          ${cycleCardBack(f.id)}
+          <div class="back-close-hint">tap to flip back</div>
+        </div>
+
       </div>
     </div>`).join('');
 }

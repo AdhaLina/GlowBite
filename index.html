@@ -28,14 +28,31 @@ button,input,select{font-size:16px}
 .header h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;letter-spacing:-1px;margin-bottom:.3rem;position:relative}
 .header p{font-size:clamp(.88rem,2.5vw,1.05rem);opacity:.88;position:relative}
 
-/* MAIN NAV — bottom tab bar */
-.main-nav{background:#fff;display:flex;justify-content:space-around;box-shadow:0 -2px 16px rgba(0,0,0,.09);position:fixed;bottom:0;left:0;right:0;z-index:300;padding-bottom:env(safe-area-inset-bottom);-webkit-overflow-scrolling:touch}
-.nav-btn{flex:1;padding:.6rem .2rem .5rem;border:none;background:none;cursor:pointer;font-size:.58rem;font-weight:700;color:#bbb;white-space:nowrap;transition:color .2s,transform .15s;display:flex;flex-direction:column;align-items:center;gap:.18rem;border-top:3px solid transparent}
-.nav-btn .nb-icon{font-size:1.45rem;line-height:1;transition:transform .2s}
-.nav-btn.active{color:var(--purple);border-top-color:var(--purple)}
-.nav-btn.active .nb-icon{transform:scale(1.18)}
-.nav-btn:active .nb-icon{transform:scale(.88)}
-body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+/* 3-DOT MENU BUTTON */
+.menu-dot-btn{position:absolute;top:50%;left:1rem;transform:translateY(-50%);background:rgba(255,255,255,.18);border:none;border-radius:50%;width:38px;height:38px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;z-index:10;transition:background .2s;padding:0}
+.menu-dot-btn:hover{background:rgba(255,255,255,.32)}
+.menu-dot-btn span{display:block;width:5px;height:5px;background:#fff;border-radius:50%;transition:transform .2s,opacity .2s}
+
+/* SIDEBAR OVERLAY */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:490;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.sidebar-overlay.open{opacity:1;visibility:visible}
+
+/* LEFT SIDEBAR */
+.main-nav{position:fixed;top:0;left:0;bottom:0;width:260px;background:#fff;z-index:500;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 1.2rem) 0 calc(env(safe-area-inset-bottom) + 1rem);box-shadow:4px 0 24px rgba(0,0,0,.13);transform:translateX(-100%);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.main-nav.open{transform:translateX(0)}
+
+/* SIDEBAR HEADER */
+.sidebar-brand{display:flex;align-items:center;gap:.7rem;padding:0 1.3rem 1.2rem;border-bottom:1px solid #f0e8ff;margin-bottom:.6rem}
+.sidebar-brand-icon{font-size:2rem}
+.sidebar-brand-name{font-size:1.15rem;font-weight:900;color:#333;letter-spacing:-0.5px}
+.sidebar-brand-sub{font-size:.7rem;color:#aaa;font-weight:500}
+
+/* NAV BUTTONS */
+.nav-btn{display:flex;align-items:center;gap:.85rem;padding:.8rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.92rem;font-weight:700;color:#999;width:100%;text-align:left;border-radius:0;transition:background .18s,color .18s;border-left:3px solid transparent;white-space:nowrap}
+.nav-btn .nb-icon{font-size:1.4rem;flex-shrink:0;transition:transform .2s}
+.nav-btn:hover{background:#faf5ff;color:#555}
+.nav-btn.active{color:var(--purple);background:#f5eeff;border-left-color:var(--purple)}
+.nav-btn.active .nb-icon{transform:scale(1.12)}
 
 /* SECTIONS */
 .section{display:none}.section.active{display:block}
@@ -312,7 +329,6 @@ body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
   .m-name{font-size:1.4rem}
   .tab-content,.mask-modal-body{padding:1rem}
   .filter-label{display:none}
-  .nav-btn{padding:.75rem .85rem;font-size:.82rem}
 }
 @media(max-width:360px){.food-grid,.mask-grid{grid-template-columns:1fr}}
 </style>
@@ -335,18 +351,32 @@ body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
 </div>
 
 <header class="header">
+  <button class="menu-dot-btn" onclick="openSidebar()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fsBtn" title="Full screen">⛶</button>
   <h1>✨ GlowBite</h1>
   <p>Discover foods that nourish your skin from within</p>
 </header>
 
-<nav class="main-nav">
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- LEFT SIDEBAR NAV -->
+<nav class="main-nav" id="mainNav">
+  <div class="sidebar-brand">
+    <span class="sidebar-brand-icon">✨</span>
+    <div>
+      <div class="sidebar-brand-name">GlowBite</div>
+      <div class="sidebar-brand-sub">Foods for glowing skin</div>
+    </div>
+  </div>
   <button class="nav-btn active" onclick="switchSection('foods',this)"><span class="nb-icon">🥗</span>Foods</button>
-  <button class="nav-btn" onclick="switchSection('period',this)"><span class="nb-icon">🌙</span>Period</button>
-  <button class="nav-btn" onclick="switchSection('masks',this)"><span class="nb-icon">🧖</span>Masks</button>
-  <button class="nav-btn" onclick="switchSection('meals',this)"><span class="nb-icon">🍽️</span>Meals</button>
+  <button class="nav-btn" onclick="switchSection('period',this)"><span class="nb-icon">🌙</span>Period Guide</button>
+  <button class="nav-btn" onclick="switchSection('masks',this)"><span class="nb-icon">🧖</span>Face Masks</button>
+  <button class="nav-btn" onclick="switchSection('meals',this)"><span class="nb-icon">🍽️</span>Meal Ideas</button>
   <button class="nav-btn" onclick="switchSection('reminders',this)"><span class="nb-icon">⏰</span>Reminders</button>
-  <button class="nav-btn" onclick="switchSection('scanner',this)"><span class="nb-icon">📸</span>Scanner</button>
+  <button class="nav-btn" onclick="switchSection('scanner',this)"><span class="nb-icon">📸</span>AI Scanner</button>
 </nav>
 
 <!-- FOODS -->
@@ -1648,11 +1678,23 @@ let vegOnly=false,halalOnly=false,query='',activeSkinType='all',selectedPhase=nu
 /* ══════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════ */
+function openSidebar(){
+  document.getElementById('mainNav').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSidebar(){
+  document.getElementById('mainNav').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
 function switchSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sec-'+id).classList.add('active');
   btn.classList.add('active');
+  closeSidebar();
 }
 
 /* ══════════════════════════════════════
@@ -1980,7 +2022,7 @@ document.getElementById('halalToggle').addEventListener('change',e=>{halalOnly=e
 document.getElementById('foodOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('foodOverlay'))closeFoodModal();});
 document.getElementById('maskOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('maskOverlay'))closeMaskModal();});
 document.getElementById('mealOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('mealOverlay'))closeMealModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();closeSidebar();}});
 
 /* ══════════════════════════════════════
    INIT

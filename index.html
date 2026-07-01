@@ -222,12 +222,24 @@ button,input,select{font-size:16px}
 .rem-empty .nre{font-size:2.5rem;margin-bottom:.6rem}
 
 /* SPLASH SCREEN */
-#splash{position:fixed;inset:0;background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+#splash{position:fixed;inset:0;background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);background-size:300% 300%;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease;animation:splashBg 3s ease infinite}
 #splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.splash-logo{font-size:5rem;margin-bottom:.5rem;animation:splashPop .6s cubic-bezier(.34,1.56,.64,1)}
-.splash-title{font-size:2rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:.3rem}
-.splash-sub{font-size:.9rem;color:rgba(255,255,255,.8)}
-@keyframes splashPop{from{transform:scale(0.4);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes splashBg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.splash-logo{font-size:6rem;margin-bottom:.4rem;animation:splashPop .7s cubic-bezier(.34,1.56,.64,1) forwards,splashFloat 2s ease-in-out .7s infinite;filter:drop-shadow(0 0 24px rgba(255,255,255,.7))}
+@keyframes splashPop{from{transform:scale(0.2) rotate(-20deg);opacity:0}to{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes splashFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.05)}}
+
+.splash-title{font-size:2.4rem;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:.3rem;animation:splashFadeUp .5s ease .4s both;text-shadow:0 2px 20px rgba(0,0,0,.2)}
+.splash-sub{font-size:.95rem;color:rgba(255,255,255,.85);animation:splashFadeUp .5s ease .6s both;letter-spacing:.5px}
+@keyframes splashFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.splash-bar-wrap{width:140px;height:4px;background:rgba(255,255,255,.25);border-radius:4px;margin-top:2rem;overflow:hidden;animation:splashFadeUp .5s ease .8s both}
+.splash-bar{height:100%;width:0;background:#fff;border-radius:4px;animation:splashProgress 1.4s ease .8s forwards}
+@keyframes splashProgress{from{width:0}to{width:100%}}
+
+.splash-sparkle{position:absolute;border-radius:50%;pointer-events:none;animation:sparkleFly var(--dur,1.5s) ease var(--delay,0s) infinite}
+@keyframes sparkleFly{0%{transform:translate(0,0) scale(0) rotate(0deg);opacity:0}20%{opacity:1}80%{opacity:.8}100%{transform:translate(var(--tx,40px),var(--ty,-80px)) scale(1) rotate(var(--rot,180deg));opacity:0}}
 
 /* INSTALL BANNER */
 #installBanner{background:linear-gradient(135deg,#C44DFF,#4D79FF);color:#fff;padding:.75rem 1rem;display:none;align-items:center;gap:.7rem;position:sticky;top:0;z-index:400}
@@ -306,6 +318,7 @@ button,input,select{font-size:16px}
   <div class="splash-logo">✨</div>
   <div class="splash-title">GlowBite</div>
   <div class="splash-sub">Foods for glowing skin</div>
+  <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
 </div>
 
 <!-- INSTALL BANNER -->
@@ -1696,7 +1709,33 @@ updateNotifyNote();
    SPLASH SCREEN
 ══════════════════════════════════════ */
 window.addEventListener('load',()=>{
-  setTimeout(()=>document.getElementById('splash').classList.add('hidden'),1600);
+  const splash=document.getElementById('splash');
+
+  // Generate sparkle particles
+  const colours=['#fff','#FFD6EC','#E8CFFF','#C4E0FF','#FFEAA7','#FFB3DE'];
+  const emojis=['✨','⭐','💫','🌟','✦','·'];
+  for(let i=0;i<28;i++){
+    const el=document.createElement('span');
+    el.className='splash-sparkle';
+    const size=Math.random()*18+6;
+    const angle=Math.random()*Math.PI*2;
+    const dist=Math.random()*160+60;
+    const isEmoji=Math.random()>.5;
+    if(isEmoji){
+      el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      el.style.cssText=`font-size:${size}px;left:${40+Math.random()*20}%;top:${30+Math.random()*20}%;`;
+    }else{
+      el.style.cssText=`width:${size}px;height:${size}px;background:${colours[Math.floor(Math.random()*colours.length)]};left:${40+Math.random()*20}%;top:${30+Math.random()*20}%;box-shadow:0 0 ${size}px ${colours[Math.floor(Math.random()*colours.length)]};`;
+    }
+    el.style.setProperty('--tx', Math.round(Math.cos(angle)*dist)+'px');
+    el.style.setProperty('--ty', Math.round(Math.sin(angle)*dist)+'px');
+    el.style.setProperty('--rot', Math.round(Math.random()*360)+'deg');
+    el.style.setProperty('--dur', (.8+Math.random()*1.2).toFixed(2)+'s');
+    el.style.setProperty('--delay', (Math.random()*1.2).toFixed(2)+'s');
+    splash.appendChild(el);
+  }
+
+  setTimeout(()=>splash.classList.add('hidden'),2400);
 });
 
 /* ══════════════════════════════════════

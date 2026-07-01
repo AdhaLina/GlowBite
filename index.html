@@ -219,6 +219,48 @@ button,input,select{font-size:16px}
 .rem-empty{text-align:center;padding:2.5rem 1rem;color:#aaa}
 .rem-empty .nre{font-size:2.5rem;margin-bottom:.6rem}
 
+/* SCANNER SECTION */
+.scanner-wrap{max-width:720px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.api-setup-card{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);padding:1.1rem;margin-bottom:1.2rem}
+.api-setup-card h4{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.5rem}
+.api-row{display:flex;gap:.5rem;align-items:center}
+.api-row input{flex:1;border:2px solid #eee;border-radius:10px;padding:.6rem .8rem;font-size:16px;font-family:inherit;outline:none;transition:border-color .2s}
+.api-row input:focus{border-color:var(--purple)}
+.api-save-btn{background:var(--purple);color:#fff;border:none;border-radius:10px;padding:.6rem 1rem;font-weight:800;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.api-saved-row{display:flex;justify-content:space-between;align-items:center}
+.api-saved-label{font-size:.85rem;color:#00943b;font-weight:700}
+.api-edit-btn{background:#f5eeff;color:var(--purple);border:none;border-radius:8px;padding:.35rem .75rem;font-size:.78rem;font-weight:700;cursor:pointer}
+.scan-upload-area{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);padding:1.4rem;margin-bottom:1.2rem;text-align:center}
+.scan-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.scan-source-btn{display:flex;flex-direction:column;align-items:center;gap:.35rem;background:var(--bg);border:2px solid #e8e0ff;border-radius:16px;padding:1rem 1.5rem;cursor:pointer;font-family:inherit;transition:border-color .2s,transform .15s}
+.scan-source-btn:hover{border-color:var(--purple);transform:translateY(-2px)}
+.scan-source-btn .ssb-icon{font-size:2rem}
+.scan-source-btn .ssb-label{font-size:.78rem;font-weight:700;color:#555}
+.scan-preview-wrap{position:relative;display:none;margin-bottom:.8rem}
+.scan-preview-wrap img{width:100%;max-height:280px;object-fit:cover;border-radius:14px;display:block}
+.scan-clear-btn{position:absolute;top:.5rem;right:.5rem;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.scan-analyse-btn{background:linear-gradient(135deg,#FF6B9D,#C44DFF);color:#fff;border:none;border-radius:14px;padding:.85rem 2rem;font-size:1rem;font-weight:800;cursor:pointer;width:100%;transition:transform .15s,opacity .2s;display:none}
+.scan-analyse-btn:hover{transform:translateY(-2px)}
+.scan-analyse-btn:disabled{opacity:.6;transform:none;cursor:not-allowed}
+.scan-hint{font-size:.8rem;color:#bbb;margin-top:.5rem}
+.scan-loading{text-align:center;padding:2rem;display:none}
+.scan-spinner{width:48px;height:48px;border:4px solid #f0e8ff;border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .8rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scan-loading p{font-size:.88rem;color:#aaa}
+.scan-results{display:none}
+.scan-ingredients-found{background:linear-gradient(135deg,#f5eeff,#fff0f8);border-radius:14px;padding:.9rem 1rem;margin-bottom:1.2rem;font-size:.83rem;color:#555;line-height:1.7}
+.scan-ingredients-found strong{color:var(--purple);display:block;font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.35rem}
+.scan-meals-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.85rem}
+.scan-meal-card{background:#fff;border-radius:16px;box-shadow:0 3px 14px rgba(0,0,0,.08);overflow:hidden;display:flex;flex-direction:column}
+.scan-meal-banner{padding:1rem;display:flex;align-items:center;justify-content:center;font-size:2.6rem;min-height:80px}
+.scan-meal-body{padding:.85rem;flex:1}
+.scan-meal-name{font-size:.95rem;font-weight:800;color:#333;margin-bottom:.3rem}
+.scan-meal-desc{font-size:.76rem;color:#777;line-height:1.5;margin-bottom:.55rem}
+.scan-meal-benefit{background:linear-gradient(135deg,#f5eeff,#fff0f8);border-radius:10px;padding:.55rem .7rem;font-size:.74rem;color:#555;line-height:1.55}
+.scan-meal-benefit strong{color:var(--purple)}
+.scan-retake-btn{background:#f5eeff;color:var(--purple);border:none;border-radius:12px;padding:.7rem;font-size:.85rem;font-weight:700;cursor:pointer;width:100%;margin-top:1.1rem}
+@media(max-width:500px){.scan-meals-grid{grid-template-columns:1fr}}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   .phase-grid{grid-template-columns:repeat(2,1fr)}
@@ -250,6 +292,7 @@ button,input,select{font-size:16px}
   <button class="nav-btn" onclick="switchSection('masks',this)">🧖 Face Masks</button>
   <button class="nav-btn" onclick="switchSection('meals',this)">🍽️ Meal Ideas</button>
   <button class="nav-btn" onclick="switchSection('reminders',this)">⏰ Reminders</button>
+  <button class="nav-btn" onclick="switchSection('scanner',this)">📸 AI Scanner</button>
 </nav>
 
 <!-- FOODS -->
@@ -343,6 +386,69 @@ button,input,select{font-size:16px}
     </div>
     <p class="rem-notify-note" id="remNotifyNote"></p>
     <div class="rem-list" id="remList"></div>
+  </div>
+</div>
+
+<!-- AI SCANNER -->
+<div class="section" id="sec-scanner">
+  <div class="scanner-wrap">
+    <div class="sec-hero">
+      <h2>📸 AI Ingredient Scanner</h2>
+      <p>Take a photo of your ingredients and AI will suggest up to 4 skin-boosting meals</p>
+    </div>
+
+    <!-- API Key setup -->
+    <div class="api-setup-card" id="apiSetupCard">
+      <h4>🔑 Claude AI API Key</h4>
+      <div id="apiKeyInput">
+        <div class="api-row">
+          <input type="password" id="apiKeyField" placeholder="sk-ant-…  (stored locally on your device only)">
+          <button class="api-save-btn" onclick="saveApiKey()">Save</button>
+        </div>
+        <p style="font-size:.72rem;color:#bbb;margin-top:.45rem">Your key is never sent anywhere except directly to Anthropic's API. Get one free at console.anthropic.com</p>
+      </div>
+      <div id="apiKeySaved" style="display:none">
+        <div class="api-saved-row">
+          <span class="api-saved-label">✅ API key saved</span>
+          <button class="api-edit-btn" onclick="editApiKey()">Change key</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload area -->
+    <div class="scan-upload-area">
+      <div class="scan-btns">
+        <button class="scan-source-btn" onclick="document.getElementById('camInput').click()">
+          <span class="ssb-icon">📷</span>
+          <span class="ssb-label">Take Photo</span>
+        </button>
+        <button class="scan-source-btn" onclick="document.getElementById('galInput').click()">
+          <span class="ssb-icon">🖼️</span>
+          <span class="ssb-label">Choose from Gallery</span>
+        </button>
+      </div>
+      <input type="file" id="camInput" accept="image/*" capture="environment" style="display:none" onchange="handleImage(this)">
+      <input type="file" id="galInput" accept="image/*" style="display:none" onchange="handleImage(this)">
+      <div class="scan-preview-wrap" id="scanPreviewWrap">
+        <img id="scanPreview" src="" alt="Ingredient photo">
+        <button class="scan-clear-btn" onclick="clearScan()">✕</button>
+      </div>
+      <button class="scan-analyse-btn" id="scanAnalyseBtn" onclick="analyseIngredients()">✨ Analyse Ingredients</button>
+      <p class="scan-hint" id="scanHint">Take or choose a photo of ingredients, a fridge, or a food label</p>
+    </div>
+
+    <!-- Loading -->
+    <div class="scan-loading" id="scanLoading">
+      <div class="scan-spinner"></div>
+      <p>AI is analysing your ingredients…</p>
+    </div>
+
+    <!-- Results -->
+    <div class="scan-results" id="scanResults">
+      <div class="scan-ingredients-found" id="scanIngredientsFound"></div>
+      <div class="scan-meals-grid" id="scanMealsGrid"></div>
+      <button class="scan-retake-btn" onclick="clearScan()">📸 Scan new ingredients</button>
+    </div>
   </div>
 </div>
 
@@ -1550,6 +1656,161 @@ renderConcernFilter();
 renderMeals();
 renderReminders();
 updateNotifyNote();
+
+/* ══════════════════════════════════════
+   AI SCANNER
+══════════════════════════════════════ */
+let scanImageB64=null, scanImageType=null;
+
+function saveApiKey(){
+  const key=document.getElementById('apiKeyField').value.trim();
+  if(!key.startsWith('sk-ant-'))return alert('Please enter a valid Claude API key (starts with sk-ant-)');
+  localStorage.setItem('glowbiteApiKey',key);
+  document.getElementById('apiKeyField').value='';
+  document.getElementById('apiKeyInput').style.display='none';
+  document.getElementById('apiKeySaved').style.display='block';
+}
+function editApiKey(){
+  document.getElementById('apiKeyInput').style.display='block';
+  document.getElementById('apiKeySaved').style.display='none';
+}
+function initApiKeyUI(){
+  const key=localStorage.getItem('glowbiteApiKey');
+  if(key){document.getElementById('apiKeyInput').style.display='none';document.getElementById('apiKeySaved').style.display='block';}
+}
+
+function handleImage(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const dataUrl=e.target.result;
+    scanImageType=file.type||'image/jpeg';
+    scanImageB64=dataUrl.split(',')[1];
+    document.getElementById('scanPreview').src=dataUrl;
+    document.getElementById('scanPreviewWrap').style.display='block';
+    document.getElementById('scanAnalyseBtn').style.display='block';
+    document.getElementById('scanHint').style.display='none';
+    document.getElementById('scanResults').style.display='none';
+    document.getElementById('scanLoading').style.display='none';
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function clearScan(){
+  scanImageB64=null;scanImageType=null;
+  document.getElementById('scanPreviewWrap').style.display='none';
+  document.getElementById('scanAnalyseBtn').style.display='none';
+  document.getElementById('scanHint').style.display='block';
+  document.getElementById('scanResults').style.display='none';
+  document.getElementById('scanLoading').style.display='none';
+}
+
+async function analyseIngredients(){
+  const key=localStorage.getItem('glowbiteApiKey');
+  if(!key){alert('Please save your Claude API key first.');return;}
+  if(!scanImageB64){alert('Please take or choose a photo first.');return;}
+
+  const btn=document.getElementById('scanAnalyseBtn');
+  btn.disabled=true;
+  document.getElementById('scanLoading').style.display='block';
+  document.getElementById('scanResults').style.display='none';
+  document.getElementById('scanPreviewWrap').style.display='block';
+
+  const prompt=`You are a nutritionist and skin health expert for the GlowBite app. Analyse this image and identify all visible food ingredients, produce, or food items.
+
+Then propose exactly 4 different skin-boosting meals that can be made using those ingredients (or a subset of them). For each meal respond in this exact JSON format:
+
+{
+  "ingredients_found": ["ingredient1", "ingredient2", ...],
+  "meals": [
+    {
+      "emoji": "🥗",
+      "name": "Meal Name",
+      "description": "One sentence description of the dish.",
+      "skin_benefit": "Specific explanation of how this meal benefits skin health, referencing the actual ingredients and nutrients involved.",
+      "key_ingredients": ["ing1", "ing2", "ing3"]
+    }
+  ]
+}
+
+Rules:
+- Propose exactly 4 meals, no more no less.
+- Each meal must be practical and use ingredients visible in the image.
+- Skin benefits must be specific (mention actual nutrients, vitamins, or compounds).
+- Keep description under 15 words.
+- Keep skin_benefit under 40 words.
+- Respond ONLY with valid JSON, no extra text.`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:1024,
+        messages:[{
+          role:'user',
+          content:[
+            {type:'image',source:{type:'base64',media_type:scanImageType,data:scanImageB64}},
+            {type:'text',text:prompt}
+          ]
+        }]
+      })
+    });
+
+    if(!res.ok){
+      const err=await res.json().catch(()=>({}));
+      throw new Error(err.error?.message||`API error ${res.status}`);
+    }
+
+    const data=await res.json();
+    const text=data.content[0].text.trim();
+    const json=JSON.parse(text.replace(/^```json\n?|\n?```$/g,''));
+    renderScanResults(json);
+  }catch(e){
+    alert('Error: '+e.message+'\n\nCheck your API key and try again.');
+  }finally{
+    btn.disabled=false;
+    document.getElementById('scanLoading').style.display='none';
+  }
+}
+
+const mealColors=[
+  'linear-gradient(135deg,#FF6B9D,#C44DFF)',
+  'linear-gradient(135deg,#43e97b,#38f9d7)',
+  'linear-gradient(135deg,#f7971e,#ffd200)',
+  'linear-gradient(135deg,#667eea,#764ba2)'
+];
+
+function renderScanResults(data){
+  const ingredientsEl=document.getElementById('scanIngredientsFound');
+  ingredientsEl.innerHTML=`<strong>🥦 Ingredients detected</strong>${data.ingredients_found.join(', ')}`;
+
+  const grid=document.getElementById('scanMealsGrid');
+  grid.innerHTML=data.meals.slice(0,4).map((m,i)=>`
+    <div class="scan-meal-card">
+      <div class="scan-meal-banner" style="background:${mealColors[i]}">${m.emoji}</div>
+      <div class="scan-meal-body">
+        <div class="scan-meal-name">${m.name}</div>
+        <div class="scan-meal-desc">${m.description}</div>
+        <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.5rem">
+          ${m.key_ingredients.map(k=>`<span style="background:#f0e8ff;color:#8B2FC9;border-radius:50px;padding:.12rem .45rem;font-size:.65rem;font-weight:700">${k}</span>`).join('')}
+        </div>
+        <div class="scan-meal-benefit"><strong>✨ Skin benefit:</strong> ${m.skin_benefit}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('scanResults').style.display='block';
+  document.getElementById('scanAnalyseBtn').style.display='none';
+}
+
+initApiKeyUI();
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});

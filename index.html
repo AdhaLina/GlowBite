@@ -788,13 +788,11 @@ button,input,select{font-size:16px}
       <button class="tab-btn active" onclick="switchTab('ov',this)">Overview</button>
       <button class="tab-btn" onclick="switchTab('nu',this)">Nutrients</button>
       <button class="tab-btn" onclick="switchTab('sk',this)">Skin Benefits</button>
-      <button class="tab-btn" onclick="switchTab('cy',this)">🌙 Cycle</button>
     </div>
     <div class="tab-content">
       <div class="tab-panel active" id="tab-ov"></div>
       <div class="tab-panel" id="tab-nu"></div>
       <div class="tab-panel" id="tab-sk"></div>
-      <div class="tab-panel" id="tab-cy"></div>
     </div>
   </div>
 </div>
@@ -2630,7 +2628,6 @@ function openFoodModal(id){
   document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
   document.getElementById('tab-nu').innerHTML=f.nutrients.map(n=>`<div class="ncard"><div class="ntop"><span class="nname">${n.name}</span><span class="namount">${n.amount} / 100g</span></div><p class="nskin">🔬 ${n.skinBenefit}</p></div>`).join('');
   document.getElementById('tab-sk').innerHTML=f.skinBenefits.map(s=>`<div class="scard"><span class="sicon">${s.icon}</span><div><p class="stitle">${s.title}</p><p class="sdesc">${s.desc}</p></div></div>`).join('');
-  document.getElementById('tab-cy').innerHTML=cycleTabHTML(f.id);
   switchTab('ov',document.querySelector('#foodOverlay .tab-btn'));
   document.getElementById('foodOverlay').classList.add('open');
   document.body.style.overflow='hidden';

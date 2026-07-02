@@ -396,6 +396,20 @@ button,input,select{font-size:16px}
 .scan-meal-benefit{background:linear-gradient(135deg,#f5eeff,#fff0f8);border-radius:10px;padding:.55rem .7rem;font-size:.74rem;color:#555;line-height:1.55}
 .scan-meal-benefit strong{color:var(--purple)}
 .scan-retake-btn{background:#f5eeff;color:var(--purple);border:none;border-radius:12px;padding:.7rem;font-size:.85rem;font-weight:700;cursor:pointer;width:100%;margin-top:1.1rem}
+/* TEXT INGREDIENT INPUT */
+.text-ingr-card{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);padding:1.3rem;margin-bottom:1.2rem}
+.text-ingr-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.text-ingr-icon{font-size:1.8rem;flex-shrink:0}
+.text-ingr-title{font-size:.95rem;font-weight:800;color:#333}
+.text-ingr-sub{font-size:.76rem;color:#aaa;margin-top:.1rem}
+.text-ingr-area{width:100%;border:2px solid #eee;border-radius:12px;padding:.75rem .9rem;font-size:16px;font-family:inherit;resize:vertical;outline:none;transition:border-color .2s;color:#333;line-height:1.55}
+.text-ingr-area:focus{border-color:var(--purple)}
+.text-ingr-btn{width:100%;background:linear-gradient(135deg,#FF6B9D,#C44DFF);color:#fff;border:none;border-radius:14px;padding:.85rem;font-size:1rem;font-weight:800;cursor:pointer;margin-top:.75rem;transition:transform .15s,opacity .2s}
+.text-ingr-btn:hover{transform:translateY(-2px)}
+.text-ingr-btn:disabled{opacity:.6;transform:none;cursor:not-allowed}
+.text-ingr-loading{display:none;text-align:center;padding:1.5rem}
+.text-ingr-loading p{font-size:.88rem;color:#aaa;margin-top:.5rem}
+.text-ingr-results{display:none}
 @media(max-width:500px){.scan-meals-grid{grid-template-columns:1fr}}
 
 /* SKIN JOURNAL */
@@ -662,6 +676,28 @@ button,input,select{font-size:16px}
       </div>
       <button class="scan-analyse-btn" id="scanAnalyseBtn" onclick="analyseIngredients()">✨ Analyse Ingredients</button>
       <p class="scan-hint" id="scanHint">Take or choose a photo of ingredients, a fridge, or a food label</p>
+    </div>
+
+    <!-- TEXT INGREDIENT INPUT -->
+    <div class="text-ingr-card">
+      <div class="text-ingr-header">
+        <span class="text-ingr-icon">✍️</span>
+        <div>
+          <div class="text-ingr-title">Type your ingredients</div>
+          <div class="text-ingr-sub">No photo? Just type what you have and AI will create recipes</div>
+        </div>
+      </div>
+      <textarea id="textIngrInput" class="text-ingr-area" placeholder="e.g. chicken breast, spinach, garlic, lemon, olive oil, tomatoes…" rows="3"></textarea>
+      <button class="text-ingr-btn" id="textIngrBtn" onclick="analyseTextIngredients()">✨ Generate Recipes</button>
+      <div class="text-ingr-loading" id="textIngrLoading">
+        <div class="scan-spinner"></div>
+        <p>AI is creating your recipes…</p>
+      </div>
+      <div class="text-ingr-results" id="textIngrResults">
+        <div class="scan-ingredients-found" id="textIngrFound"></div>
+        <div class="scan-meals-grid" id="textIngrGrid"></div>
+        <button class="scan-retake-btn" onclick="clearTextIngr()">✍️ Try different ingredients</button>
+      </div>
     </div>
 
     <!-- Loading -->
@@ -3090,6 +3126,91 @@ Rules:
     btn.disabled=false;
     document.getElementById('scanLoading').style.display='none';
   }
+}
+
+async function analyseTextIngredients(){
+  const key=localStorage.getItem('glowbiteApiKey');
+  if(!key){alert('Please save your Claude API key first.');return;}
+  const raw=document.getElementById('textIngrInput').value.trim();
+  if(!raw){alert('Please type some ingredients first.');return;}
+
+  const btn=document.getElementById('textIngrBtn');
+  btn.disabled=true;
+  document.getElementById('textIngrLoading').style.display='block';
+  document.getElementById('textIngrResults').style.display='none';
+  if(navigator.vibrate)navigator.vibrate(20);
+
+  const prompt=`You are a nutritionist and skin health expert for the GlowBite app. The user has these ingredients: ${raw}
+
+Propose exactly 4 different skin-boosting meals that can be made using those ingredients (or a subset of them). Respond in this exact JSON format:
+
+{
+  "ingredients_found": ["ingredient1", "ingredient2", ...],
+  "meals": [
+    {
+      "emoji": "🥗",
+      "name": "Meal Name",
+      "description": "One sentence description of the dish.",
+      "skin_benefit": "Specific explanation of how this meal benefits skin health, referencing the actual ingredients and nutrients involved.",
+      "key_ingredients": ["ing1", "ing2", "ing3"]
+    }
+  ]
+}
+
+Rules:
+- Propose exactly 4 meals, no more no less.
+- Each meal must be practical and use the listed ingredients.
+- Skin benefits must be specific (mention actual nutrients, vitamins, or compounds).
+- Keep description under 15 words.
+- Keep skin_benefit under 40 words.
+- Respond ONLY with valid JSON, no extra text.`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:1024,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error?.message||`API error ${res.status}`);}
+    const data=await res.json();
+    const text=data.content[0].text.trim();
+    const json=JSON.parse(text.replace(/^```json\n?|\n?```$/g,''));
+    renderTextIngrResults(json);
+    if(navigator.vibrate)navigator.vibrate([30,20,60]);
+  }catch(e){
+    alert('Error: '+e.message+'\n\nCheck your API key and try again.');
+  }finally{
+    btn.disabled=false;
+    document.getElementById('textIngrLoading').style.display='none';
+  }
+}
+
+function renderTextIngrResults(data){
+  document.getElementById('textIngrFound').innerHTML=`<strong>🥦 Ingredients used</strong>${data.ingredients_found.join(', ')}`;
+  document.getElementById('textIngrGrid').innerHTML=data.meals.slice(0,4).map((m,i)=>`
+    <div class="scan-meal-card">
+      <div class="scan-meal-banner" style="background:${mealColors[i]}">${m.emoji}</div>
+      <div class="scan-meal-body">
+        <div class="scan-meal-name">${m.name}</div>
+        <div class="scan-meal-desc">${m.description}</div>
+        <div class="scan-meal-benefit"><strong>✨ Skin benefit:</strong> ${m.skin_benefit}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('textIngrResults').style.display='block';
+}
+
+function clearTextIngr(){
+  document.getElementById('textIngrInput').value='';
+  document.getElementById('textIngrResults').style.display='none';
 }
 
 const mealColors=[

@@ -2559,36 +2559,22 @@ function renderFoods(){
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
   g.innerHTML=filtered.map((f,i)=>`
-    <div class="food-card-wrap card-enter" style="animation-delay:${i*40}ms">
-      <div class="food-card-inner" id="fci-${f.id}">
-
-        <!-- FRONT -->
-        <div class="food-card-front food-card">
-          <div class="card-banner" style="background:${f.color}">${f.emoji}
-            <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
-            <span class="flip-hint">🌙 Tap for cycle</span>
-          </div>
-          <div class="card-body" onclick="openFoodModal(${f.id})">
-            <h3 class="card-name">${f.name}</h3>
-            <p class="card-desc">${f.description}</p>
-            <div class="card-tags">
-              <span class="tag tag-cat">${f.category}</span>
-              ${f.isVegetarian?'<span class="tag tag-veg">🌿 Vegetarian</span>':''}
-              ${f.isHalal?'<span class="tag tag-halal">☪️ Halal</span>':''}
-            </div>
-          </div>
-          <div class="card-footer" onclick="flipCard(event,${f.id})">
-            <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
-            <span class="card-cta">🌙 Cycle →</span>
-          </div>
+    <div class="food-card card-enter" style="animation-delay:${i*40}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
+      <div class="card-banner" style="background:${f.color}">${f.emoji}
+        <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">${f.name}</h3>
+        <p class="card-desc">${f.description}</p>
+        <div class="card-tags">
+          <span class="tag tag-cat">${f.category}</span>
+          ${f.isVegetarian?'<span class="tag tag-veg">🌿 Vegetarian</span>':''}
+          ${f.isHalal?'<span class="tag tag-halal">☪️ Halal</span>':''}
         </div>
-
-        <!-- BACK -->
-        <div class="food-card-back" style="background:${f.color}" onclick="flipCard(event,${f.id})">
-          ${cycleCardBack(f.id)}
-          <div class="back-close-hint">tap to flip back</div>
-        </div>
-
+      </div>
+      <div class="card-footer">
+        <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
+        <span class="card-cta">View →</span>
       </div>
     </div>`).join('');
 }

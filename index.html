@@ -326,23 +326,6 @@ button,input,select{font-size:16px}
 .food-card-back{position:absolute;inset:0;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1rem;box-shadow:0 3px 14px rgba(0,0,0,.13)}
 /* flip hint badge */
 .flip-hint{position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.3);border-radius:50px;padding:.18rem .6rem;font-size:.65rem;font-weight:700;color:#fff;white-space:nowrap;pointer-events:none;backdrop-filter:blur(4px)}
-/* back side cycle pills */
-.back-phase{display:flex;align-items:flex-start;gap:.5rem;background:rgba(255,255,255,.18);border-radius:12px;padding:.5rem .65rem}
-.back-phase-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
-.back-phase-info{flex:1;min-width:0}
-.back-phase-name{font-size:.72rem;font-weight:900;color:#fff;opacity:.9;margin-bottom:.08rem}
-.back-phase-text{font-size:.7rem;color:rgba(255,255,255,.85);line-height:1.45}
-.back-close-hint{text-align:center;font-size:.65rem;color:rgba(255,255,255,.6);margin-top:.3rem}
-/* CYCLE TAB IN MODAL */
-.cy-phase-block{border-radius:16px;overflow:hidden;margin-bottom:.85rem}
-.cy-phase-head{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;color:#fff}
-.cy-phase-head .cy-moon{font-size:1.5rem;flex-shrink:0}
-.cy-phase-head h4{font-size:.92rem;font-weight:900;margin:0}
-.cy-phase-head span{font-size:.75rem;opacity:.85;font-weight:500}
-.cy-phase-body{padding:.8rem 1rem;background:#faf8ff}
-.cy-phase-body p{font-size:.84rem;color:#555;line-height:1.65}
-.cy-phase-body .cy-tip{margin-top:.5rem;font-size:.78rem;color:#888;font-style:italic}
-.cy-note{text-align:center;font-size:.72rem;color:#ccc;padding:.3rem 1rem .8rem}
 /* HEART / FAVOURITES */
 .heart-btn{position:absolute;top:.5rem;right:.5rem;background:rgba(255,255,255,.25);border:none;border-radius:50%;width:30px;height:30px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;line-height:1}
 .heart-btn:hover{transform:scale(1.15)}
@@ -2269,129 +2252,7 @@ function dismissGlowTip(){
 ══════════════════════════════════════ */
 /* ══════════════════════════════════════
    MENSTRUAL CYCLE DATA PER FOOD
-══════════════════════════════════════ */
-const cyclePhaseInfo={
-  m:{label:'Menstrual',emoji:'🔴',days:'Days 1–5',color:'#c0175c',bg:'#ffe4f0',pill:'cyc-m'},
-  f:{label:'Follicular',emoji:'🌱',days:'Days 6–13',color:'#e65100',bg:'#fff3e0',pill:'cyc-f'},
-  o:{label:'Ovulation',emoji:'🌸',days:'Days 14–16',color:'#2e7d32',bg:'#e8f5e9',pill:'cyc-o'},
-  l:{label:'Luteal',emoji:'🌙',days:'Days 17–28',color:'#5e35b1',bg:'#ede7f6',pill:'cyc-l'},
-};
-// foodId → array of {phase, benefit, tip}
-const foodCycleData={
-  1:[// Avocado
-    {phase:'m',benefit:'Rich in healthy fats that ease cramping and reduce prostaglandin-driven inflammation during menstruation.',tip:'Eat daily to soothe period cramps naturally.'},
-    {phase:'f',benefit:'Folate and B vitamins support cell regeneration as your follicles develop.',tip:'Add to salads to boost energy as oestrogen rises.'},
-    {phase:'l',benefit:'Magnesium helps reduce PMS bloating and mood swings in the luteal phase.',tip:'Eat before bed to ease pre-period tension.'}],
-  2:[// Salmon
-    {phase:'m',benefit:'Omega-3s are powerful anti-inflammatories that directly reduce menstrual pain and heavy flow.',tip:'Eat salmon 2–3 days before your period for best results.'},
-    {phase:'f',benefit:'High protein supports muscle repair and oestrogen metabolism during the follicular phase.',tip:'Great post-workout meal as energy increases.'},
-    {phase:'l',benefit:'Vitamin D and omega-3s stabilise mood and reduce PMS symptoms.',tip:'Pair with leafy greens for full cycle support.'}],
-  3:[// Blueberries
-    {phase:'m',benefit:'Antioxidants reduce oxidative stress from heavy bleeding and support iron absorption.',tip:'Blend into a smoothie with spinach for an iron-rich menstrual boost.'},
-    {phase:'o',benefit:'Vitamin C and antioxidants support healthy egg release and cervical mucus production.',tip:'Eat fresh at ovulation for peak fertility support.'},
-    {phase:'l',benefit:'Natural sugars and fibre stabilise blood sugar, reducing luteal phase cravings.',tip:'Snack on blueberries instead of reaching for sweets.'}],
-  4:[// Sweet Potato
-    {phase:'f',benefit:'Beta-carotene converts to Vitamin A, supporting follicle development and hormonal balance.',tip:'Roast with turmeric to amplify anti-inflammatory effects.'},
-    {phase:'l',benefit:'Complex carbs raise serotonin levels, easing luteal phase mood dips and cravings.',tip:'Eat in the evening to improve sleep during PMS week.'}],
-  5:[// Spinach
-    {phase:'m',benefit:'Iron replaces what is lost during menstruation. Folate reduces fatigue and supports red blood cell production.',tip:'Eat cooked spinach — cooking increases iron bioavailability.'},
-    {phase:'f',benefit:'Folate supports cell division as the body prepares a new egg for release.',tip:'Pair with Vitamin C foods to maximise iron and folate absorption.'},
-    {phase:'l',benefit:'Magnesium in spinach calms the nervous system and eases water retention.',tip:'Add to soups or stews in your luteal phase.'}],
-  6:[// Walnuts
-    {phase:'m',benefit:'Omega-3 fatty acids reduce uterine cramping and systemic period inflammation.',tip:'Eat a small handful daily during your period.'},
-    {phase:'l',benefit:'Melatonin precursors in walnuts support better sleep during restless PMS nights.',tip:'Eat walnuts in the evening to improve luteal phase sleep.'}],
-  7:[// Tomatoes
-    {phase:'f',benefit:'Lycopene supports oestrogen detoxification and liver health during the follicular phase.',tip:'Cook tomatoes to increase lycopene absorption.'},
-    {phase:'o',benefit:'Vitamin C boosts collagen, energy and supports healthy cervical mucus at ovulation.',tip:'Eat raw in salads at peak ovulation days.'}],
-  8:[// Green Tea
-    {phase:'f',benefit:'EGCG antioxidants support oestrogen metabolism and detoxification as the cycle resets.',tip:'Replace coffee with green tea in the follicular phase.'},
-    {phase:'l',benefit:'L-theanine in green tea reduces anxiety and cortisol spikes common in the luteal phase.',tip:'Drink 1–2 cups in the afternoon to ease PMS tension.'}],
-  9:[// Dark Chocolate
-    {phase:'m',benefit:'Magnesium eases cramps and boosts mood via serotonin. Iron supports blood replenishment.',tip:'Choose 70%+ cacao for maximum magnesium content.'},
-    {phase:'l',benefit:'Magnesium and phenylethylamine lift mood and reduce PMS chocolate cravings naturally.',tip:'A small piece of dark chocolate satisfies cravings without a sugar crash.'}],
-  10:[// Carrots
-    {phase:'f',benefit:'Beta-carotene and fibre support oestrogen clearance via the gut during the follicular phase.',tip:'Eat raw carrots to bind and remove excess oestrogen.'},
-    {phase:'l',benefit:'Fibre helps regulate progesterone metabolism and reduces bloating.',tip:'Snack on carrot sticks in the luteal phase.'}],
-  11:[// Almonds
-    {phase:'l',benefit:'Magnesium, Vitamin E and B6 in almonds directly combat PMS symptoms including cramps, mood changes and bloating.',tip:'Eat a handful daily in your luteal phase as a hormone-balancing snack.'},
-    {phase:'m',benefit:'Vitamin E reduces menstrual pain and inflammation while supporting skin healing.',tip:'Almond milk is a gentle, nourishing alternative to dairy during your period.'}],
-  12:[// Pomegranate
-    {phase:'f',benefit:'Phytoestrogens in pomegranate support rising oestrogen levels naturally during the follicular phase.',tip:'Drink unsweetened pomegranate juice in the first half of your cycle.'},
-    {phase:'o',benefit:'Antioxidants protect egg quality and support healthy ovulation.',tip:'Sprinkle seeds on yogurt at ovulation for a fertility-boosting snack.'}],
-  13:[// Kiwi
-    {phase:'m',benefit:'Vitamin C boosts iron absorption from plant foods, combating period fatigue.',tip:'Eat kiwi alongside iron-rich foods during your period.'},
-    {phase:'f',benefit:'Folate supports cell regeneration and DNA repair as follicles develop.',tip:'Great morning snack in the first two weeks of your cycle.'}],
-  14:[// Turmeric
-    {phase:'m',benefit:'Curcumin is one of nature\'s most powerful anti-inflammatories, reducing period pain, cramping and flow.',tip:'Golden milk (turmeric latte) the week before and during your period can significantly ease symptoms.'},
-    {phase:'l',benefit:'Reduces prostaglandins responsible for PMS inflammation and breast tenderness.',tip:'Add to soups, curries or warm drinks throughout the luteal phase.'}],
-  15:[// Broccoli
-    {phase:'f',benefit:'DIM (diindolylmethane) in broccoli actively metabolises and clears excess oestrogen from the body.',tip:'Eat lightly steamed — overcooking destroys DIM.'},
-    {phase:'l',benefit:'Calcium and fibre ease PMS bloating and support progesterone function.',tip:'Combine with chickpeas for a hormone-balancing luteal phase meal.'}],
-  16:[// Sunflower Seeds
-    {phase:'f',benefit:'Vitamin E and selenium support follicle development and protect egg cells from oxidative stress.',tip:'Sprinkle on salads or yogurt in the follicular phase.'},
-    {phase:'o',benefit:'Zinc supports healthy ovulation and hormone signalling at mid-cycle.',tip:'A handful at ovulation supports peak fertility.'}],
-  17:[// Chickpeas
-    {phase:'l',benefit:'B6 and magnesium in chickpeas reduce PMS mood swings and bloating.',tip:'Hummus on wholegrain crackers is a perfect luteal phase snack.'},
-    {phase:'m',benefit:'Iron and protein support blood replenishment and sustained energy during menstruation.',tip:'Add to soups for a period-friendly, warming meal.'}],
-  18:[// Olive Oil
-    {phase:'m',benefit:'Oleocanthal in olive oil acts like ibuprofen, reducing menstrual inflammation and cramping.',tip:'Drizzle generously on period meals.'},
-    {phase:'f',benefit:'Healthy monounsaturated fats support oestrogen production and cellular health.',tip:'Use as the primary cooking fat in the first half of your cycle.'}],
-  19:[// Red Bell Pepper
-    {phase:'m',benefit:'Highest Vitamin C content of any vegetable — supports iron absorption during menstruation.',tip:'Eat raw with hummus for maximum Vitamin C benefit.'},
-    {phase:'f',benefit:'Vitamin C and B6 support hormonal balance and energy as oestrogen rises.',tip:'Add to stir-fries in the follicular phase.'}],
-  20:[// Papaya
-    {phase:'m',benefit:'Papain enzyme has natural uterine-stimulating properties that can help regulate menstrual flow.',tip:'Eat ripe papaya at the start of your period to encourage healthy flow.'},
-    {phase:'f',benefit:'Vitamin C, A and folate support oestrogen balance and skin glow as energy returns.',tip:'Perfect tropical breakfast in the first half of your cycle.'}],
-  21:[// Ginger
-    {phase:'m',benefit:'As effective as ibuprofen in studies for reducing period pain. Also reduces nausea and heavy flow.',tip:'Ginger tea with honey and lemon is the ultimate period comfort drink.'},
-    {phase:'l',benefit:'Anti-inflammatory properties reduce breast tenderness and bloating before your period.',tip:'Add fresh ginger to hot water throughout the luteal phase.'}],
-  22:[// Cucumber
-    {phase:'l',benefit:'High water content and silica reduce water retention and facial puffiness common in the luteal phase.',tip:'Infuse water with cucumber slices to stay hydrated and reduce bloating.'},
-    {phase:'m',benefit:'Cooling and hydrating — helps replace fluids lost during heavy flow days.',tip:'Snack on cucumber slices with sea salt to replenish electrolytes.'}],
-  23:[// Eggs
-    {phase:'f',benefit:'Choline supports oestrogen metabolism. Protein provides building blocks for hormone production.',tip:'Eggs for breakfast in the follicular phase gives sustained energy as oestrogen rises.'},
-    {phase:'o',benefit:'Zinc and selenium in eggs support healthy egg release at ovulation.',tip:'Poached eggs on greens at ovulation is a fertility-friendly power meal.'}],
-  24:[// Greek Yogurt
-    {phase:'l',benefit:'Calcium reduces severity of PMS symptoms including cramps, mood changes and headaches by up to 48%.',tip:'Eat Greek yogurt daily in your luteal phase.'},
-    {phase:'m',benefit:'Probiotics support gut health during menstruation when digestive discomfort is common.',tip:'Pair with banana and blueberries for a gentle period breakfast.'}],
-  25:[// Watermelon
-    {phase:'m',benefit:'High water content replenishes fluids, while natural sugars provide gentle energy during low-energy period days.',tip:'Eat chilled watermelon to ease period bloating and rehydrate.'},
-    {phase:'l',benefit:'L-citrulline reduces water retention and the magnesium content eases pre-period headaches.',tip:'Snack on watermelon in the final days before your period.'}],
-  26:[// Mango
-    {phase:'f',benefit:'Vitamin C and folate support oestrogen production and cell renewal in the follicular phase.',tip:'Fresh mango smoothie is a perfect energising breakfast as your cycle resets.'},
-    {phase:'o',benefit:'Antioxidants protect egg quality and vitamin A supports cervical health at ovulation.',tip:'Enjoy at peak ovulation days for a natural fertility boost.'}],
-  27:[// Oats
-    {phase:'m',benefit:'Iron and B vitamins replace nutrients lost during menstruation. Beta-glucan stabilises blood sugar when energy dips.',tip:'A warm bowl of oats with dark chocolate and banana is the ultimate period breakfast.'},
-    {phase:'l',benefit:'Complex carbs boost serotonin production, easing luteal phase mood swings and carb cravings.',tip:'Eat oat porridge in the evenings to reduce PMS food cravings.'}],
-  28:[// Flaxseeds
-    {phase:'f',benefit:'Lignans in flaxseed are phytoestrogens that support healthy oestrogen levels in the first half of the cycle.',tip:'Add 1 tbsp ground flaxseed to smoothies or porridge daily in the follicular phase.'},
-    {phase:'l',benefit:'Omega-3 ALA reduces prostaglandins driving PMS cramps and inflammation.',tip:'Sprinkle on yogurt in the luteal phase.'}],
-  29:[// Pumpkin Seeds
-    {phase:'f',benefit:'Zinc supports follicle development and oestrogen production in the first half of the cycle.',tip:'Snack on a handful daily from Day 1 to Day 14 for zinc seed cycling.'},
-    {phase:'o',benefit:'Zinc is essential for ovulation — a deficiency can delay or prevent egg release.',tip:'The cornerstone of seed cycling at ovulation.'}],
-};
-// Fallback for foods not in the map
-const defaultCycleData=[
-  {phase:'m',benefit:'Provides anti-inflammatory nutrients that help ease menstrual discomfort and replenish the body.',tip:'Include in your diet during your period for best results.'},
-  {phase:'f',benefit:'Nutrients support hormonal balance and energy as oestrogen rises in the follicular phase.',tip:'A great addition to your first-half-of-cycle meals.'},
-  {phase:'l',benefit:'Supports progesterone function and helps reduce common PMS symptoms.',tip:'Include regularly in the week before your period.'},
-];
-
-function cycleCardPills(foodId){return '';}// removed — now on card back
-
-function cycleCardBack(foodId){
-  const data=(foodCycleData[foodId]||defaultCycleData).slice(0,3);
-  return data.map(d=>{
-    const ph=cyclePhaseInfo[d.phase];
-    return `<div class="back-phase">
-      <span class="back-phase-icon">${ph.emoji}</span>
-      <div class="back-phase-info">
-        <div class="back-phase-name">${ph.label} · ${ph.days}</div>
-        <div class="back-phase-text">${d.benefit.length>90?d.benefit.slice(0,90)+'…':d.benefit}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
+══════════════════════════════════════ */// foodId → array of {phase, benefit, tip}// Fallback for foods not in the map
 
 function flipCard(e,id){
   e.stopPropagation();
@@ -2401,23 +2262,6 @@ function flipCard(e,id){
   if(navigator.vibrate)navigator.vibrate(25);
 }
 
-function cycleTabHTML(foodId){
-  const data=foodCycleData[foodId]||defaultCycleData;
-  const blocks=data.map(d=>{
-    const ph=cyclePhaseInfo[d.phase];
-    return `<div class="cy-phase-block">
-      <div class="cy-phase-head" style="background:${ph.color}">
-        <span class="cy-moon">${ph.emoji}</span>
-        <div><h4>${ph.label} Phase</h4><span>${ph.days}</span></div>
-      </div>
-      <div class="cy-phase-body" style="background:${ph.bg}">
-        <p>${d.benefit}</p>
-        <p class="cy-tip">💡 ${d.tip}</p>
-      </div>
-    </div>`;
-  }).join('');
-  return blocks+`<p class="cy-note">ℹ️ Cycle nutrition is general guidance. Consult your healthcare provider for personal advice.</p>`;
-}
 
 let favourites=new Set(JSON.parse(localStorage.getItem('glowbiteFavs')||'[]'));
 let favOnly=false;

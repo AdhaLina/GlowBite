@@ -14,7 +14,7 @@
 <meta name="msapplication-TileColor" content="#C44DFF">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <title>GlowBite — Foods for Glowing Skin</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -3052,11 +3052,13 @@ const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 let supabase=null;
 let currentUser=null;
 
-try{
-  if(window.supabase){
-    supabase=window.supabase.createClient(SUPA_URL,SUPA_KEY);
-  }
-}catch(e){console.warn('Supabase init failed',e);}
+function tryInitSupabase(){
+  try{
+    if(window.supabase){
+      supabase=window.supabase.createClient(SUPA_URL,SUPA_KEY);
+    }
+  }catch(e){console.warn('Supabase init failed',e);}
+}
 
 function showLogin(){
   document.getElementById('loginScreen').classList.remove('hidden');
@@ -3152,7 +3154,24 @@ function signOut(){
   });
 }
 
-initAuth();
+// Wait for async Supabase CDN script, then init auth
+(function waitForSupabase(){
+  tryInitSupabase();
+  if(supabase){
+    initAuth();
+  }else{
+    // CDN still loading — poll briefly, then give up and show login
+    let attempts=0;
+    const poll=setInterval(()=>{
+      tryInitSupabase();
+      attempts++;
+      if(supabase||attempts>=10){
+        clearInterval(poll);
+        initAuth();
+      }
+    },300);
+  }
+})();
 
 /* ══════════════════════════════════════
    INIT
@@ -3171,8 +3190,12 @@ renderMeals();
 /* ══════════════════════════════════════
    SPLASH SCREEN
 ══════════════════════════════════════ */
-window.addEventListener('load',()=>{
+(function initSplash(){
   const splash=document.getElementById('splash');
+  // Hard cap: hide splash after 3s no matter what (covers slow CDN / load event delays)
+  const hardCap=setTimeout(()=>splash.classList.add('hidden'),3000);
+  const run=()=>{
+    clearTimeout(hardCap);
 
   // Generate sparkle particles
   const colours=['#fff','#FFD6EC','#E8CFFF','#C4E0FF','#FFEAA7','#FFB3DE'];
@@ -3198,8 +3221,14 @@ window.addEventListener('load',()=>{
     splash.appendChild(el);
   }
 
-  setTimeout(()=>splash.classList.add('hidden'),2400);
-});
+    setTimeout(()=>splash.classList.add('hidden'),2400);
+  };
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',run);
+  }else{
+    run();
+  }
+})();
 
 /* ══════════════════════════════════════
    INSTALL / FULLSCREEN

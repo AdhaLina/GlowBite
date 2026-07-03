@@ -2,675 +2,227 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="GlowBite">
-<meta name="theme-color" content="#0E0A1A">
-<meta name="format-detection" content="telephone=no">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="msapplication-TileColor" content="#C44DFF">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GlowBite — Foods for Glowing Skin</title>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#12081a;--surface:rgba(255,255,255,0.06);--surface2:rgba(255,255,255,0.03);
-  --text:#ffffff;--text-muted:rgba(255,255,255,0.5);--text-dim:rgba(255,255,255,0.35);
-  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.06);
-  --coral:#FF6B6B;--purple:#7B2FF7;--lime:#C6FF3D;--pink:#FF3E9A;--gold:#FFC857;
-  --fuchsia:#FF3E9A;--teal:#00E5CC;--green:#22C55E;
-  --ink:#12081a;--ink2:#1B1024;--ink3:#2a1339;
-  --card-r:22px;--cream:#ffffff;--muted:rgba(255,255,255,0.5);
-  --grad-btn:linear-gradient(120deg,#FF6B6B,#FF3E9A 55%,#7B2FF7);
-  --grad-accent:linear-gradient(135deg,#FF6B6B,#7B2FF7);
-}
-html{-webkit-text-size-adjust:100%}
-body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:radial-gradient(ellipse 120% 80% at 15% 0%,#2a1339 0%,#12081a 55%,#0c0512 100%) fixed;background-color:#12081a;min-height:100vh;color:var(--text);overscroll-behavior-y:none;padding-bottom:env(safe-area-inset-bottom);position:relative}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--purple:#C44DFF;--pink:#FF6B9D;--blue:#4D79FF;--green:#00C851;--teal:#00B5AD;--bg:#f5f0ff}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:#333}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#FF6B9D 0%,#C44DFF 50%,#4D79FF 100%);padding:2.2rem 1rem 1.8rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,.08);border-radius:50%;top:-100px;left:-80px}
+.header::after{content:'';position:absolute;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%;bottom:-60px;right:-40px}
+.header h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;letter-spacing:-1px;margin-bottom:.3rem;position:relative}
+.header p{font-size:clamp(.88rem,2.5vw,1.05rem);opacity:.88;position:relative}
+
+/* MAIN NAV */
+.main-nav{background:#fff;display:flex;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);position:sticky;top:0;z-index:300;overflow-x:auto}
+.nav-btn{padding:.85rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:700;color:#aaa;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
 
 /* SECTIONS */
 .section{display:none}.section.active{display:block}
 
-/* FLOATING FRUITS */
-.fruit-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.fruit{position:absolute;font-size:var(--fsz,2rem);opacity:var(--fop,.08);animation:fruitFloat var(--fdur,9s) ease-in-out var(--fdel,0s) infinite,fruitBob var(--fbdur,4s) ease-in-out var(--fdel,0s) infinite alternate}
-@keyframes fruitFloat{0%{transform:translateY(0) rotate(var(--frot,0deg)) scale(1)}50%{transform:translateY(var(--fty,-40px)) rotate(calc(var(--frot,0deg) + 8deg)) scale(1.06)}100%{transform:translateY(0) rotate(var(--frot,0deg)) scale(1)}}
-@keyframes fruitBob{from{transform:translateY(0) scale(1) rotate(var(--frot,0deg))}to{transform:translateY(var(--fty,-30px)) scale(1.08) rotate(calc(var(--frot,0deg) + 10deg))}}
-.fruit.burst{animation:fruitBurst .5s cubic-bezier(.36,.07,.19,.97) forwards!important}
-@keyframes fruitBurst{0%{transform:scale(1)}30%{transform:scale(1.7) rotate(20deg);opacity:.5}100%{transform:scale(0) rotate(40deg);opacity:0}}
-
-/* BACKGROUND BUBBLES */
-.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-bubble{position:absolute;border-radius:50%;opacity:.06;animation:bgFloat var(--bdur,12s) ease-in-out var(--bdel,0s) infinite alternate}
-@keyframes bgFloat{0%{transform:translate(0,0) scale(1)}100%{transform:translate(var(--bx,20px),var(--by,-30px)) scale(var(--bs,1.1))}}
-
-/* FLOATING BLOBS (reference design) */
-.blob-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.blob-layer::before{content:'';position:absolute;top:-120px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,107,107,.45),rgba(123,47,247,0) 70%);filter:blur(14px);animation:floatBlob 14s ease-in-out infinite}
-.blob-layer::after{content:'';position:absolute;bottom:-160px;left:-100px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle at 60% 40%,rgba(198,255,61,.3),rgba(198,255,61,0) 70%);filter:blur(14px);animation:floatBlob 18s ease-in-out infinite reverse}
-@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-40px) scale(1.08)}}
-
-/* z-index stacking */
-.section,.header,#installBanner,#splash,.sidebar-overlay,.main-nav,.overlay,.jmodal-overlay,.mask-overlay,.meal-overlay{position:relative;z-index:1}
-button,input,select{font-size:16px}
-
-/* HEADER */
-.header{background:transparent;position:relative;overflow:hidden;padding:calc(2.5rem + env(safe-area-inset-top)) 1.4rem 1.6rem;color:#fff}
-.header h1{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:clamp(2rem,7vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:.35rem;position:relative;background:linear-gradient(100deg,#fff 30%,#FFD9EC 60%,#C6FF3D 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.header p{font-size:.88rem;color:rgba(255,255,255,.55);position:relative;font-weight:500}
-@keyframes glowPulse{from{opacity:.8}to{opacity:1}}
-.sparkle{font-style:italic;display:inline-block}
-@keyframes sparklePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-
-/* MENU BUTTON */
-.menu-dot-btn{position:absolute;top:calc(env(safe-area-inset-top) + 1rem);left:1rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:40px;height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;z-index:10;transition:background .2s;padding:0;backdrop-filter:blur(8px)}
-.menu-dot-btn:hover{background:rgba(255,255,255,.15)}
-.menu-dot-btn span{display:block;width:5px;height:5px;background:#fff;border-radius:50%}
-
-/* FULLSCREEN BTN */
-.fullscreen-btn{position:absolute;top:50%;right:1rem;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:34px;height:34px;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-
-/* SIDEBAR OVERLAY */
-.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:490;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
-.sidebar-overlay.open{opacity:1;visibility:visible}
-
-/* SIDEBAR */
-.main-nav{position:fixed;top:0;left:0;bottom:0;width:270px;background:rgba(27,14,40,0.96);border-right:1px solid rgba(255,255,255,.08);z-index:500;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 1.2rem) 0 calc(env(safe-area-inset-bottom) + 1rem);transform:translateX(-100%);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;backdrop-filter:blur(20px)}
-.main-nav.open{transform:translateX(0)}
-.sidebar-brand{padding:0 1.3rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:.6rem;display:flex;align-items:center;gap:.7rem}
-.sidebar-brand-icon{font-size:2rem}
-.sidebar-brand-name{font-size:1.1rem;font-weight:800;color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif}
-.sidebar-brand-sub{font-size:.7rem;color:rgba(255,255,255,.4)}
-.nav-btn{display:flex;align-items:center;gap:.85rem;padding:.85rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:700;color:rgba(255,255,255,.45);width:100%;text-align:left;border-left:3px solid transparent;transition:background .18s,color .18s;white-space:nowrap;opacity:0;transform:translateX(-18px)}
-.main-nav.open .nav-btn{animation:navSlideIn .32s ease forwards}
-@keyframes navSlideIn{to{opacity:1;transform:translateX(0)}}
-.main-nav.open .nav-btn:nth-child(2){animation-delay:.04s}
-.main-nav.open .nav-btn:nth-child(3){animation-delay:.08s}
-.main-nav.open .nav-btn:nth-child(4){animation-delay:.12s}
-.main-nav.open .nav-btn:nth-child(5){animation-delay:.16s}
-.main-nav.open .nav-btn:nth-child(6){animation-delay:.20s}
-.main-nav.open .nav-btn:nth-child(7){animation-delay:.24s}
-.main-nav.open .nav-btn:nth-child(8){animation-delay:.28s}
-.nav-btn .nb-icon{font-size:1.3rem;flex-shrink:0}
-.nav-btn:hover{background:rgba(255,255,255,.06);color:#fff}
-.nav-btn.active{color:#FF3E9A;background:rgba(255,62,154,.1);border-left-color:#FF3E9A}
-
 /* FOOD CONTROLS */
-.foods-controls{background:rgba(18,8,26,.85);padding:.9rem 1rem;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:10;backdrop-filter:blur(16px)}
+.foods-controls{background:#fff;padding:.8rem 1rem;box-shadow:0 1px 8px rgba(0,0,0,.06)}
 .ctrl-inner{max-width:1200px;margin:0 auto}
-.search-bar{display:flex;align-items:center;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:50px;padding:.6rem 1rem;margin-bottom:.6rem;transition:border-color .2s,box-shadow .2s}
-.search-bar:focus-within{border-color:#FF3E9A;box-shadow:0 0 0 3px rgba(255,62,154,.15)}
-.search-bar input{border:none;background:none;width:100%;font-size:16px;outline:none;color:#fff}
-.search-bar input::placeholder{color:rgba(255,255,255,.4)}
-.search-icon{margin-right:.5rem;color:rgba(255,255,255,.4)}
-.filter-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
-.filter-label{font-size:.72rem;font-weight:800;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px}
+.search-bar{display:flex;align-items:center;background:var(--bg);border-radius:50px;padding:.5rem 1rem;margin-bottom:.65rem;border:2px solid transparent;transition:border-color .2s}
+.search-bar:focus-within{border-color:var(--purple)}
+.search-bar input{border:none;background:none;width:100%;font-size:.92rem;outline:none;color:#333}
+.search-icon{margin-right:.5rem}
+.filter-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.filter-label{font-size:.78rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px}
 .toggle-wrap{display:flex;align-items:center;gap:.4rem;cursor:pointer;user-select:none}
-.toggle-label-text{font-size:.84rem;font-weight:700;color:rgba(255,255,255,.5)}
+.toggle-label-text{font-size:.86rem;font-weight:600;color:#555}
 .toggle{position:relative;width:44px;height:23px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0;position:absolute}
-.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.15);border-radius:23px;cursor:pointer;transition:background .25s}
-.toggle-slider::before{content:'';position:absolute;width:17px;height:17px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .25s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.toggle input:checked+.toggle-slider{background:#FF3E9A}
-.toggle.halal input:checked+.toggle-slider{background:#22C55E}
+.toggle-slider{position:absolute;inset:0;background:#ddd;border-radius:23px;cursor:pointer;transition:background .25s}
+.toggle-slider::before{content:'';position:absolute;width:17px;height:17px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:var(--green)}
+.toggle.halal input:checked+.toggle-slider{background:var(--teal)}
 .toggle input:checked+.toggle-slider::before{transform:translateX(21px)}
-.divider{width:1px;height:18px;background:rgba(255,255,255,.1)}
-.fav-filter-btn{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.3rem}
-.fav-filter-btn.active{background:rgba(255,62,154,.15);border-color:#FF3E9A;color:#FF3E9A}
-
-/* GLOW SCORE WIDGET */
-.glow-score-wrap{padding:1rem 1rem 0;position:relative}
-.glow-score-card{border-radius:26px;padding:20px;background:linear-gradient(155deg,rgba(255,107,107,.15),rgba(123,47,247,.2));border:1px solid rgba(255,255,255,.12);overflow:hidden;position:relative;margin-bottom:.75rem}
-.glow-score-card::before{content:'';position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,61,.3),transparent 70%);pointer-events:none}
-.glow-score-inner{display:flex;align-items:center;gap:18px;position:relative}
-.glow-dial{position:relative;width:96px;height:96px;border-radius:50%;background:conic-gradient(#C6FF3D 0deg,#FFC857 90deg,#FF6B6B 200deg,#7B2FF7 300deg,#C6FF3D 360deg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.glow-dial-inner{width:74px;height:74px;border-radius:50%;background:#1B1024;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.glow-dial-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:24px;font-weight:800;color:#fff;line-height:1}
-.glow-dial-label{font-size:9px;color:rgba(255,255,255,.5);font-weight:700;letter-spacing:.05em;margin-top:1px}
-.glow-score-text{flex:1}
-.glow-score-pts{font-size:13px;font-weight:700;color:#C6FF3D;margin-bottom:4px}
-.glow-score-desc{font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.5}
-.glow-streak-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem;padding:0 1rem}
-.glow-streak-card{border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:14px 16px;display:flex;flex-direction:column;gap:4px}
-.glow-streak-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:22px;font-weight:800;line-height:1}
-.glow-streak-lbl{font-size:11px;color:rgba(255,255,255,.5);font-weight:600}
-
-/* GLOW PICKS CAROUSEL */
-.glow-picks-section{padding:.25rem 0 .25rem 1rem}
-.glow-picks-title{font-size:.8rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.65rem;padding-right:1rem}
-.glow-picks-scroll{display:flex;gap:.65rem;overflow-x:auto;padding-bottom:.5rem;padding-right:1rem;scrollbar-width:none}
-.glow-picks-scroll::-webkit-scrollbar{display:none}
-.glow-pick{flex:0 0 88px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:.75rem .5rem .6rem;display:flex;flex-direction:column;align-items:center;gap:.35rem;cursor:pointer;transition:transform .2s}
-.glow-pick:active{transform:scale(.93)}
-.glow-pick-emoji{font-size:1.8rem;line-height:1}
-.glow-pick-name{font-size:.63rem;font-weight:700;color:#fff;text-align:center;line-height:1.2}
-.glow-pick-badge{font-size:.6rem;font-weight:800;color:#12081a;background:#C6FF3D;border-radius:50px;padding:.12rem .42rem;letter-spacing:.01em;margin-top:.1rem}
+.divider{width:1px;height:18px;background:#e5e5e5}
 
 /* FOOD GRID */
-.main-pad{padding:.75rem 1rem 5rem}
-.results-count{font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:.8rem;font-weight:600;letter-spacing:.03em}
-.food-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}
-@media(min-width:600px){.food-grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.food-grid{grid-template-columns:repeat(4,1fr)}}
+.main-pad{max-width:1200px;margin:0 auto;padding:1.3rem 1rem 3rem}
+.results-count{font-size:.82rem;color:#999;margin-bottom:.9rem}
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.food-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.food-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
+.card-banner{height:105px;display:flex;align-items:center;justify-content:center;font-size:3.3rem}
+.card-body{padding:.9rem;flex:1}
+.card-name{font-size:1.08rem;font-weight:800;margin-bottom:.3rem}
+.card-desc{font-size:.8rem;color:#666;line-height:1.5;margin-bottom:.65rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-tags{display:flex;gap:.3rem;flex-wrap:wrap}
+.tag{padding:.16rem .5rem;border-radius:50px;font-size:.7rem;font-weight:700}
+.tag-cat{background:#f0e8ff;color:#8B2FC9}
+.tag-veg{background:#e6f9ee;color:#00943b}
+.tag-halal{background:#e0f5f5;color:#007a75}
+.card-footer{padding:.6rem .9rem;border-top:1px solid #f3f3f3;display:flex;justify-content:space-between;align-items:center}
+.card-hint{font-size:.75rem;color:#bbb}
+.card-cta{font-size:.78rem;color:var(--purple);font-weight:700}
+.no-results{grid-column:1/-1;text-align:center;padding:3.5rem 1rem;color:#aaa}
+.no-results .nre{font-size:2.8rem;margin-bottom:.8rem}
+.no-results h3{font-size:1.1rem;color:#888}
 
-/* FOOD CARDS */
-.food-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--card-r);overflow:hidden;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;position:relative}
-.food-card:hover{transform:translateY(-5px);box-shadow:0 14px 32px rgba(0,0,0,.4)}
-.food-card:active{transform:scale(.96)}
-.food-card.tapped{animation:cardTap .38s cubic-bezier(.36,.07,.19,.97)}
-@keyframes cardTap{0%{transform:scale(1)}25%{transform:scale(.94)}60%{transform:scale(1.06) translateY(-4px)}100%{transform:scale(1)}}
-.card-banner{height:100px;display:flex;align-items:center;justify-content:center;font-size:3.2rem;position:relative;overflow:hidden;transition:font-size .25s cubic-bezier(.34,1.56,.64,1)}
-.food-card:hover .card-banner{font-size:3.9rem}
-.heart-btn{position:absolute;top:.5rem;right:.5rem;z-index:2;background:rgba(0,0,0,.3);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;transition:transform .2s;backdrop-filter:blur(4px)}
-.heart-btn:hover{transform:scale(1.2)}
-.heart-btn.faved{background:rgba(255,62,154,.4)}
-@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
-.card-body{padding:.75rem .8rem .85rem}
-.card-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:.92rem;font-weight:800;letter-spacing:-.01em;color:#fff;margin-bottom:.22rem;line-height:1.2}
-.card-desc{font-size:.7rem;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:.5rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.45rem}
-.tag{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.15rem .48rem;border-radius:50px}
-.tag-cat{background:rgba(255,62,154,.15);color:#FF3E9A}
-.tag-veg{background:rgba(34,197,94,.15);color:#22C55E}
-.tag-halal{background:rgba(0,229,204,.15);color:#00E5CC}
-.card-footer{padding:.5rem .8rem;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center}
-.card-hint{font-size:.67rem;color:rgba(255,255,255,.4)}
-.card-cta{font-size:.7rem;font-weight:800;color:#C6FF3D;letter-spacing:.02em}
-/* GLOW SCORE BADGE on card */
-.card-glow-score{position:absolute;top:.5rem;left:.5rem;z-index:2;width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#E7FF9C,#C6FF3D 55%,#8FCB00);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;color:#12081a;line-height:1;box-shadow:0 2px 8px rgba(198,255,61,.4)}
-/* FEATURED first card */
-.food-card.featured{border:1.5px solid rgba(198,255,61,.35);background:linear-gradient(155deg,rgba(255,107,107,.10),rgba(123,47,247,.15));grid-column:1/-1}
-.food-card.featured .card-banner{height:130px}
-/* INGREDIENT PILLS on mask/meal cards */
-.ingr-pills{display:flex;flex-wrap:wrap;gap:.35rem;padding:.5rem .8rem .6rem;border-top:1px solid rgba(255,255,255,.06)}
-.ingr-pill{font-size:.6rem;font-weight:600;color:rgba(255,255,255,.8);background:rgba(255,255,255,.1);border-radius:50px;padding:.2rem .55rem}
-/* WHY IT GLOWS rows in modal */
-.why-glow-row{display:flex;align-items:center;gap:12px;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
-.why-glow-row:last-child{border-bottom:none}
-.why-glow-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.why-glow-name{font-size:.82rem;font-weight:700;color:#fff;flex:1}
-.why-glow-pts{font-size:.78rem;font-weight:800;color:#C6FF3D}
-.why-glow-list{background:rgba(255,255,255,.04);border-radius:16px;padding:.4rem .9rem;margin:.6rem 0 1rem}
-
-/* FLIP CARD */
-.food-card-wrap{perspective:1000px;border-radius:var(--card-r)}
-.food-card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,0,.2,1)}
-.food-card-wrap.flipped .food-card-inner{transform:rotateY(180deg)}
-.food-card-front,.food-card-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--card-r);overflow:hidden}
-.food-card-front{background:rgba(255,255,255,.06)}
-.food-card-back{position:absolute;inset:0;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1rem;background:linear-gradient(155deg,rgba(255,107,107,.15),rgba(123,47,247,.2));border:1px solid rgba(255,255,255,.1)}
-.flip-hint{position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.4);border-radius:50px;padding:.18rem .6rem;font-size:.65rem;font-weight:700;color:#fff;white-space:nowrap;pointer-events:none;backdrop-filter:blur(4px)}
-
-/* NO RESULTS */
-.no-results{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--text-muted)}
-.no-results .nre{font-size:3rem;margin-bottom:.7rem}
-.no-results h3{font-family:Georgia,serif;font-weight:400;color:var(--text);margin-bottom:.3rem}
-.no-results p{font-size:.86rem}
-
-/* GLOW TIP */
-.glow-tip-card{background:linear-gradient(135deg,rgba(123,47,247,.18),rgba(255,62,154,.12));border:1px solid rgba(255,62,154,.2);border-radius:var(--card-r);padding:1rem 1.1rem;margin-bottom:.85rem;display:flex;gap:.9rem;align-items:center}
-.glow-tip-icon{font-size:2rem;flex-shrink:0;animation:tipFloat 3s ease-in-out infinite alternate}
-@keyframes tipFloat{from{transform:translateY(0)}to{transform:translateY(-4px)}}
-.glow-tip-content{flex:1;min-width:0}
-.glow-tip-label{font-size:.63rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#FF3E9A;margin-bottom:.22rem}
-.glow-tip-text{font-size:.83rem;color:rgba(255,255,255,.85);line-height:1.55}
-.glow-tip-close{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:26px;height:26px;color:#fff;font-size:.75rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.glow-tip-close:hover{background:rgba(255,255,255,.2)}
-
-/* SECTION HERO */
-.sec-hero{padding:1.8rem 1.2rem 1.2rem}
-.sec-hero h2{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.55rem;font-weight:800;letter-spacing:-.025em;color:#fff;margin-bottom:.35rem}
-.sec-hero p{font-size:.87rem;color:rgba(255,255,255,.5);line-height:1.6;font-weight:500}
-
-/* PERIOD GUIDE */
-.period-wrap{max-width:880px;margin:0 auto;padding:0 1rem 3rem}
-.phase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1.6rem}
-@media(max-width:480px){.phase-grid{grid-template-columns:repeat(2,1fr)}}
-.phase-btn{border:none;cursor:pointer;border-radius:16px;padding:.9rem .5rem;text-align:center;font-family:inherit;transition:transform .2s,box-shadow .2s;color:#fff;position:relative}
-.phase-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.3)}
-.phase-btn.sel{box-shadow:0 0 0 3px #fff,0 0 0 5px rgba(0,0,0,.3);transform:translateY(-3px)}
-.phase-moon{font-size:1.8rem;display:block;margin-bottom:.3rem}
-.phase-name{font-size:.78rem;font-weight:800;display:block}
-.phase-days{font-size:.64rem;opacity:.85;display:block;margin-top:.1rem}
-.phase-card{background:rgba(255,255,255,.06);border-radius:20px;border:1px solid rgba(255,255,255,.1);overflow:hidden;animation:fadeUp .3s ease}
-.phase-head{padding:1.3rem;color:#fff}
-.phase-head h3{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:.2rem}
-.phase-head p{font-size:.84rem;opacity:.9;line-height:1.55}
-.phase-body{padding:1rem}
-.phase-info-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem}
-@media(max-width:400px){.phase-info-row{grid-template-columns:1fr}}
-.phase-info-box,.pinfo{background:rgba(255,255,255,.05);border-radius:12px;padding:.8rem;border:1px solid rgba(255,255,255,.08)}
-.phase-info-box h4,.pinfo h4{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.45);margin-bottom:.4rem}
-.phase-info-box p,.pinfo p{font-size:.8rem;color:#fff;line-height:1.55}
-.phase-rec-title{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.45);margin-bottom:.6rem}
-.phase-chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
-.phase-chip{display:flex;align-items:center;gap:.3rem;background:rgba(255,255,255,.07);border-radius:50px;padding:.28rem .7rem;font-size:.78rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:transform .15s,border-color .15s;color:#fff}
-.phase-chip:hover{transform:scale(1.04);border-color:#FF3E9A}
-.phase-tips-box{background:rgba(255,255,255,.04);border-radius:12px;padding:.85rem;border:1px solid rgba(255,255,255,.08)}
-.phase-tips-box h4{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.45);margin-bottom:.5rem}
+/* PERIOD SECTION */
+.period-wrap{max-width:880px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.sec-hero{text-align:center;margin-bottom:1.5rem}
+.sec-hero h2{font-size:1.5rem;font-weight:900;color:#333;margin-bottom:.25rem}
+.sec-hero p{font-size:.88rem;color:#999}
+.phase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-bottom:1.8rem}
+.phase-btn{border:none;cursor:pointer;border-radius:16px;padding:1rem .5rem;text-align:center;font-family:inherit;transition:transform .2s,box-shadow .2s;color:#fff;position:relative}
+.phase-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.14)}
+.phase-btn.sel{box-shadow:0 0 0 3px #fff,0 0 0 5px rgba(0,0,0,.25);transform:translateY(-3px)}
+.phase-moon{font-size:1.9rem;display:block;margin-bottom:.35rem}
+.phase-name{font-size:.82rem;font-weight:800;display:block}
+.phase-days{font-size:.68rem;opacity:.85;display:block;margin-top:.12rem}
+.phase-card{background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.phase-head{padding:1.4rem;color:#fff}
+.phase-head h3{font-size:1.3rem;font-weight:900;margin-bottom:.25rem}
+.phase-head p{font-size:.85rem;opacity:.92;line-height:1.6}
+.phase-body{padding:1.1rem}
+.phase-info-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:1.1rem}
+.pinfo{background:var(--bg);border-radius:13px;padding:.9rem}
+.pinfo h4{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.4rem}
+.pinfo p{font-size:.83rem;color:#555;line-height:1.6}
+.phase-rec-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.7rem}
+.phase-chips{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.phase-chip{display:flex;align-items:center;gap:.35rem;background:#fff;border-radius:50px;padding:.3rem .75rem;font-size:.8rem;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.07);border:2px solid #f0f0f0;transition:transform .15s,border-color .15s}
+.phase-chip:hover{transform:scale(1.05);border-color:var(--purple)}
+.phase-tips-box{background:var(--bg);border-radius:13px;padding:.9rem}
+.phase-tips-box h4{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:.6rem}
 .phase-tips-box ul{list-style:none}
-.phase-tips-box li{padding:.28rem 0 .28rem 1.3rem;position:relative;font-size:.82rem;color:#fff;line-height:1.55}
-.phase-tips-box li::before{content:'✦';position:absolute;left:0;color:#FF3E9A;font-size:.55rem;top:.42rem}
-.disclaimer{font-size:.72rem;color:rgba(255,255,255,.4);text-align:center;padding:1rem;line-height:1.55}
-.phase-btn.sel .phase-moon{animation:moonBob .7s ease-in-out infinite alternate}
-@keyframes moonBob{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-5px) rotate(4deg)}}
+.phase-tips-box li{padding:.3rem 0 .3rem 1.4rem;position:relative;font-size:.83rem;color:#555;line-height:1.55}
+.phase-tips-box li::before{content:'✦';position:absolute;left:0;color:var(--purple);font-size:.6rem;top:.45rem}
+.disclaimer{text-align:center;font-size:.72rem;color:#ccc;padding:.8rem 1rem 0}
 
-/* FACE MASKS */
-.masks-wrap{max-width:880px;margin:0 auto;padding:0 1rem 3rem}
-.stype-row{display:flex;gap:.45rem;overflow-x:auto;scrollbar-width:none;padding:.3rem 0 1rem}
-.stype-row::-webkit-scrollbar{display:none}
-.stype-btn{flex-shrink:0;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border-radius:50px;padding:.38rem .9rem;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s}
-.stype-btn.active{background:var(--grad-btn);border-color:transparent;color:#fff;box-shadow:0 3px 12px rgba(255,62,154,.35)}
-.mask-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
-.mask-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--card-r);overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s}
-.mask-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
-.mask-banner{height:90px;display:flex;align-items:center;justify-content:center;font-size:3rem}
-.mask-body{padding:.85rem}
-.mask-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:.95rem;font-weight:800;color:#fff;margin-bottom:.25rem}
-.mask-benefit{font-size:.75rem;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:.6rem}
+/* MASKS SECTION */
+.masks-wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.stype-row{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.4rem}
+.stype-btn{padding:.38rem .95rem;border-radius:50px;border:2px solid #ddd;background:#fff;cursor:pointer;font-size:.82rem;font-weight:700;color:#888;transition:all .2s}
+.stype-btn.active,.stype-btn:hover{background:var(--purple);border-color:var(--purple);color:#fff}
+.mask-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.mask-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.mask-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
+.mask-banner{height:95px;display:flex;align-items:center;justify-content:center;font-size:3rem}
+.mask-body{padding:.9rem;flex:1}
+.mask-name{font-size:1.05rem;font-weight:800;margin-bottom:.25rem}
+.mask-benefit{font-size:.78rem;color:#888;margin-bottom:.6rem}
 .mask-badges{display:flex;gap:.3rem;flex-wrap:wrap}
-.badge-skin{background:rgba(255,62,154,.12);color:#FF3E9A;border-radius:50px;padding:.15rem .5rem;font-size:.62rem;font-weight:700}
-.badge-time{font-size:11px;font-weight:700;color:#12081a;background:#C6FF3D;padding:3px 10px;border-radius:999px}
-.mask-footer{padding:.5rem .85rem;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center}
-.mask-hint{font-size:.68rem;color:rgba(255,255,255,.4)}
-.mask-cta{font-size:.72rem;font-weight:800;color:#C6FF3D}
-
-/* MEALS */
-.meals-wrap{max-width:880px;margin:0 auto;padding:0 1rem 3rem}
-.concern-row{display:flex;gap:.45rem;overflow-x:auto;scrollbar-width:none;padding:.3rem 0 1rem}
-.concern-row::-webkit-scrollbar{display:none}
-.concern-btn{flex-shrink:0;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border-radius:50px;padding:.38rem .9rem;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s}
-.concern-btn.active{background:var(--grad-btn);border-color:transparent;color:#fff}
-.meal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
-.meal-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--card-r);overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s}
-.meal-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.35)}
-.meal-banner{height:90px;display:flex;align-items:center;justify-content:center;font-size:3rem}
-.meal-body{padding:.85rem}
-.meal-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:.95rem;font-weight:800;color:#fff;margin-bottom:.25rem}
-.meal-tagline{font-size:.75rem;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:.55rem}
-.meal-meta{display:flex;gap:.3rem;flex-wrap:wrap}
-.badge-concern{padding:.15rem .5rem;border-radius:50px;font-size:.62rem;font-weight:700;background:rgba(255,62,154,.12);color:#FF3E9A}
-.meal-footer{padding:.5rem .85rem;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between}
-.meal-hint{font-size:.68rem;color:rgba(255,255,255,.4)}
-.meal-cta{font-size:.72rem;font-weight:800;color:#C6FF3D}
-.skin-benefit-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:.85rem;margin-top:.5rem;font-size:.83rem;color:#fff;line-height:1.65}
-.skin-benefit-box strong{color:#C6FF3D}
-
-/* REMINDERS */
-.reminders-wrap{max-width:640px;margin:0 auto;padding:0 1rem 3rem}
-.rem-form{background:rgba(255,255,255,.06);border-radius:var(--card-r);padding:1.2rem;margin-bottom:1.2rem;border:1px solid rgba(255,255,255,.1);display:flex;gap:.65rem;flex-wrap:wrap;align-items:flex-end}
-.rem-field{display:flex;flex-direction:column;gap:.4rem;flex:1;min-width:140px}
-.rem-field label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.45)}
-.rem-field input,.rem-field select{border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;border-radius:10px;padding:.6rem .8rem;font-size:16px;font-family:inherit;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
-.rem-field input:focus,.rem-field select:focus{border-color:#FF3E9A}
-.rem-field select option{background:#1B1024;color:#fff}
-.rem-add-btn{background:var(--grad-btn);color:#fff;border:none;border-radius:12px;padding:.7rem 1.2rem;font-size:.88rem;font-weight:800;cursor:pointer;white-space:nowrap;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 14px rgba(255,62,154,.35)}
-.rem-add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,62,154,.45)}
-.rem-notify,.rem-notify-note{background:rgba(255,255,255,.05);border-radius:12px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.78rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.08)}
-.rem-list{display:flex;flex-direction:column;gap:.7rem}
-.rem-card{background:rgba(255,255,255,.06);border-radius:16px;padding:.9rem 1rem;display:flex;align-items:center;gap:.75rem;border:1px solid rgba(255,255,255,.1)}
-.rem-emoji{font-size:1.6rem;flex-shrink:0}
-.rem-info{flex:1;min-width:0}
-.rem-text{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.18rem}
-.rem-meta{font-size:.72rem;color:rgba(255,255,255,.45)}
-.rem-del{background:rgba(255,107,107,.15);color:#FF6B6B;border:none;border-radius:50%;width:28px;height:28px;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
-.rem-del:hover{transform:scale(1.15)}
-.rem-empty{text-align:center;padding:3rem 1rem;color:rgba(255,255,255,.4)}
-.rem-empty .nre{font-size:2.5rem;margin-bottom:.6rem}
-
-/* JOURNAL */
-.journal-wrap{max-width:720px;margin:0 auto;padding:0 1rem 3rem}
-.journal-add-btn{width:100%;background:var(--grad-btn);color:#fff;border:none;border-radius:16px;padding:.9rem;font-size:1rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.2rem;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(255,62,154,.35)}
-.journal-add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,62,154,.45)}
-.journal-entries{display:flex;flex-direction:column;gap:.85rem}
-.journal-empty{text-align:center;padding:3rem 1rem;color:rgba(255,255,255,.4)}
-.journal-empty .je-icon{font-size:3rem;margin-bottom:.7rem}
-.journal-empty p{font-size:.88rem}
-.journal-card{background:rgba(255,255,255,.06);border-radius:18px;border:1px solid rgba(255,255,255,.1);overflow:hidden;animation:fadeUp .32s ease}
-.jc-header{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem .7rem;border-bottom:1px solid rgba(255,255,255,.07)}
-.jc-rating{font-size:1.55rem;flex-shrink:0}
-.jc-meta{flex:1;min-width:0}
-.jc-date{font-size:.74rem;font-weight:700;color:rgba(255,255,255,.45)}
-.jc-mood{font-size:.82rem;font-weight:800;color:#fff;margin-top:.05rem}
-.jc-actions{display:flex;gap:.4rem;flex-shrink:0}
-.jc-edit-btn,.jc-del-btn{border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.78rem;display:flex;align-items:center;justify-content:center;transition:transform .15s}
-.jc-edit-btn{background:rgba(255,62,154,.15);color:#FF3E9A}
-.jc-del-btn{background:rgba(255,107,107,.15);color:#FF6B6B}
-.jc-edit-btn:hover,.jc-del-btn:hover{transform:scale(1.15)}
-.jc-body{padding:.85rem 1rem}
-.jc-note{font-size:.86rem;color:#fff;line-height:1.65;margin-bottom:.7rem;white-space:pre-wrap}
-.jc-skin-row{display:flex;gap:.35rem;flex-wrap:wrap}
-.jc-skin-tag{padding:.16rem .52rem;border-radius:50px;font-size:.68rem;font-weight:700;background:rgba(255,62,154,.12);color:#FF3E9A}
-.jc-photo{width:100%;max-height:200px;object-fit:cover;display:block;border-radius:0 0 18px 18px;cursor:pointer}
-
-/* PROGRESS SECTION */
-.progress-wrap{max-width:720px;margin:0 auto;padding:0 1rem 3rem}
-.progress-chart-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:1.2rem 1.1rem 1rem;margin-bottom:1rem}
-.progress-chart-title{font-size:.78rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1rem}
-.bar-chart{display:flex;align-items:flex-end;gap:.5rem;height:90px}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem}
-.bar-track{flex:1;width:100%;background:rgba(255,255,255,.08);border-radius:6px;display:flex;align-items:flex-end;overflow:hidden;min-height:8px}
-.bar-fill{width:100%;border-radius:6px;background:linear-gradient(180deg,#C6FF3D,#8FCB00);transition:height .6s cubic-bezier(.34,1.56,.64,1)}
-.bar-fill.today{background:linear-gradient(180deg,#FF6B6B,#FF3E9A)}
-.bar-day{font-size:.65rem;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.03em}
-.bar-score{font-size:.6rem;font-weight:800;color:rgba(255,255,255,.55)}
-.progress-badges-title{font-size:.78rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase;margin:1.2rem 0 .75rem}
-.badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
-.badge-card{border-radius:18px;padding:1rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.45rem;text-align:center;position:relative;overflow:hidden}
-.badge-card.earned{border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07)}
-.badge-card.locked{border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);opacity:.6}
-.badge-icon{font-size:2rem;line-height:1}
-.badge-name{font-size:.68rem;font-weight:800;color:#fff;line-height:1.2}
-.badge-desc{font-size:.58rem;color:rgba(255,255,255,.4);line-height:1.3}
-.badge-earned-dot{position:absolute;top:.5rem;right:.5rem;width:8px;height:8px;border-radius:50%;background:#C6FF3D}
-.progress-unlock-card{background:linear-gradient(135deg,rgba(123,47,247,.2),rgba(255,107,107,.12));border:1px solid rgba(123,47,247,.3);border-radius:20px;padding:1.1rem 1.2rem;display:flex;align-items:center;gap:.9rem}
-.unlock-icon{font-size:1.8rem;flex-shrink:0}
-.unlock-text{flex:1}
-.unlock-title{font-size:.85rem;font-weight:800;color:#fff}
-.unlock-sub{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:.2rem}
-.unlock-sub span{color:#C6FF3D;font-weight:700}
-
-/* JOURNAL MODAL */
-.jmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;display:flex;align-items:flex-end;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
-.jmodal-overlay.open{opacity:1;visibility:visible}
-.jmodal{background:#1B1024;border-radius:28px 28px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:1.4rem 1.2rem calc(1.8rem + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.1)}
-.jmodal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:0 auto 1.2rem}
-.jmodal h3{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.2rem}
-.jfield{margin-bottom:1.1rem}
-.jfield label{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45);margin-bottom:.5rem}
-.jfield textarea,.jfield input[type=text]{width:100%;border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:.75rem .9rem;font-size:16px;font-family:inherit;outline:none;resize:vertical;transition:border-color .2s;color:#fff;background:rgba(255,255,255,.06);line-height:1.55}
-.jfield textarea:focus,.jfield input[type=text]:focus{border-color:#FF3E9A}
-.jfield textarea{min-height:90px}
-.jnotes-area{width:100%;border:1.5px solid rgba(255,255,255,.1);border-radius:14px;padding:.75rem .9rem;font-size:16px;font-family:inherit;resize:vertical;outline:none;transition:border-color .2s;color:#fff;background:rgba(255,255,255,.06);line-height:1.55;min-height:90px}
-.jnotes-area:focus{border-color:#FF3E9A}
-.rating-row,.skin-tags-row,.skin-tag-row{display:flex;flex-wrap:wrap;gap:.4rem}
-.rating-opt,.skin-tag-opt{border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border-radius:50px;padding:.38rem .85rem;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s}
-.rating-opt.sel,.skin-tag-opt.sel{background:rgba(255,62,154,.15);border-color:#FF3E9A;color:#FF3E9A}
-.jphoto-btn{display:flex;align-items:center;gap:.6rem;background:rgba(255,255,255,.06);border:1.5px dashed rgba(255,255,255,.18);border-radius:14px;padding:.85rem 1rem;cursor:pointer;font-size:.88rem;font-weight:700;color:rgba(255,255,255,.5);width:100%;transition:border-color .2s;justify-content:center}
-.jphoto-btn:hover{border-color:#FF3E9A}
-.jphoto-preview{width:100%;max-height:180px;object-fit:cover;border-radius:14px;display:none;margin-top:.6rem}
-.jmodal-actions{display:flex;gap:.65rem;margin-top:1.2rem}
-.jsave-btn,.jmodal-save{flex:1;background:var(--grad-btn);color:#fff;border:none;border-radius:14px;padding:.85rem;font-size:1rem;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 14px rgba(255,62,154,.35)}
-.jsave-btn:hover,.jmodal-save:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,62,154,.45)}
-.jcancel-btn,.jmodal-cancel{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:14px;padding:.85rem 1.2rem;font-size:.88rem;font-weight:700;cursor:pointer}
+.badge-skin{padding:.15rem .5rem;border-radius:50px;font-size:.68rem;font-weight:700;background:#fff0f8;color:#d63a8a}
+.badge-time{padding:.15rem .5rem;border-radius:50px;font-size:.68rem;font-weight:700;background:#f0f8ff;color:#2980b9}
+.mask-footer{padding:.6rem .9rem;border-top:1px solid #f3f3f3;display:flex;justify-content:space-between;align-items:center}
+.mask-hint{font-size:.73rem;color:#bbb}
+.mask-cta{font-size:.78rem;color:var(--purple);font-weight:700}
 
 /* FOOD MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;display:flex;align-items:flex-end;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
 .overlay.open{opacity:1;visibility:visible}
-.modal{background:#1B1024;border-radius:28px 28px 0 0;width:100%;max-height:92vh;overflow-y:auto;border-top:1px solid rgba(255,255,255,.1)}
-.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:.8rem auto .4rem}
-.modal-head{padding:1.4rem 1.2rem 1rem;color:#fff;position:relative}
-.fm-emoji,.m-emoji{font-size:3rem;margin-bottom:.4rem;display:block}
-.fm-name,.m-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem}
-.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.12);border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center}
-.m-tags{display:flex;gap:.35rem;flex-wrap:wrap}
-.m-tags .tag{background:rgba(255,255,255,.12);color:#fff}
-.tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.08);padding:0 1.2rem}
-.tab-btn{padding:.75rem .9rem;border:none;background:none;cursor:pointer;font-size:.84rem;font-weight:700;color:rgba(255,255,255,.45);border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;white-space:nowrap}
-.tab-btn.active{color:#C6FF3D;border-bottom-color:#C6FF3D}
-.tab-content{padding:1.2rem}
+.modal{background:#fff;border-radius:22px;max-width:560px;width:100%;max-height:91vh;overflow-y:auto;transform:translateY(20px) scale(.96);transition:transform .28s;scrollbar-width:thin}
+.overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-head{padding:1.8rem 1.4rem 1.4rem;text-align:center;position:relative;color:#fff}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.22);border:none;width:32px;height:32px;border-radius:50%;font-size:.95rem;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.modal-close:hover{background:rgba(255,255,255,.38)}
+.m-emoji{font-size:4rem;display:block;margin-bottom:.6rem;line-height:1}
+.m-name{font-size:1.7rem;font-weight:900;margin-bottom:.4rem}
+.m-tags{display:flex;justify-content:center;gap:.35rem;flex-wrap:wrap}
+.m-tags .tag{background:rgba(255,255,255,.22);color:#fff}
+.tabs{display:flex;border-bottom:2px solid #f0f0f0;padding:0 .9rem;background:#fff}
+.tab-btn{padding:.8rem .95rem;border:none;background:none;cursor:pointer;font-size:.85rem;font-weight:700;color:#bbb;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap}
+.tab-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
+.tab-content{padding:1.3rem 1.4rem 1.7rem}
 .tab-panel{display:none}.tab-panel.active{display:block}
-.m-desc{font-size:.9rem;color:#fff;line-height:1.65;margin-bottom:1rem}
-.sh{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45);margin-bottom:.6rem}
-.blist{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.blist li{font-size:.84rem;color:#fff;line-height:1.55;padding-left:1.1rem;position:relative}
-.blist li::before{content:'✦';position:absolute;left:0;color:#C6FF3D;font-size:.55rem;top:.3rem}
-.ncard{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.85rem;margin-bottom:.6rem}
-.ntop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.35rem}
-.nname{font-size:.9rem;font-weight:800;color:#fff}
-.namount{font-size:.76rem;color:rgba(255,255,255,.45);font-weight:600}
-.nskin{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.55}
-.scard{display:flex;gap:.85rem;align-items:flex-start;margin-bottom:.9rem}
-.sicon{font-size:1.6rem;flex-shrink:0}
-.stitle{font-size:.9rem;font-weight:800;color:#fff;margin-bottom:.2rem}
-.sdesc{font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.55}
+.m-desc{color:#555;line-height:1.75;margin-bottom:1.3rem;font-size:.9rem}
+.sh{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#bbb;margin-bottom:.65rem}
+.blist{list-style:none}
+.blist li{padding:.35rem 0 .35rem 1.5rem;position:relative;font-size:.86rem;color:#555;line-height:1.5;border-bottom:1px solid #f8f8f8}
+.blist li:last-child{border-bottom:none}
+.blist li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:900}
+.ncard{background:linear-gradient(135deg,#faf8ff,#f3eeff);border-radius:13px;padding:.9rem;margin-bottom:.65rem;border-left:4px solid var(--purple)}
+.ntop{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.3rem}
+.nname{font-weight:800;font-size:.88rem;color:#333}
+.namount{font-size:.7rem;background:var(--purple);color:#fff;padding:.12rem .5rem;border-radius:50px;white-space:nowrap;flex-shrink:0}
+.nskin{font-size:.8rem;color:#666;line-height:1.5}
+.scard{display:flex;align-items:flex-start;gap:.8rem;padding:.9rem;background:linear-gradient(135deg,#fff5fb,#f5eeff);border-radius:13px;margin-bottom:.65rem}
+.sicon{font-size:1.6rem;flex-shrink:0;line-height:1}
+.stitle{font-size:.88rem;font-weight:800;margin-bottom:.25rem;color:#333}
+.sdesc{font-size:.8rem;color:#666;line-height:1.6}
 
-/* MASK & MEAL MODALS */
-.mask-overlay,.meal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;display:flex;align-items:flex-end;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
-.mask-overlay.open,.meal-overlay.open{opacity:1;visibility:visible}
-.mask-modal,.meal-modal{background:#1B1024;border-radius:28px 28px 0 0;width:100%;max-height:92vh;overflow-y:auto;border-top:1px solid rgba(255,255,255,.1)}
-.mm-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:.8rem auto .4rem}
-.mm-head{padding:1.4rem 1.2rem 1rem;color:#fff;position:relative}
-.mm-emoji{font-size:2.8rem;display:block;margin-bottom:.3rem}
-.mm-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem}
-.mm-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.12);border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;color:#fff}
-.mm-body,.mask-modal-body{padding:1rem 1.2rem 2rem}
-.mm-section-title{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45);margin:1rem 0 .6rem}
-.ingr-list{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
-.ingr-item{display:flex;align-items:center;gap:.75rem;background:rgba(255,255,255,.05);border-radius:12px;padding:.65rem .85rem;border:1px solid rgba(255,255,255,.08)}
-.ingr-emoji{font-size:1.3rem}
-.ingr-item strong{font-size:.84rem;font-weight:700;color:#fff;display:block}
-.ingr-item span{font-size:.74rem;color:rgba(255,255,255,.5)}
-.step-list{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1rem}
-.step-item{display:flex;gap:.75rem;align-items:flex-start}
-.step-num{width:24px;height:24px;border-radius:50%;background:rgba(198,255,61,.15);border:1px solid rgba(198,255,61,.3);color:#C6FF3D;font-size:.72rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
-.step-text{font-size:.84rem;color:#fff;line-height:1.6}
-.mask-tip,.meal-tip{background:rgba(255,200,87,.08);border:1px solid rgba(255,200,87,.18);border-radius:14px;padding:.85rem 1rem;margin-top:1.2rem;font-size:.82rem;color:#fff;line-height:1.6}
-.mask-tip strong,.meal-tip strong{color:#FFC857}
-.patch-note{text-align:center;font-size:.72rem;color:rgba(255,255,255,.4);padding:.5rem 1rem .9rem}
+/* MASK MODAL */
+.mask-modal-body{padding:1.3rem 1.4rem}
+.mm-section-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#bbb;margin-bottom:.7rem}
+.ingr-list{margin-bottom:1.3rem}
+.ingr-item{display:flex;gap:.65rem;align-items:flex-start;padding:.5rem 0;border-bottom:1px solid #f5f5f5}
+.ingr-item:last-child{border-bottom:none}
+.ingr-emoji{font-size:1.25rem;flex-shrink:0}
+.ingr-item strong{font-size:.86rem;color:#333;display:block}
+.ingr-item span{font-size:.76rem;color:#aaa}
+.step-list{margin-bottom:1.2rem}
+.step-item{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid #f5f5f5}
+.step-item:last-child{border-bottom:none}
+.step-num{background:var(--purple);color:#fff;border-radius:50%;width:24px;height:24px;font-size:.75rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
+.step-text{font-size:.83rem;color:#555;line-height:1.6}
+.mask-tip{background:linear-gradient(135deg,#fff5fb,#f0e8ff);border-radius:12px;padding:.8rem;font-size:.8rem;color:#555;line-height:1.6;margin-bottom:.5rem}
+.mask-tip strong{color:var(--purple)}
+.patch-note{text-align:center;font-size:.72rem;color:#ccc;padding:.5rem 1rem .9rem}
 
-/* SPLASH */
-#splash{position:fixed;inset:0;background:radial-gradient(ellipse 120% 80% at 15% 0%,#2a1339,#12081a 55%,#0c0512);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;transition:opacity .6s,visibility .6s}
-#splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.splash-logo{font-size:4rem;animation:splashPop .6s cubic-bezier(.34,1.56,.64,1)}
-@keyframes splashPop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
-.splash-title{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:2.2rem;font-weight:800;color:#fff;letter-spacing:-.03em;background:linear-gradient(100deg,#fff 30%,#FFD9EC 60%,#C6FF3D 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.splash-sub{font-size:.9rem;color:rgba(255,255,255,.45);font-weight:500}
-.splash-bar-wrap{width:120px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:1.5rem;overflow:hidden}
-.splash-bar{height:100%;background:linear-gradient(90deg,#FF6B6B,#FF3E9A,#7B2FF7);border-radius:2px;animation:splashLoad 2s ease forwards}
-@keyframes splashLoad{from{width:0}to{width:100%}}
-.splash-sparkle{position:absolute;border-radius:50%;animation:splashSparkle var(--dur,1s) var(--delay,0s) ease-out forwards}
-@keyframes splashSparkle{0%{transform:translate(0,0) scale(1);opacity:.9}100%{transform:translate(var(--tx,40px),var(--ty,-40px)) scale(0);opacity:0}}
+/* MEALS SECTION */
+.meals-wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.concern-row{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.4rem}
+.concern-btn{padding:.38rem .95rem;border-radius:50px;border:2px solid #ddd;background:#fff;cursor:pointer;font-size:.82rem;font-weight:700;color:#888;transition:all .2s}
+.concern-btn.active,.concern-btn:hover{background:var(--purple);border-color:var(--purple);color:#fff}
+.meal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.meal-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.08);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.meal-card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.13)}
+.meal-banner{height:110px;display:flex;align-items:center;justify-content:center;font-size:3.5rem}
+.meal-body{padding:.9rem;flex:1}
+.meal-name{font-size:1.05rem;font-weight:800;margin-bottom:.25rem}
+.meal-tagline{font-size:.8rem;color:#888;margin-bottom:.65rem;line-height:1.45}
+.meal-meta{display:flex;gap:.4rem;flex-wrap:wrap}
+.badge-concern{padding:.15rem .5rem;border-radius:50px;font-size:.68rem;font-weight:700;background:#f5eeff;color:#8B2FC9}
+.meal-footer{padding:.6rem .9rem;border-top:1px solid #f3f3f3;display:flex;justify-content:space-between;align-items:center}
+.meal-hint{font-size:.75rem;color:#bbb}
+.meal-cta{font-size:.78rem;color:var(--purple);font-weight:700}
+.skin-benefit-box{background:linear-gradient(135deg,#f5eeff,#fff0f8);border-radius:13px;padding:.9rem;margin-top:.5rem;font-size:.83rem;color:#555;line-height:1.65}
+.skin-benefit-box strong{color:var(--purple)}
 
-/* INSTALL BANNER */
-#installBanner{display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,rgba(123,47,247,.9),rgba(255,62,154,.85));color:#fff;padding:1rem 1.2rem calc(1rem + env(safe-area-inset-bottom));align-items:center;gap:.75rem;z-index:800;border-top:1px solid rgba(255,255,255,.12);font-size:.88rem;backdrop-filter:blur(12px)}
-#installBanner p{flex:1;font-size:.82rem;font-weight:600;line-height:1.4}
-.install-btn{background:#fff;color:#7B2FF7;border:none;border-radius:50px;padding:.45rem 1.1rem;font-size:.82rem;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.install-dismiss{background:none;border:none;color:rgba(255,255,255,.6);font-size:1.1rem;cursor:pointer;flex-shrink:0}
-
-/* SHARED ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.card-enter{opacity:0;transform:translateY(20px);animation:cardEnter .35s ease forwards}
-@keyframes cardEnter{to{opacity:1;transform:translateY(0)}}
-
-/* ── BOTTOM TAB BAR ── */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(18,8,26,.88);border-top:1px solid rgba(255,255,255,.1);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;padding:0 0 env(safe-area-inset-bottom)}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:.6rem .25rem .5rem;border:none;background:none;cursor:pointer;color:rgba(255,255,255,.35);font-size:.58rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;transition:color .18s}
-.tab-btn .tab-icon{font-size:1.35rem;line-height:1;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
-.tab-btn.active{color:#FF3E9A}
-.tab-btn.active .tab-icon{transform:scale(1.18)}
-
-/* ── COMPACT TOP BAR ── */
-.top-bar{position:fixed;top:0;left:0;right:0;z-index:10;padding:calc(env(safe-area-inset-top) + .55rem) 1.1rem .55rem;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
-.top-bar-brand{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.15rem;font-weight:800;background:linear-gradient(100deg,#fff 30%,#FFD9EC 60%,#C6FF3D 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.top-bar-avatar{width:36px;height:36px;border-radius:11px;background:var(--grad-btn);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:14px;font-weight:800;color:#fff;pointer-events:all;cursor:pointer;flex-shrink:0}
-
-/* ── HOME SECTION ── */
-.home-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 1.1rem calc(5.5rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1rem}
-.home-greeting-row{display:flex;align-items:flex-start;justify-content:space-between}
-.home-date{font-size:.75rem;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:.2rem}
-.home-greeting{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-.02em}
-.home-avatar{width:44px;height:44px;border-radius:14px;background:var(--grad-btn);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:17px;font-weight:800;color:#fff;flex-shrink:0}
-/* glow score hero card (home) */
-.home-glow-card{border-radius:28px;padding:22px;background:linear-gradient(155deg,rgba(255,107,107,.18),rgba(123,47,247,.22));border:1px solid rgba(255,255,255,.12);overflow:hidden;position:relative}
-.home-glow-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,61,.35),transparent 70%);pointer-events:none}
-.home-glow-inner{display:flex;align-items:center;gap:18px;position:relative}
-.home-dial{position:relative;width:110px;height:110px;border-radius:50%;background:conic-gradient(#C6FF3D 0deg,#FFC857 90deg,#FF6B6B 200deg,#7B2FF7 300deg,#C6FF3D 360deg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.home-dial-inner{width:86px;height:86px;border-radius:50%;background:#1B1024;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.home-dial-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:28px;font-weight:800;color:#fff;line-height:1}
-.home-dial-lbl{font-size:9px;color:rgba(255,255,255,.5);font-weight:700;letter-spacing:.05em;margin-top:1px}
-.home-score-pts{font-size:13px;font-weight:700;color:#C6FF3D;margin-bottom:5px}
-.home-score-desc{font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.5}
-/* streak row */
-.home-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.home-stat-card{border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:1rem;display:flex;flex-direction:column;gap:5px}
-.home-stat-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:22px;font-weight:800;line-height:1}
-.home-stat-lbl{font-size:11.5px;color:rgba(255,255,255,.5);font-weight:600}
-/* scan CTA */
-.home-scan-btn{width:100%;border:none;border-radius:20px;padding:17px;background:var(--grad-btn);color:#fff;font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.01em;box-shadow:0 12px 30px rgba(255,62,154,.35);cursor:pointer;transition:transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
-.home-scan-btn:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(255,62,154,.45)}
-/* picks */
-.home-picks-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
-.home-picks-title{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.05rem;font-weight:700;color:#fff}
-.home-picks-see{font-size:.75rem;color:rgba(255,255,255,.4);font-weight:600;cursor:pointer}
-.home-picks-scroll{display:flex;gap:.75rem;overflow-x:auto;padding-bottom:.3rem;scrollbar-width:none}
-.home-picks-scroll::-webkit-scrollbar{display:none}
-.home-pick-item{flex:0 0 108px;display:flex;flex-direction:column;gap:.5rem}
-.home-pick-banner{width:108px;height:84px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0}
-.home-pick-name{font-size:.8rem;font-weight:700;color:#fff}
-.home-pick-badge{display:inline-flex;width:fit-content;font-size:.65rem;font-weight:800;color:#12081a;background:#C6FF3D;padding:.18rem .55rem;border-radius:50px}
-
-/* ── FOODS SECTION (updated) ── */
-.foods-page-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 0 calc(5.5rem + env(safe-area-inset-bottom))}
-.foods-page-hdr{padding:0 1.1rem .5rem}
-.foods-page-hdr h2{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em}
-.foods-page-hdr p{font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.2rem}
-
-/* ── PROGRESS (gradient bars) ── */
-.bar-fill-grad{width:100%;border-radius:6px;background:linear-gradient(180deg,#FF6B6B,#7B2FF7);transition:height .6s cubic-bezier(.34,1.56,.64,1)}
-.bar-fill-today2{background:linear-gradient(180deg,#C6FF3D,#7B2FF7) !important}
-.bar-fill-empty{background:rgba(255,255,255,.15) !important}
-.progress-avg{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:.9rem;font-weight:800;color:#C6FF3D}
-
-/* ── RECIPES SECTION ── */
-.recipes-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 1.1rem calc(5.5rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1.1rem}
-.recipes-hdr h2{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em}
-.recipes-hdr p{font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.2rem}
-.recipes-tab-row{display:flex;gap:.5rem}
-.recipes-tab{flex:1;text-align:center;padding:.7rem;border-radius:14px;border:none;cursor:pointer;font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:.85rem;font-weight:800;transition:background .2s,color .2s}
-.recipes-tab.active{background:var(--grad-btn);color:#fff;box-shadow:0 6px 18px rgba(255,62,154,.3)}
-.recipes-tab:not(.active){background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
-.recipes-panel{display:none}.recipes-panel.active{display:flex;flex-direction:column;gap:.9rem}
-/* recipe card with image banner */
-.rec-card{border-radius:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);overflow:hidden;cursor:pointer;transition:transform .2s}
-.rec-card:active{transform:scale(.97)}
-.rec-banner{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative}
-.rec-body{padding:1rem;display:flex;flex-direction:column;gap:.6rem}
-.rec-title-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-.rec-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1rem;font-weight:800;color:#fff;flex:1}
-.rec-time-badge{font-size:.65rem;font-weight:800;color:#12081a;background:#C6FF3D;padding:.22rem .6rem;border-radius:50px;flex-shrink:0}
-.rec-desc{font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.5}
-.rec-chips{display:flex;flex-wrap:wrap;gap:.35rem}
-.rec-chip{font-size:.65rem;font-weight:700;color:#fff;background:rgba(255,255,255,.1);padding:.22rem .6rem;border-radius:50px}
-/* list-style food card for foods page */
-.food-list-card{display:flex;align-items:center;gap:.9rem;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:.85rem;cursor:pointer;transition:transform .15s;position:relative}
-.food-list-card:active{transform:scale(.97)}
-.food-list-emoji{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.9rem;flex-shrink:0}
-.food-list-info{flex:1;min-width:0}
-.food-list-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:.9rem;font-weight:800;color:#fff}
-.food-list-sub{font-size:.72rem;color:rgba(255,255,255,.45);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.food-list-score{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:1rem;font-weight:800;color:#C6FF3D;flex-shrink:0}
-
-/* ── MORE SECTION ── */
-.more-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 1.1rem calc(5.5rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:.75rem}
-.more-hdr{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:.4rem}
-.more-link{display:flex;align-items:center;gap:.85rem;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:1rem 1.1rem;cursor:pointer;transition:background .15s}
-.more-link:hover{background:rgba(255,255,255,.1)}
-.more-link-icon{font-size:1.5rem;flex-shrink:0}
-.more-link-text{flex:1}
-.more-link-name{font-size:.9rem;font-weight:700;color:#fff}
-.more-link-sub{font-size:.72rem;color:rgba(255,255,255,.4);margin-top:.1rem}
-.more-link-arrow{color:rgba(255,255,255,.3);font-size:.85rem}
-.more-back-btn{display:flex;align-items:center;gap:.5rem;background:none;border:none;color:rgba(255,255,255,.55);font-size:.85rem;font-weight:700;cursor:pointer;padding:.2rem 0;margin-bottom:.4rem}
-
-/* hide old sidebar elements */
-.header,.main-nav,.sidebar-overlay,.menu-dot-btn,.fullscreen-btn{display:none!important}
+/* RESPONSIVE */
+@media(max-width:600px){
+  .phase-grid{grid-template-columns:repeat(2,1fr)}
+  .phase-info-row{grid-template-columns:1fr}
+  .food-grid,.mask-grid{grid-template-columns:repeat(2,1fr);gap:.7rem}
+  .card-banner,.mask-banner{height:80px;font-size:2.4rem}
+  .card-body,.mask-body{padding:.7rem}
+  .card-name,.mask-name{font-size:.92rem}
+  .modal,.overlay .modal{border-radius:18px}
+  .m-emoji{font-size:3rem}
+  .m-name{font-size:1.4rem}
+  .tab-content,.mask-modal-body{padding:1rem}
+  .filter-label{display:none}
+  .nav-btn{padding:.75rem .85rem;font-size:.82rem}
+}
+@media(max-width:360px){.food-grid,.mask-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<canvas id="sparkle-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;"></canvas>
 
-<!-- FLOATING BLOBS -->
-<div class="blob-layer"></div>
+<header class="header">
+  <h1>✨ GlowBite</h1>
+  <p>Discover foods that nourish your skin from within</p>
+</header>
 
-<!-- BACKGROUND BUBBLES -->
-<div class="bg-bubbles" id="bgBubbles"></div>
-
-<!-- FLOATING FRUITS -->
-<div class="fruit-layer" id="fruitLayer"></div>
-
-<!-- SPLASH SCREEN -->
-<div id="splash">
-  <div class="splash-logo">✨</div>
-  <div class="splash-title">GlowBite</div>
-  <div class="splash-sub">Foods for glowing skin</div>
-  <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
-</div>
-
-<!-- INSTALL BANNER -->
-<div id="installBanner">
-  <p>📲 Add GlowBite to your Home Screen for the full app experience!</p>
-  <button class="install-btn" id="installBtn" onclick="triggerInstall()">Install</button>
-  <button class="install-dismiss" onclick="dismissInstallBanner()">✕</button>
-</div>
-
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="top-bar-brand">GlowBite ✦</div>
-  <div class="top-bar-avatar" id="topAvatar">G</div>
-</div>
-
-<!-- BOTTOM TAB BAR -->
-<nav class="bottom-nav" id="bottomNav">
-  <button class="tab-btn active" id="tab-home" onclick="switchTab('home',this)"><span class="tab-icon">🏠</span>Home</button>
-  <button class="tab-btn" id="tab-foods" onclick="switchTab('foods',this)"><span class="tab-icon">🥗</span>Foods</button>
-  <button class="tab-btn" id="tab-progress" onclick="switchTab('progress',this)"><span class="tab-icon">📈</span>Progress</button>
-  <button class="tab-btn" id="tab-recipes" onclick="switchTab('recipes',this)"><span class="tab-icon">🧖</span>Recipes</button>
-  <button class="tab-btn" id="tab-more" onclick="switchTab('more',this)"><span class="tab-icon">⋯</span>More</button>
+<nav class="main-nav">
+  <button class="nav-btn active" onclick="switchSection('foods',this)">🥗 Foods</button>
+  <button class="nav-btn" onclick="switchSection('period',this)">🌙 Period Guide</button>
+  <button class="nav-btn" onclick="switchSection('masks',this)">🧖 Face Masks</button>
+  <button class="nav-btn" onclick="switchSection('meals',this)">🍽️ Meal Ideas</button>
 </nav>
 
-<!-- HOME SECTION -->
-<div class="section active" id="sec-home">
-  <div class="home-wrap">
-    <div class="home-greeting-row">
-      <div>
-        <div class="home-date" id="homeDate"></div>
-        <div class="home-greeting">Hey, you ✦</div>
-      </div>
-      <div class="home-avatar" id="homeAvatar">G</div>
-    </div>
-    <div class="home-glow-card">
-      <div class="home-glow-inner">
-        <div class="home-dial">
-          <div class="home-dial-inner">
-            <div class="home-dial-num" id="homeDialNum">60</div>
-            <div class="home-dial-lbl">GLOW SCORE</div>
-          </div>
-        </div>
-        <div>
-          <div class="home-score-pts" id="homeScorePts">↑ Eat well, glow more</div>
-          <div class="home-score-desc">Save your favourite glow foods to raise your score.</div>
-        </div>
-      </div>
-    </div>
-    <div class="home-stat-row">
-      <div class="home-stat-card">
-        <div class="home-stat-num" style="color:#FFC857" id="homeStreakNum">🔥 0</div>
-        <div class="home-stat-lbl">day streak</div>
-      </div>
-      <div class="home-stat-card">
-        <div class="home-stat-num" style="color:#FF6B6B" id="homeSavedNum">0</div>
-        <div class="home-stat-lbl">foods saved</div>
-      </div>
-    </div>
-    <button class="home-scan-btn" onclick="switchTab('foods',document.getElementById('tab-foods'))">🥗 Explore Glow Foods ✦</button>
-    <div>
-      <div class="home-picks-hdr">
-        <div class="home-picks-title">Glow-boosting picks</div>
-        <div class="home-picks-see" onclick="switchTab('foods',document.getElementById('tab-foods'))">See all</div>
-      </div>
-      <div class="home-picks-scroll" id="homePicksScroll"></div>
-    </div>
-    <div id="homeGlowTip"></div>
-  </div>
-</div>
-
 <!-- FOODS -->
-<div class="section" id="sec-foods">
-  <div class="foods-page-wrap">
-  <div class="foods-page-hdr"><h2>Food Library</h2><p>Nutrients &amp; skin benefits, at a glance</p></div>
+<div class="section active" id="sec-foods">
   <div class="foods-controls">
     <div class="ctrl-inner">
       <div class="search-bar">
@@ -688,130 +240,19 @@ button,input,select{font-size:16px}
           <span class="toggle halal"><input type="checkbox" id="halalToggle"><span class="toggle-slider"></span></span>
           <span class="toggle-label-text">☪️ Halal</span>
         </label>
-        <div class="divider"></div>
-        <button class="fav-filter-btn" id="favFilterBtn" onclick="toggleFavFilter()">❤️ Saved</button>
       </div>
     </div>
-  </div>
-  <div class="glow-score-wrap">
-    <div class="glow-score-card">
-      <div class="glow-score-inner">
-        <div class="glow-dial">
-          <div class="glow-dial-inner">
-            <div class="glow-dial-num" id="glowDialNum">82</div>
-            <div class="glow-dial-label">GLOW SCORE</div>
-          </div>
-        </div>
-        <div class="glow-score-text">
-          <div class="glow-score-pts">↑ Eat well, glow more</div>
-          <div class="glow-score-desc">Save your favourite glow foods and build a skin-nourishing routine.</div>
-        </div>
-      </div>
-    </div>
-    <div class="glow-streak-row">
-      <div class="glow-streak-card">
-        <div class="glow-streak-num" style="color:#FFC857" id="streakNum">🔥 0</div>
-        <div class="glow-streak-lbl">day streak</div>
-      </div>
-      <div class="glow-streak-card">
-        <div class="glow-streak-num" style="color:#FF6B6B" id="savedNum">0</div>
-        <div class="glow-streak-lbl">foods saved</div>
-      </div>
-    </div>
-  </div>
-  <div class="glow-picks-section">
-    <div class="glow-picks-title">✦ Glow-boosting picks</div>
-    <div class="glow-picks-scroll" id="glowPicksScroll"></div>
   </div>
   <div class="main-pad">
-    <div id="glowTipWrap"></div>
     <p class="results-count" id="resultsCount"></p>
     <div class="food-grid" id="foodGrid"></div>
-  </div>
-  </div><!-- /foods-page-wrap -->
-</div>
-
-<!-- PROGRESS -->
-<div class="section" id="sec-progress">
-  <div class="progress-wrap" style="padding:calc(env(safe-area-inset-top) + 3.8rem) 1rem calc(5.5rem + env(safe-area-inset-bottom))">
-    <div style="margin-bottom:1rem">
-      <h2 style="font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em">Your Glow Journey</h2>
-      <p style="font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.2rem" id="progressSubtitle">Track your weekly glow score</p>
-    </div>
-    <div class="progress-chart-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-        <div class="progress-chart-title" style="margin-bottom:0">This week</div>
-        <div class="progress-avg" id="weekAvgLabel">avg —</div>
-      </div>
-      <div class="bar-chart" id="weeklyBarChart"></div>
-    </div>
-    <div class="progress-badges-title">✦ Badges</div>
-    <div class="badges-grid" id="badgesGrid"></div>
-    <div class="progress-unlock-card" id="unlockCard">
-      <div class="unlock-icon">✦</div>
-      <div class="unlock-text">
-        <div class="unlock-title">Keep going!</div>
-        <div class="unlock-sub" id="unlockSub">Save <span>5 more foods</span> to unlock Glow 100</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- RECIPES (masks + meals combined) -->
-<div class="section" id="sec-recipes">
-  <div class="recipes-wrap">
-    <div class="recipes-hdr"><h2>Recipes for you</h2><p>Masks &amp; meals for glowing skin</p></div>
-    <div class="recipes-tab-row">
-      <button class="recipes-tab active" id="rtab-masks" onclick="switchRecipeTab('masks',this)">Home Masks</button>
-      <button class="recipes-tab" id="rtab-meals" onclick="switchRecipeTab('meals',this)">Meals</button>
-    </div>
-    <div class="recipes-panel active" id="rpanel-masks">
-      <div class="stype-row" id="stypeRow2"></div>
-      <div id="recipeMaskGrid"></div>
-    </div>
-    <div class="recipes-panel" id="rpanel-meals">
-      <div class="concern-row" id="concernRow2"></div>
-      <div id="recipeMealGrid"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MORE -->
-<div class="section" id="sec-more">
-  <div class="more-wrap">
-    <div class="more-hdr">More</div>
-    <div class="more-link" onclick="openMoreSub('period')">
-      <div class="more-link-icon">🌙</div>
-      <div class="more-link-text">
-        <div class="more-link-name">Period Guide</div>
-        <div class="more-link-sub">Foods for every phase of your cycle</div>
-      </div>
-      <div class="more-link-arrow">›</div>
-    </div>
-    <div class="more-link" onclick="openMoreSub('reminders')">
-      <div class="more-link-icon">⏰</div>
-      <div class="more-link-text">
-        <div class="more-link-name">Reminders</div>
-        <div class="more-link-sub">Set daily glow routine alerts</div>
-      </div>
-      <div class="more-link-arrow">›</div>
-    </div>
-    <div class="more-link" onclick="openMoreSub('journal')">
-      <div class="more-link-icon">📓</div>
-      <div class="more-link-text">
-        <div class="more-link-name">Skin Journal</div>
-        <div class="more-link-sub">Track your skin's daily journey</div>
-      </div>
-      <div class="more-link-arrow">›</div>
-    </div>
   </div>
 </div>
 
 <!-- PERIOD GUIDE -->
 <div class="section" id="sec-period">
-  <div class="period-wrap" style="padding-top:calc(env(safe-area-inset-top) + 3.8rem)">
+  <div class="period-wrap">
     <div class="sec-hero">
-      <button class="more-back-btn" onclick="openMoreSub(null)">‹ More</button>
       <h2>🌙 Period Guide</h2>
       <p>Foods to support your skin &amp; health at every phase of your cycle</p>
     </div>
@@ -841,99 +282,6 @@ button,input,select{font-size:16px}
     </div>
     <div class="concern-row" id="concernRow"></div>
     <div class="meal-grid" id="mealGrid"></div>
-  </div>
-</div>
-
-<!-- REMINDERS -->
-<div class="section" id="sec-reminders">
-  <div class="reminders-wrap" style="padding-top:calc(env(safe-area-inset-top) + 3.8rem)">
-    <div class="sec-hero">
-      <button class="more-back-btn" onclick="openMoreSub(null)">‹ More</button>
-      <h2>⏰ Glow Reminders</h2>
-      <p>Set daily reminders to eat, hydrate or apply your skincare ritual</p>
-    </div>
-    <div class="rem-form">
-      <div class="rem-field" style="flex:2">
-        <label>Reminder</label>
-        <input type="text" id="remText" placeholder="e.g. Drink water, Apply face mask…" autocomplete="off">
-      </div>
-      <div class="rem-field" style="flex:0 0 110px">
-        <label>Time</label>
-        <input type="time" id="remTime">
-      </div>
-      <div class="rem-field" style="flex:0 0 120px">
-        <label>Repeat</label>
-        <select id="remRepeat">
-          <option value="daily">Daily</option>
-          <option value="once">Once</option>
-        </select>
-      </div>
-      <button class="rem-add-btn" onclick="addReminder()">+ Add</button>
-    </div>
-    <p class="rem-notify-note" id="remNotifyNote"></p>
-    <div class="rem-list" id="remList"></div>
-  </div>
-</div>
-
-
-<!-- SKIN JOURNAL -->
-<div class="section" id="sec-journal">
-  <div class="journal-wrap" style="padding-top:calc(env(safe-area-inset-top) + 3.8rem)">
-    <div class="sec-hero">
-      <button class="more-back-btn" onclick="openMoreSub(null)">‹ More</button>
-      <h2>📓 Skin Journal</h2>
-      <p>Track your skin's journey — daily mood, notes &amp; photos</p>
-    </div>
-    <button class="journal-add-btn" onclick="openJournalModal()">✏️ Add Today's Entry</button>
-    <div class="journal-entries" id="journalEntries"></div>
-  </div>
-</div>
-
-<!-- JOURNAL MODAL -->
-<div class="jmodal-overlay" id="journalOverlay">
-  <div class="jmodal" id="journalModal">
-    <div class="jmodal-handle"></div>
-    <h3 id="jmodalTitle">Today's Skin Entry</h3>
-
-    <div class="jfield">
-      <label>Skin rating</label>
-      <div class="rating-row" id="ratingRow">
-        <button class="rating-opt" data-val="😍 Glowing">😍 Glowing</button>
-        <button class="rating-opt" data-val="😊 Good">😊 Good</button>
-        <button class="rating-opt" data-val="😐 Okay">😐 Okay</button>
-        <button class="rating-opt" data-val="😟 Rough">😟 Rough</button>
-        <button class="rating-opt" data-val="😩 Breakout">😩 Breakout</button>
-      </div>
-    </div>
-
-    <div class="jfield">
-      <label>Skin concerns today</label>
-      <div class="skin-tag-row" id="skinTagRow">
-        <button class="skin-tag-opt" data-val="Acne">Acne</button>
-        <button class="skin-tag-opt" data-val="Dryness">Dryness</button>
-        <button class="skin-tag-opt" data-val="Oiliness">Oiliness</button>
-        <button class="skin-tag-opt" data-val="Redness">Redness</button>
-        <button class="skin-tag-opt" data-val="Dullness">Dullness</button>
-        <button class="skin-tag-opt" data-val="Puffiness">Puffiness</button>
-        <button class="skin-tag-opt" data-val="Glowing">Glowing ✨</button>
-        <button class="skin-tag-opt" data-val="Even tone">Even tone</button>
-      </div>
-    </div>
-
-    <div class="jfield">
-      <label>Notes — what did you eat, drink or do?</label>
-      <textarea id="jNotes" placeholder="e.g. Drank 2L water, ate salmon and avocado toast. Noticed skin felt softer after the turmeric mask…"></textarea>
-    </div>
-
-    <div class="jfield">
-      <label>Add a photo (optional)</label>
-      <button class="jphoto-btn" onclick="document.getElementById('jPhotoInput').click()">📷 Take or choose photo</button>
-      <input type="file" id="jPhotoInput" accept="image/*" style="display:none" onchange="handleJournalPhoto(this)">
-      <img id="jPhotoPreview" class="jphoto-preview" alt="Skin photo">
-    </div>
-
-    <button class="jmodal-save" onclick="saveJournalEntry()">💾 Save Entry</button>
-    <button class="jmodal-cancel" onclick="closeJournalModal()">Cancel</button>
   </div>
 </div>
 
@@ -1395,288 +743,7 @@ nutrients:[
 skinBenefits:[
 {icon:"🎯",title:"Acne Fighter",desc:"Exceptional zinc content regulates sebum production, reduces inflammation and inhibits acne-causing bacteria — one of the most effective plant foods for acne."},
 {icon:"🩹",title:"Wound Healing",desc:"Zinc and manganese together accelerate skin repair, helping blemishes, cuts and inflammatory damage heal faster."},
-{icon:"🌙",title:"Sleep & Skin",desc:"Tryptophan and magnesium promote deep sleep, maximising the skin's overnight repair cycle when growth hormone peaks."}]},
-
-/* ── 20 NEW FOODS ── */
-{id:30,name:"Chicken Breast",emoji:"🍗",category:"Meat",color:"linear-gradient(135deg,#f7d365,#f5a623)",isVegetarian:false,isHalal:true,
-description:"Chicken breast is one of the leanest, highest-protein meats available. Its rich amino acid profile directly supports the skin's structural proteins, collagen and elastin.",
-benefits:["Provides complete protein for collagen synthesis","Rich in skin-repairing B vitamins","Supports healthy cell turnover","Reduces skin sagging with protein","Boosts overnight skin repair"],
-nutrients:[
-{name:"Protein",amount:"31 g",skinBenefit:"Complete amino acid profile including glycine and proline — the direct building blocks of collagen and elastin fibres."},
-{name:"Niacin (B3)",amount:"14 mg",skinBenefit:"Essential for DNA repair in skin cells and maintaining the skin barrier; deficiency causes rough, inflamed skin."},
-{name:"Selenium",amount:"27 mcg",skinBenefit:"Antioxidant mineral that preserves skin elasticity and protects against UV-induced oxidative damage."},
-{name:"Phosphorus",amount:"220 mg",skinBenefit:"Supports cellular energy for efficient skin repair and renewal."},
-{name:"Vitamin B6",amount:"0.9 mg",skinBenefit:"Regulates hormonal activity that can trigger acne and excess sebum."}],
-skinBenefits:[
-{icon:"🏗️",title:"Collagen Builder",desc:"The highest-protein lean meat provides every amino acid needed to synthesise and repair the collagen matrix that keeps skin firm and youthful."},
-{icon:"🔋",title:"Cell Energy",desc:"B vitamins support cellular metabolism so skin cells can repair and renew efficiently overnight."},
-{icon:"🛡️",title:"Antioxidant Shield",desc:"Selenium protects skin proteins from oxidative breakdown, maintaining firmness and elasticity over time."}]},
-
-{id:31,name:"Beef Liver",emoji:"🥩",category:"Meat",color:"linear-gradient(135deg,#8B1A1A,#c0392b)",isVegetarian:false,isHalal:true,
-description:"Gram for gram, beef liver is one of the most nutrient-dense foods on earth. It delivers retinol (pre-formed Vitamin A) at levels impossible to match from plant sources.",
-benefits:["Highest natural source of Vitamin A for skin","Exceptional B12 for skin cell renewal","Iron for radiant complexion","Supports collagen production","Anti-ageing nutrient powerhouse"],
-nutrients:[
-{name:"Retinol (Vitamin A)",amount:"4968 mcg",skinBenefit:"Pre-formed Vitamin A directly activates skin cell turnover, reduces fine lines and regulates sebum — far more bioavailable than beta-carotene."},
-{name:"Vitamin B12",amount:"59 mcg",skinBenefit:"Essential for red blood cell production ensuring skin cells receive adequate oxygen for a vibrant complexion."},
-{name:"Iron",amount:"6.5 mg",skinBenefit:"Haem iron is highly absorbable, directly improving oxygen delivery to skin cells and reducing pallor."},
-{name:"Copper",amount:"9.8 mg",skinBenefit:"Activates lysyl oxidase enzyme essential for cross-linking collagen and elastin fibres."},
-{name:"CoQ10",amount:"3.3 mg",skinBenefit:"Antioxidant that powers mitochondria in skin cells, reducing oxidative ageing."}],
-skinBenefits:[
-{icon:"✨",title:"Vitamin A Goldmine",desc:"A single serving of liver provides weeks worth of Vitamin A — the most proven dietary nutrient for reducing wrinkles, acne and uneven skin tone."},
-{icon:"💗",title:"Radiant Complexion",desc:"Haem iron and B12 together maximise oxygen delivery to skin, eliminating dullness and pallor within weeks."},
-{icon:"⏳",title:"Anti-Ageing",desc:"Copper activates the enzymes that rebuild collagen and elastin, directly countering skin sagging and wrinkling."}]},
-
-{id:32,name:"Turkey",emoji:"🦃",category:"Meat",color:"linear-gradient(135deg,#c79081,#dfa579)",isVegetarian:false,isHalal:true,
-description:"Turkey is uniquely rich in tryptophan, the amino acid that converts to serotonin and melatonin — hormones that regulate sleep and directly affect skin repair quality.",
-benefits:["Improves sleep quality for overnight skin repair","High protein for collagen synthesis","Zinc for clear acne-free skin","Selenium antioxidant protection","Reduces stress-related breakouts"],
-nutrients:[
-{name:"Tryptophan",amount:"0.4 g",skinBenefit:"Precursor to melatonin and serotonin, promoting deep restorative sleep when skin growth hormone peaks."},
-{name:"Protein",amount:"29 g",skinBenefit:"Complete protein supporting collagen, elastin and keratin synthesis for structural skin health."},
-{name:"Zinc",amount:"3.1 mg",skinBenefit:"Regulates sebum production and accelerates wound healing from blemishes."},
-{name:"Selenium",amount:"32 mcg",skinBenefit:"Protects skin cells from UV oxidative damage and preserves elastin proteins."},
-{name:"Niacin (B3)",amount:"11 mg",skinBenefit:"Supports the skin barrier and has anti-inflammatory effects on acne and rosacea."}],
-skinBenefits:[
-{icon:"🌙",title:"Sleep & Glow",desc:"Tryptophan promotes melatonin production and deep sleep — the period when growth hormone repairs skin cells most actively."},
-{icon:"🎯",title:"Clear Skin",desc:"Zinc and selenium together regulate oil production, reduce inflammation and accelerate healing of existing blemishes."},
-{icon:"💪",title:"Skin Structure",desc:"Complete protein delivers every amino acid needed for collagen and keratin, the structural proteins of firm, resilient skin."}]},
-
-{id:33,name:"Sardines",emoji:"🐠",category:"Fish",color:"linear-gradient(135deg,#4D79FF,#667eea)",isVegetarian:false,isHalal:true,
-description:"Sardines are one of the most complete skin foods available — small but extraordinarily dense in omega-3s, calcium, Vitamin D and protein. Eaten whole with bones, they're unmatched.",
-benefits:["Highest omega-3 of any small fish","Reduces skin inflammation","Strengthens skin barrier","Calcium for skin cell signalling","Reduces acne and redness"],
-nutrients:[
-{name:"Omega-3 Fatty Acids",amount:"1.5 g",skinBenefit:"EPA and DHA reduce inflammatory prostaglandins that cause acne, eczema and skin redness."},
-{name:"Vitamin D",amount:"272 IU",skinBenefit:"Regulates skin cell growth, supports immune function in skin and reduces inflammatory skin conditions."},
-{name:"Calcium",amount:"382 mg",skinBenefit:"Triggers skin cell differentiation and renewal signals, maintaining a healthy turnover rate."},
-{name:"Vitamin B12",amount:"8.9 mcg",skinBenefit:"Supports DNA synthesis in rapidly dividing skin cells."},
-{name:"Coenzyme Q10",amount:"present",skinBenefit:"Cellular antioxidant reducing oxidative damage in skin mitochondria."}],
-skinBenefits:[
-{icon:"🔥",title:"Anti-Inflammatory",desc:"EPA and DHA are nature's most potent anti-inflammatories — reducing redness, acne and flare-ups of eczema and psoriasis."},
-{icon:"🏰",title:"Barrier Strength",desc:"Omega-3s reinforce the lipid barrier between skin cells, preventing moisture loss and environmental penetration."},
-{icon:"⚡",title:"Cellular Energy",desc:"CoQ10 powers mitochondria in skin cells, enabling faster repair and reducing visible signs of cellular ageing."}]},
-
-{id:34,name:"Tuna",emoji:"🐟",category:"Fish",color:"linear-gradient(135deg,#2980b9,#6dd5fa)",isVegetarian:false,isHalal:true,
-description:"Tuna is an exceptional source of selenium — a mineral that forms the backbone of the body's antioxidant enzyme system, directly protecting skin from ageing.",
-benefits:["Powerful selenium antioxidant for skin","High protein for skin repair","Omega-3 anti-inflammatory","Reduces UV skin damage","Maintains skin elasticity"],
-nutrients:[
-{name:"Selenium",amount:"90 mcg",skinBenefit:"Forms selenoproteins including glutathione peroxidase — the master antioxidant enzyme protecting skin from UV oxidative damage."},
-{name:"Protein",amount:"30 g",skinBenefit:"High-quality complete protein providing amino acids for collagen and elastin repair."},
-{name:"Omega-3 Fatty Acids",amount:"0.5 g",skinBenefit:"Reduce skin inflammation and maintain the moisture barrier."},
-{name:"Niacin (B3)",amount:"18 mg",skinBenefit:"Highest niacin of common foods — reduces skin redness, improves barrier function and has proven anti-ageing effects topically and internally."},
-{name:"Iodine",amount:"40 mcg",skinBenefit:"Supports thyroid hormone production which regulates skin cell renewal rate."}],
-skinBenefits:[
-{icon:"🛡️",title:"Antioxidant Enzyme",desc:"Selenium in tuna activates glutathione peroxidase — the body's own antioxidant enzyme system — providing enduring cellular protection."},
-{icon:"✨",title:"Anti-Ageing",desc:"Niacin has been shown in studies to reduce hyperpigmentation, fine lines and skin roughness when consumed regularly."},
-{icon:"💧",title:"Hydration & Barrier",desc:"Protein and omega-3s together maintain skin's structural integrity and moisture-retaining lipid barrier."}]},
-
-{id:35,name:"Kale",emoji:"🥬",category:"Leafy Green",color:"linear-gradient(135deg,#134e5e,#71b280)",isVegetarian:true,isHalal:true,
-description:"Kale delivers more Vitamin C per calorie than almost any other vegetable, combined with Vitamin K, lutein and zeaxanthin — making it exceptional for collagen production and skin protection.",
-benefits:["Highest Vitamin C among leafy greens","Powerful collagen support","Reduces dark circles and puffiness","Protects against UV damage","Anti-inflammatory for clearer skin"],
-nutrients:[
-{name:"Vitamin C",amount:"93 mg",skinBenefit:"Highest Vitamin C among leafy greens — essential for collagen hydroxylation and brightening."},
-{name:"Vitamin K",amount:"817 mcg",skinBenefit:"Reduces dark circles, bruising and discolouration in skin; supports wound healing."},
-{name:"Lutein & Zeaxanthin",amount:"18 mg",skinBenefit:"Shield skin from UV and blue-light damage; improve skin hydration and elasticity."},
-{name:"Vitamin A",amount:"241 mcg",skinBenefit:"Promotes skin cell turnover and regulates sebum production."},
-{name:"Sulforaphane",amount:"present",skinBenefit:"Activates the Nrf2 antioxidant pathway for long-lasting cellular protection."}],
-skinBenefits:[
-{icon:"💎",title:"Collagen King",desc:"93mg Vitamin C per 100g — near the highest of any vegetable — maximises the collagen synthesis your skin needs for firmness."},
-{icon:"👁️",title:"Dark Circle Fighter",desc:"Vitamin K reduces the visible blood vessels and pigmentation that cause dark undereye circles and general discolouration."},
-{icon:"🛡️",title:"UV Defence",desc:"Lutein, zeaxanthin and sulforaphane create a multi-layered internal shield against UV and environmental skin damage."}]},
-
-{id:36,name:"Beetroot",emoji:"🫀",category:"Vegetable",color:"linear-gradient(135deg,#c0392b,#8e44ad)",isVegetarian:true,isHalal:true,
-description:"Beetroot is one of the richest dietary sources of nitrates, which the body converts to nitric oxide — dramatically improving blood flow and skin nutrient delivery for a natural flush.",
-benefits:["Boosts blood flow for natural skin glow","Powerful antioxidant betalains","Detoxifies skin from within","Reduces inflammation","Brightens dull complexion"],
-nutrients:[
-{name:"Dietary Nitrates",amount:"250 mg",skinBenefit:"Convert to nitric oxide in the body, expanding blood vessels and delivering more nutrients and oxygen to skin cells."},
-{name:"Betalains",amount:"present",skinBenefit:"Unique red-purple antioxidants with potent anti-inflammatory and detoxifying properties."},
-{name:"Folate",amount:"109 mcg",skinBenefit:"Supports DNA repair in skin cells after UV exposure and promotes healthy cell division."},
-{name:"Vitamin C",amount:"4.9 mg",skinBenefit:"Supports collagen synthesis and brightens skin tone."},
-{name:"Manganese",amount:"0.3 mg",skinBenefit:"Activates superoxide dismutase antioxidant enzyme in skin cells."}],
-skinBenefits:[
-{icon:"💗",title:"Natural Flush",desc:"Nitrates expand capillaries in skin, dramatically improving circulation and delivering a natural rosy glow that creams cannot replicate."},
-{icon:"🔴",title:"Betalain Power",desc:"Betalains are unique antioxidants found almost only in beetroot with exceptional anti-inflammatory and liver-detoxifying properties that clear skin."},
-{icon:"🌿",title:"Skin Detox",desc:"Betaine in beetroot supports liver detoxification of excess hormones and toxins linked to acne and dull skin."}]},
-
-{id:37,name:"Asparagus",emoji:"🌱",category:"Vegetable",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
-description:"Asparagus is one of the best dietary sources of glutathione — often called the body's master antioxidant — which directly protects skin from ageing and UV damage.",
-benefits:["Provides the master antioxidant glutathione","Powerful anti-ageing effects","Reduces puffiness with diuretic properties","Supports liver detox for clearer skin","Rich in folate for cell repair"],
-nutrients:[
-{name:"Glutathione",amount:"28 mg",skinBenefit:"The body's master antioxidant — neutralises free radicals, recycles other antioxidants and protects skin DNA from UV damage."},
-{name:"Folate",amount:"149 mcg",skinBenefit:"Essential for DNA repair in rapidly dividing skin cells and protection from UV mutagenesis."},
-{name:"Vitamin K",amount:"41 mcg",skinBenefit:"Supports wound healing and reduces skin discolouration and dark circles."},
-{name:"Vitamin E",amount:"1.1 mg",skinBenefit:"Fat-soluble antioxidant protecting cell membrane lipids from oxidative breakdown."},
-{name:"Saponins",amount:"present",skinBenefit:"Prebiotic compounds feeding beneficial gut bacteria, supporting the gut-skin axis for calmer skin."}],
-skinBenefits:[
-{icon:"⚡",title:"Master Antioxidant",desc:"Glutathione recycles Vitamins C and E for reuse, multiplying their antioxidant effect and providing exceptional protection against skin ageing."},
-{icon:"💧",title:"De-Puffing",desc:"Natural diuretic properties reduce water retention and facial puffiness, especially effective for undereye bags."},
-{icon:"🌿",title:"Liver Support",desc:"Asparagine and saponins support liver detoxification, reducing the hormone and toxin load that causes acne and dull skin."}]},
-
-{id:38,name:"Garlic",emoji:"🧄",category:"Vegetable",color:"linear-gradient(135deg,#f5f5f0,#c8c8a0)",isVegetarian:true,isHalal:true,
-description:"Garlic has been used medicinally for over 5,000 years. Its active compound allicin is one of the most potent natural antibacterial and antifungal agents known, with remarkable skin benefits.",
-benefits:["Powerful antibacterial for acne-prone skin","Allicin reduces skin inflammation","Supports collagen via sulphur","Improves circulation for better complexion","Anti-ageing antioxidants"],
-nutrients:[
-{name:"Allicin",amount:"3.7 mg",skinBenefit:"Potent antibacterial and antifungal compound that directly targets acne-causing bacteria from within."},
-{name:"Sulphur Compounds",amount:"present",skinBenefit:"Sulphur is a key structural component of collagen and keratin — essential for skin elasticity and hair health."},
-{name:"Vitamin C",amount:"31 mg",skinBenefit:"Supports collagen synthesis and provides antioxidant protection to skin cells."},
-{name:"Selenium",amount:"14 mcg",skinBenefit:"Preserves skin elasticity and works with Vitamin E to protect cell membranes."},
-{name:"Quercetin",amount:"present",skinBenefit:"Flavonoid antioxidant that reduces skin inflammation and inhibits UV-induced skin damage."}],
-skinBenefits:[
-{icon:"🦠",title:"Antibacterial",desc:"Allicin kills acne-causing P. acnes bacteria both topically and systemically — one of nature's most effective natural antibiotics for skin."},
-{icon:"🏗️",title:"Collagen Sulphur",desc:"Sulphur compounds in garlic provide the sulphur backbone needed for collagen and keratin structure, keeping skin firm and resilient."},
-{icon:"🔥",title:"Anti-Inflammatory",desc:"Quercetin and diallyl disulphide reduce inflammatory cytokines in skin, calming redness, eczema and acne flare-ups."}]},
-
-{id:39,name:"Zucchini",emoji:"🥒",category:"Vegetable",color:"linear-gradient(135deg,#43e97b,#38f9d7)",isVegetarian:true,isHalal:true,
-description:"Zucchini is exceptionally low in calories yet high in antioxidants and water content, making it one of the most effective vegetables for hydrating skin from within while reducing inflammation.",
-benefits:["Hydrates skin from within","Rich in skin-protective antioxidants","Reduces skin inflammation","Lutein for UV protection","Supports collagen with Vitamin C"],
-nutrients:[
-{name:"Water",amount:"94%",skinBenefit:"Near-equivalent to cucumber, making it exceptionally hydrating for skin cells."},
-{name:"Lutein & Zeaxanthin",amount:"2.1 mg",skinBenefit:"Carotenoids that accumulate in skin, protecting it from UV and blue-light oxidative damage."},
-{name:"Vitamin C",amount:"17 mg",skinBenefit:"Supports collagen production and provides antioxidant protection."},
-{name:"Potassium",amount:"261 mg",skinBenefit:"Maintains electrolyte balance for proper skin cell hydration."},
-{name:"Manganese",amount:"0.2 mg",skinBenefit:"Activates collagen-forming enzymes in skin cells."}],
-skinBenefits:[
-{icon:"💧",title:"Deep Hydration",desc:"94% water content hydrates skin cells from inside, plumping fine lines and reducing the dullness caused by dehydration."},
-{icon:"☀️",title:"UV Shield",desc:"Lutein and zeaxanthin accumulate in skin and act as internal filters against UV and blue-light oxidative stress."},
-{icon:"😌",title:"Soothing",desc:"Anti-inflammatory compounds reduce skin redness and irritation, complementing topical skincare from the inside."}]},
-
-{id:40,name:"Brussels Sprouts",emoji:"🥦",category:"Vegetable",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
-description:"Brussels sprouts contain sulforaphane levels comparable to broccoli, plus exceptional Vitamin C and Vitamin K — making them one of the most comprehensive skin-protective vegetables.",
-benefits:["Activates internal antioxidant defences","Exceptional Vitamin C for collagen","Reduces UV damage","Supports skin cell detoxification","Reduces inflammation"],
-nutrients:[
-{name:"Vitamin C",amount:"85 mg",skinBenefit:"Near the highest Vitamin C of any vegetable — essential for collagen hydroxylation and skin brightening."},
-{name:"Sulforaphane",amount:"present",skinBenefit:"Activates the Nrf2 antioxidant pathway, providing long-lasting protection against UV and oxidative skin damage."},
-{name:"Vitamin K",amount:"177 mcg",skinBenefit:"Supports skin repair and reduces visible discolouration and dark spots."},
-{name:"Folate",amount:"61 mcg",skinBenefit:"Supports DNA repair in skin cells after UV exposure."},
-{name:"Kaempferol",amount:"present",skinBenefit:"Flavonoid antioxidant with anti-inflammatory and UV-protective effects on skin."}],
-skinBenefits:[
-{icon:"⚡",title:"Antioxidant Activation",desc:"Sulforaphane switches on the Nrf2 pathway — your body's own master antioxidant system — providing hours of skin cell protection."},
-{icon:"💎",title:"Collagen Boost",desc:"85mg Vitamin C rivals broccoli and bell pepper — maximising the collagen synthesis that keeps skin firm and youthful."},
-{icon:"🔬",title:"Skin Detox",desc:"Cruciferous compounds activate liver enzymes that clear skin-disrupting hormones and environmental toxins."}]},
-
-{id:41,name:"Strawberries",emoji:"🍓",category:"Berry",color:"linear-gradient(135deg,#f7797d,#fbd786)",isVegetarian:true,isHalal:true,
-description:"Strawberries deliver more Vitamin C per serving than oranges, combined with unique ellagic acid — an antioxidant that specifically inhibits collagen destruction caused by UV rays.",
-benefits:["More Vitamin C than oranges","Ellagic acid prevents UV collagen damage","Brightens and evens skin tone","Reduces hyperpigmentation","Anti-ageing antioxidants"],
-nutrients:[
-{name:"Vitamin C",amount:"59 mg",skinBenefit:"More than an orange per serving — essential for collagen synthesis and skin brightening."},
-{name:"Ellagic Acid",amount:"83 mg",skinBenefit:"Specifically inhibits the MMP enzymes that break down collagen after UV exposure — a uniquely targeted anti-ageing compound."},
-{name:"Anthocyanins",amount:"35 mg",skinBenefit:"Flavonoids protecting skin from oxidative stress and improving microcirculation."},
-{name:"Folate",amount:"24 mcg",skinBenefit:"Supports DNA repair in skin cells after UV exposure."},
-{name:"Manganese",amount:"0.4 mg",skinBenefit:"Activates superoxide dismutase, a key skin antioxidant enzyme."}],
-skinBenefits:[
-{icon:"💎",title:"Collagen Defender",desc:"Ellagic acid specifically blocks the enzymes that destroy collagen after sun exposure — a mechanism unique to berries and pomegranate."},
-{icon:"✨",title:"Brightening",desc:"Vitamin C and ellagic acid together inhibit melanin production, progressively fading dark spots and hyperpigmentation."},
-{icon:"🌟",title:"Anti-Ageing",desc:"Combined antioxidants neutralise the free radicals responsible for wrinkles, loss of elasticity and skin dullness."}]},
-
-{id:42,name:"Orange",emoji:"🍊",category:"Fruit",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
-description:"The iconic Vitamin C fruit — one orange meets your full daily Vitamin C need. But oranges also contain hesperidin, a flavonoid that strengthens capillaries and reduces skin redness.",
-benefits:["Meets full daily Vitamin C in one fruit","Hesperidin strengthens skin capillaries","Reduces redness and rosacea","Brightens skin tone","Supports collagen production"],
-nutrients:[
-{name:"Vitamin C",amount:"53 mg",skinBenefit:"Meets 100% of daily requirement — essential for collagen enzyme activation and antioxidant protection."},
-{name:"Hesperidin",amount:"28 mg",skinBenefit:"Flavonoid that strengthens capillary walls, reducing redness, visible veins and bruising in skin."},
-{name:"Beta-Carotene",amount:"71 mcg",skinBenefit:"Converts to Vitamin A, supporting skin cell renewal."},
-{name:"Folate",amount:"30 mcg",skinBenefit:"Supports DNA synthesis and repair in skin cells."},
-{name:"Potassium",amount:"181 mg",skinBenefit:"Maintains skin cell hydration and electrolyte balance."}],
-skinBenefits:[
-{icon:"💎",title:"Collagen Synthesis",desc:"Vitamin C is the essential cofactor for the enzymes that hydroxylate proline and lysine — without it, collagen simply cannot form properly."},
-{icon:"🌹",title:"Capillary Strength",desc:"Hesperidin reinforces the tiny blood vessels under skin, reducing redness, rosacea flushes and visible thread veins."},
-{icon:"✨",title:"Brightening",desc:"Vitamin C inhibits tyrosinase, the enzyme that produces melanin, gradually fading dark spots and creating a luminous complexion."}]},
-
-{id:43,name:"Pineapple",emoji:"🍍",category:"Tropical Fruit",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
-description:"Pineapple contains bromelain, a powerful enzyme complex that reduces skin inflammation and swelling, and has been used clinically to accelerate wound healing and reduce bruising.",
-benefits:["Bromelain reduces skin inflammation","Accelerates wound and blemish healing","Rich in Vitamin C for collagen","Reduces puffiness","Anti-ageing antioxidants"],
-nutrients:[
-{name:"Bromelain",amount:"present",skinBenefit:"Proteolytic enzyme complex that breaks down inflammatory proteins, reduces post-injury swelling and accelerates skin healing."},
-{name:"Vitamin C",amount:"47 mg",skinBenefit:"Supports collagen production and provides antioxidant brightening."},
-{name:"Manganese",amount:"0.9 mg",skinBenefit:"Activates prolidase enzyme needed to synthesise the proline in collagen."},
-{name:"Beta-Carotene",amount:"35 mcg",skinBenefit:"Converts to Vitamin A to support skin cell renewal."},
-{name:"Thiamine (B1)",amount:"0.1 mg",skinBenefit:"Supports cellular energy production for efficient skin repair."}],
-skinBenefits:[
-{icon:"🩹",title:"Healing Accelerator",desc:"Bromelain is clinically used to reduce post-surgical swelling — the same mechanism accelerates healing of blemishes and inflammatory skin damage."},
-{icon:"🔥",title:"Anti-Inflammatory",desc:"Bromelain blocks inflammatory cytokine cascades in skin, reducing redness, swelling and acne severity."},
-{icon:"💎",title:"Collagen Support",desc:"Manganese and Vitamin C together form the enzymatic team that builds and cross-links collagen fibres for firm skin."}]},
-
-{id:44,name:"Grapes",emoji:"🍇",category:"Fruit",color:"linear-gradient(135deg,#667eea,#764ba2)",isVegetarian:true,isHalal:true,
-description:"Grapes — especially red and black varieties — contain resveratrol in their skins, one of the most studied anti-ageing compounds in nutrition science, alongside oligomeric proanthocyanidins (OPCs).",
-benefits:["Resveratrol activates anti-ageing genes","OPCs are 50× stronger than Vitamin E","Reduces UV damage","Improves skin elasticity","Brightens complexion"],
-nutrients:[
-{name:"Resveratrol",amount:"0.5 mg",skinBenefit:"Activates SIRT1 longevity genes in skin cells, slowing the hallmarks of cellular ageing."},
-{name:"OPCs (proanthocyanidins)",amount:"120 mg",skinBenefit:"50× more potent than Vitamin E as antioxidants — protect collagen and elastin from free radical breakdown."},
-{name:"Vitamin C",amount:"10 mg",skinBenefit:"Supports collagen synthesis and works synergistically with OPCs."},
-{name:"Vitamin K",amount:"14 mcg",skinBenefit:"Reduces discolouration and supports skin healing."},
-{name:"Anthocyanins",amount:"165 mg",skinBenefit:"Improve microcirculation and reduce oxidative damage in skin cells."}],
-skinBenefits:[
-{icon:"⏰",title:"Anti-Ageing Genes",desc:"Resveratrol activates the SIRT1 sirtuin pathway, considered one of the most promising dietary approaches to slowing skin cell ageing."},
-{icon:"🛡️",title:"Super Antioxidant",desc:"OPCs from grape seed are among the most potent antioxidants known — outperforming Vitamins C and E in protecting collagen from oxidation."},
-{icon:"💗",title:"Microcirculation",desc:"Anthocyanins improve blood flow in tiny skin vessels, delivering more nutrients for a naturally flushed, healthy-looking complexion."}]},
-
-{id:45,name:"Lemon",emoji:"🍋",category:"Fruit",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
-description:"Lemons are extraordinary sources of Vitamin C and contain unique flavonoids called limonoids that have been shown to reduce collagen breakdown and protect skin from UV damage.",
-benefits:["Concentrated Vitamin C for collagen","Limonoids protect against UV damage","Brightens dull skin","Natural skin-lightening properties","Antioxidant protection"],
-nutrients:[
-{name:"Vitamin C",amount:"53 mg",skinBenefit:"Essential for collagen synthesis and inhibiting melanin production for a brighter complexion."},
-{name:"Limonoids",amount:"present",skinBenefit:"Unique citrus compounds that inhibit MMP enzymes which break down collagen after UV exposure."},
-{name:"Hesperidin",amount:"30 mg",skinBenefit:"Strengthens capillary walls and reduces skin redness and visible veins."},
-{name:"Citric Acid",amount:"present",skinBenefit:"Natural AHA that gently exfoliates and brightens skin when consumed; supports kidney health for toxin elimination."},
-{name:"Rutin",amount:"present",skinBenefit:"Flavonoid antioxidant that protects skin against free radical damage and improves capillary integrity."}],
-skinBenefits:[
-{icon:"✨",title:"Brightening",desc:"Vitamin C inhibits melanin production and combined with citric acid creates a brightening effect visible over several weeks of regular consumption."},
-{icon:"🛡️",title:"UV Collagen Guard",desc:"Limonoids specifically inhibit the collagenase enzymes activated by UV exposure, protecting skin structure from sun damage."},
-{icon:"💧",title:"Gentle Detox",desc:"Citric acid supports kidney detoxification, helping eliminate the toxins and excess hormones that contribute to acne and dull skin."}]},
-
-{id:46,name:"Cherries",emoji:"🍒",category:"Berry",color:"linear-gradient(135deg,#c0392b,#e74c3c)",isVegetarian:true,isHalal:true,
-description:"Cherries are one of the only dietary sources of melatonin, the sleep hormone. Combined with their exceptional anthocyanin content, they provide a unique combination of sleep-enhancing and antioxidant skin benefits.",
-benefits:["Melatonin improves sleep for skin repair","Anthocyanins reduce skin inflammation","Reduces exercise-induced skin inflammation","Brightens complexion","Anti-ageing antioxidants"],
-nutrients:[
-{name:"Melatonin",amount:"0.013 mg",skinBenefit:"One of the only dietary sources — promotes deep restorative sleep when skin repair peaks; also acts as a direct antioxidant in skin cells."},
-{name:"Anthocyanins",amount:"82 mg",skinBenefit:"Potent antioxidants that reduce skin inflammation and inhibit melanin overproduction."},
-{name:"Vitamin C",amount:"7 mg",skinBenefit:"Supports collagen synthesis and antioxidant skin protection."},
-{name:"Potassium",amount:"222 mg",skinBenefit:"Maintains skin cell hydration and reduces water retention puffiness."},
-{name:"Quercetin",amount:"2.6 mg",skinBenefit:"Flavonoid that reduces histamine-driven skin inflammation and UV-induced skin damage."}],
-skinBenefits:[
-{icon:"🌙",title:"Sleep Hormone",desc:"Cherries are one of the only foods with measurable melatonin — improving sleep quality and the overnight repair window when skin growth hormone peaks."},
-{icon:"🔥",title:"Anti-Inflammatory",desc:"Anthocyanins and quercetin inhibit COX inflammatory enzymes, reducing skin redness, acne inflammation and eczema flare-ups."},
-{icon:"✨",title:"Antioxidant Glow",desc:"Combined anthocyanins, Vitamin C and quercetin neutralise free radicals and protect skin DNA from damage for a clear, luminous complexion."}]},
-
-{id:47,name:"Sweet Corn",emoji:"🌽",category:"Vegetable",color:"linear-gradient(135deg,#f7971e,#ffd200)",isVegetarian:true,isHalal:true,
-description:"Sweet corn is unusually rich in lutein and zeaxanthin, carotenoids that are directly deposited in skin tissue where they absorb UV radiation and reduce photo-oxidative damage.",
-benefits:["Lutein & zeaxanthin protect skin from UV","Reduces UV-related skin ageing","Provides ferulic acid antioxidant","Supports skin hydration","Anti-inflammatory properties"],
-nutrients:[
-{name:"Lutein & Zeaxanthin",amount:"1.1 mg",skinBenefit:"Carotenoids that accumulate in skin tissue, absorbing UV radiation and reducing photo-oxidative stress."},
-{name:"Ferulic Acid",amount:"present",skinBenefit:"Potent antioxidant that doubles the effectiveness of Vitamins C and E when combined — often used in premium skincare serums."},
-{name:"Vitamin C",amount:"6.8 mg",skinBenefit:"Supports collagen synthesis and antioxidant protection."},
-{name:"Beta-Carotene",amount:"52 mcg",skinBenefit:"Converts to Vitamin A supporting skin cell renewal and sebum regulation."},
-{name:"Thiamine (B1)",amount:"0.2 mg",skinBenefit:"Supports cellular energy production for efficient skin repair."}],
-skinBenefits:[
-{icon:"☀️",title:"UV Skin Shield",desc:"Lutein and zeaxanthin from corn accumulate directly in skin cells, acting as internal UV filters reducing photoageing damage."},
-{icon:"⚡",title:"Ferulic Acid",desc:"Ferulic acid is one of the few dietary antioxidants that potentiates the action of Vitamins C and E, amplifying their skin-protective effects."},
-{icon:"💧",title:"Skin Hydration",desc:"High water and fibre content supports gut health and skin hydration, reducing the dullness associated with dehydration."}]},
-
-{id:48,name:"Celery",emoji:"🌿",category:"Vegetable",color:"linear-gradient(135deg,#56ab2f,#a8e063)",isVegetarian:true,isHalal:true,
-description:"Celery is 95% water and uniquely rich in silica and phthalides — compounds that improve circulation and are rarely found in other vegetables, making it a distinctive skin hydration and glow food.",
-benefits:["Silica strengthens skin structure","Improves circulation for glowing skin","Deeply hydrates skin from within","Reduces puffiness","Anti-inflammatory phytonutrients"],
-nutrients:[
-{name:"Silica",amount:"4 mg",skinBenefit:"Trace mineral essential for collagen cross-linking and maintaining skin elasticity and firmness."},
-{name:"Phthalides",amount:"present",skinBenefit:"Unique compounds that relax blood vessel walls, improving circulation and skin nutrient delivery."},
-{name:"Water",amount:"95%",skinBenefit:"Very high water content contributes to maintaining skin turgor and preventing dehydration-related dullness."},
-{name:"Vitamin K",amount:"29 mcg",skinBenefit:"Reduces skin discolouration and supports wound healing processes."},
-{name:"Apigenin",amount:"present",skinBenefit:"Flavonoid with anti-inflammatory properties that reduce skin redness and irritation."}],
-skinBenefits:[
-{icon:"🏗️",title:"Silica for Structure",desc:"Silica is the mineral backbone of collagen fibres — celery is one of the best dietary sources for maintaining skin firmness and elasticity."},
-{icon:"💗",title:"Circulation Boost",desc:"Phthalides relax arterial walls, improving blood flow through skin capillaries and delivering a natural, healthy glow."},
-{icon:"💧",title:"Intense Hydration",desc:"95% water content combined with natural electrolytes makes celery one of the most effective foods for maintaining plump, hydrated skin."}]},
-
-{id:49,name:"Apricots",emoji:"🍑",category:"Fruit",color:"linear-gradient(135deg,#f7971e,#f5576c)",isVegetarian:true,isHalal:true,
-description:"Apricots have one of the highest beta-carotene concentrations of any common fruit. Just three fresh apricots provide almost a full day's Vitamin A needs for glowing, renewed skin.",
-benefits:["Exceptional beta-carotene for skin glow","Vitamin A promotes cell renewal","Protects against UV damage","Reduces acne scar appearance","Brightens dull complexion"],
-nutrients:[
-{name:"Beta-Carotene",amount:"1094 mcg",skinBenefit:"Converts to Vitamin A in body — promotes cell renewal, reduces sebum and imparts a warm golden tone to skin."},
-{name:"Vitamin C",amount:"10 mg",skinBenefit:"Supports collagen synthesis and works synergistically with beta-carotene for comprehensive skin protection."},
-{name:"Vitamin E",amount:"0.9 mg",skinBenefit:"Fat-soluble antioxidant working synergistically with beta-carotene to protect skin cell membranes."},
-{name:"Potassium",amount:"259 mg",skinBenefit:"Maintains skin cell hydration and electrolyte balance."},
-{name:"Lycopene",amount:"5 mcg",skinBenefit:"Provides additional antioxidant UV protection."}],
-skinBenefits:[
-{icon:"🧡",title:"Skin-Warming Glow",desc:"Beta-carotene deposits in skin tissue, creating a warm golden tone that research shows is perceived as more attractive than UV tanning."},
-{icon:"🔄",title:"Cell Renewal",desc:"Vitamin A accelerates skin cell turnover, fading acne scars, dark spots and uneven pigmentation for a more even complexion."},
-{icon:"🛡️",title:"UV Protection",desc:"Beta-carotene and lycopene together act as internal photoprotectors, reducing UV sensitivity and sun damage."}]}
+{icon:"🌙",title:"Sleep & Skin",desc:"Tryptophan and magnesium promote deep sleep, maximising the skin's overnight repair cycle when growth hormone peaks."}]}
 ];
 
 /* ══════════════════════════════════════
@@ -2068,412 +1135,7 @@ steps:[
 "Remove the tea bag and ginger.",
 "Stir in a small pinch of turmeric and honey until dissolved.",
 "Add a squeeze of lemon juice and sip slowly, ideally 30 minutes before bed."],
-skinBenefit:"EGCG in green tea reduces sebum production and targets acne bacteria. Ginger and turmeric reduce overnight skin inflammation so your skin can repair more efficiently during sleep — when growth hormone peaks."},
-
-{id:11,name:"Salmon & Avocado Rice Bowl",emoji:"🍱",
-tagline:"Omega-3 glow bowl with healthy fats",
-color:"linear-gradient(135deg,#f7971e,#ffd200)",
-concerns:["hydration","aging","brightening"],time:"20 min",servings:1,
-ingredients:[
-{emoji:"🐟",item:"120g grilled salmon fillet",purpose:"Omega-3 and astaxanthin for deep skin glow"},
-{emoji:"🥑",item:"½ ripe avocado (sliced)",purpose:"Healthy fats and Vitamin E for moisture"},
-{emoji:"🍚",item:"½ cup cooked brown rice",purpose:"Complex carbs for steady blood sugar"},
-{emoji:"🥒",item:"¼ cucumber (thinly sliced)",purpose:"Silica and hydration for skin elasticity"},
-{emoji:"🥬",item:"Handful of baby spinach",purpose:"Iron and folate to oxygenate skin cells"},
-{emoji:"🫒",item:"1 tbsp olive oil + splash soy sauce",purpose:"Anti-inflammatory dressing"},
-{emoji:"🌱",item:"1 tsp sesame seeds",purpose:"Zinc and healthy fats"}],
-steps:[
-"Cook brown rice according to packet instructions.",
-"Grill or pan-fry salmon for 3–4 minutes each side.",
-"Arrange rice in a bowl, then top with salmon, avocado, cucumber and spinach.",
-"Drizzle with olive oil and soy sauce.",
-"Sprinkle sesame seeds and serve immediately."],
-skinBenefit:"Omega-3 from salmon reduces inflammation, avocado fats lock in moisture, and astaxanthin gives skin a natural radiance boost that works from the inside out."},
-
-{id:12,name:"Turmeric Golden Soup",emoji:"🍲",
-tagline:"Anti-inflammatory healing bowl",
-color:"linear-gradient(135deg,#f7971e,#FFD700)",
-concerns:["acne","redness","aging"],time:"25 min",servings:2,
-ingredients:[
-{emoji:"🟡",item:"1½ tsp ground turmeric",purpose:"Curcumin blocks inflammatory pathways driving acne and redness"},
-{emoji:"🍠",item:"2 medium sweet potatoes (cubed)",purpose:"Beta-carotene converts to Vitamin A, regulating sebum"},
-{emoji:"🧅",item:"1 onion (diced)",purpose:"Quercetin anti-inflammatory compound"},
-{emoji:"🫒",item:"1 tbsp olive oil",purpose:"Enhances curcumin absorption by up to 2000%"},
-{emoji:"🥛",item:"400ml coconut milk",purpose:"Lauric acid has antimicrobial properties for acne-prone skin"},
-{emoji:"🫚",item:"1 tsp fresh ginger (grated)",purpose:"Gingerols reduce prostaglandin-driven skin inflammation"},
-{emoji:"🧄",item:"2 cloves garlic",purpose:"Allicin fights bacteria linked to acne"}],
-steps:[
-"Sauté onion and garlic in olive oil over medium heat for 3 minutes.",
-"Add ginger and turmeric, stir for 1 minute until fragrant.",
-"Add sweet potato cubes and coat in the spices.",
-"Pour in coconut milk and 200ml water. Simmer for 15 minutes.",
-"Blend until smooth, season with salt and pepper.",
-"Serve with a crack of black pepper (boosts curcumin absorption further)."],
-skinBenefit:"Curcumin combined with black pepper and fat is one of nature's most powerful anti-inflammatory combinations — directly targeting the root causes of acne, redness and premature ageing."},
-
-{id:13,name:"Berry Collagen Smoothie",emoji:"🍓",
-tagline:"Vitamin C collagen booster drink",
-color:"linear-gradient(135deg,#f093fb,#f5576c)",
-concerns:["aging","brightening","hydration"],time:"5 min",servings:1,
-ingredients:[
-{emoji:"🍓",item:"1 cup mixed frozen berries",purpose:"Vitamin C for collagen synthesis and anthocyanins for brightening"},
-{emoji:"🍌",item:"½ banana",purpose:"B6 for skin cell renewal and natural sweetness"},
-{emoji:"🥛",item:"200ml oat milk",purpose:"Gentle, non-inflammatory dairy alternative"},
-{emoji:"🌱",item:"1 tbsp ground flaxseeds",purpose:"Omega-3 ALA for skin barrier support"},
-{emoji:"🍯",item:"1 tsp honey",purpose:"Antibacterial and anti-inflammatory natural sweetener"},
-{emoji:"💊",item:"½ tsp Vitamin C powder (optional)",purpose:"Boosts collagen synthesis and skin brightening"}],
-steps:[
-"Add all ingredients to a blender.",
-"Blend on high for 60 seconds until smooth.",
-"Pour into a tall glass.",
-"Drink immediately — Vitamin C degrades quickly once blended.",
-"Best consumed in the morning on an empty stomach."],
-skinBenefit:"A Vitamin C surge from berries directly stimulates collagen production — the protein that keeps skin firm and reduces fine lines. The omega-3s in flaxseed protect the collagen you already have."},
-
-{id:14,name:"Egg & Spinach Glow Wrap",emoji:"🌯",
-tagline:"Protein-rich skin repair breakfast",
-color:"linear-gradient(135deg,#43e97b,#38f9d7)",
-concerns:["acne","hydration","brightening"],time:"12 min",servings:1,
-ingredients:[
-{emoji:"🥚",item:"2 eggs (scrambled)",purpose:"Biotin, zinc and protein — the skin repair trio"},
-{emoji:"🥬",item:"Large handful baby spinach",purpose:"Iron, folate and Vitamin K for skin oxygenation"},
-{emoji:"🍅",item:"½ tomato (sliced)",purpose:"Lycopene antioxidant and Vitamin C"},
-{emoji:"🥑",item:"¼ avocado (mashed)",purpose:"Healthy fats for skin moisture and glow"},
-{emoji:"🌮",item:"1 wholegrain wrap",purpose:"Complex carbs for blood sugar stability"},
-{emoji:"🟡",item:"Pinch of turmeric in eggs",purpose:"Curcumin anti-inflammatory compound"}],
-steps:[
-"Whisk eggs with a pinch of turmeric, salt and pepper.",
-"Scramble in a non-stick pan over medium heat until just set.",
-"Warm the wrap in the same pan for 30 seconds.",
-"Spread mashed avocado over the wrap.",
-"Layer spinach, tomato slices and scrambled eggs.",
-"Roll tightly and eat immediately."],
-skinBenefit:"Biotin and zinc from eggs directly support skin cell renewal; iron from spinach oxygenates skin cells; avocado fats lock in moisture — all wrapped up in under 15 minutes."},
-
-{id:15,name:"Mango Turmeric Overnight Oats",emoji:"🌙",
-tagline:"Prep tonight, glow tomorrow morning",
-color:"linear-gradient(135deg,#f7971e,#f5d56c)",
-concerns:["brightening","aging","acne"],time:"5 min + overnight",servings:1,
-ingredients:[
-{emoji:"🌾",item:"½ cup rolled oats",purpose:"Beta-glucan to stabilise blood sugar overnight"},
-{emoji:"🥭",item:"½ ripe mango (cubed)",purpose:"Vitamins A and C for brightening and collagen"},
-{emoji:"🟡",item:"½ tsp turmeric powder",purpose:"Anti-inflammatory curcumin"},
-{emoji:"🥛",item:"150ml coconut milk",purpose:"Lauric acid and creaminess"},
-{emoji:"🌱",item:"1 tbsp chia seeds",purpose:"Omega-3, fibre and hydration from gel formation"},
-{emoji:"🍯",item:"1 tsp honey",purpose:"Antibacterial and low-GI sweetener"}],
-steps:[
-"Mix oats, chia seeds and turmeric in a jar or bowl.",
-"Pour over coconut milk and stir well.",
-"Add honey and mix again.",
-"Cover and refrigerate overnight (minimum 6 hours).",
-"In the morning, top with fresh mango cubes.",
-"Stir once more and eat cold."],
-skinBenefit:"Chia seeds form a gel overnight, keeping you hydrated from within. Turmeric reduces overnight inflammation while beta-glucan stabilises blood sugar — preventing morning cortisol-driven breakouts."},
-
-{id:16,name:"Pomegranate Walnut Salad",emoji:"🥗",
-tagline:"Antioxidant feast for anti-ageing",
-color:"linear-gradient(135deg,#c0392b,#e74c3c)",
-concerns:["aging","brightening","redness"],time:"10 min",servings:1,
-ingredients:[
-{emoji:"🔴",item:"½ cup pomegranate seeds",purpose:"Punicalagins — most powerful antioxidants known for skin"},
-{emoji:"🥜",item:"2 tbsp walnuts (roughly chopped)",purpose:"Omega-3 and melatonin for skin repair"},
-{emoji:"🥬",item:"2 handfuls mixed rocket and spinach",purpose:"Vitamin K reduces skin redness and broken capillaries"},
-{emoji:"🐐",item:"30g goat's cheese (crumbled)",purpose:"Probiotics and calcium for skin health"},
-{emoji:"🫒",item:"1 tbsp extra virgin olive oil",purpose:"Polyphenols for anti-inflammatory dressing"},
-{emoji:"🍯",item:"1 tsp balsamic vinegar",purpose:"Acetic acid supports collagen and blood flow"}],
-steps:[
-"Wash and dry the salad leaves, place in a bowl.",
-"Scatter pomegranate seeds and walnuts over the top.",
-"Crumble goat's cheese over the salad.",
-"Whisk olive oil and balsamic vinegar together.",
-"Drizzle dressing over the salad just before serving.",
-"Toss gently and serve immediately."],
-skinBenefit:"Punicalagins in pomegranate are 3× more potent than red wine antioxidants — they protect collagen fibres from degradation and reduce the inflammatory markers that accelerate skin ageing."},
-
-{id:17,name:"Chickpea & Kale Stir Fry",emoji:"🍳",
-tagline:"Hormonal acne-fighting power plate",
-color:"linear-gradient(135deg,#f5d367,#e4a94a)",
-concerns:["acne","hydration"],time:"18 min",servings:1,
-ingredients:[
-{emoji:"🫘",item:"1 can chickpeas (drained)",purpose:"Zinc and B6 regulate sebum and hormones"},
-{emoji:"🥦",item:"1 cup kale (chopped)",purpose:"DIM compound clears excess oestrogen driving hormonal acne"},
-{emoji:"🧄",item:"3 cloves garlic",purpose:"Allicin has direct anti-acne bacterial properties"},
-{emoji:"🫚",item:"1 tsp fresh ginger",purpose:"Anti-inflammatory gingerols"},
-{emoji:"🟡",item:"½ tsp turmeric",purpose:"Curcumin blocks acne-causing inflammatory signals"},
-{emoji:"🫒",item:"1 tbsp olive oil",purpose:"Anti-inflammatory monounsaturated fats"},
-{emoji:"🍋",item:"Squeeze of lemon juice",purpose:"Vitamin C and brightening acid"}],
-steps:[
-"Heat olive oil in a wok or large pan over high heat.",
-"Add garlic and ginger, stir-fry for 1 minute.",
-"Add chickpeas, stir and cook for 3 minutes until lightly golden.",
-"Add kale and turmeric, stir-fry for 3–4 minutes until wilted.",
-"Season with salt, pepper and a squeeze of lemon.",
-"Serve hot over rice or eat alone."],
-skinBenefit:"DIM from kale actively metabolises excess oestrogen — the hormone most linked to hormonal chin breakouts. Zinc from chickpeas then regulates the sebum response, making this a complete hormonal acne plate."},
-
-{id:18,name:"Watermelon Feta Mint Salad",emoji:"🍉",
-tagline:"Super-hydrating summer skin plate",
-color:"linear-gradient(135deg,#f7797d,#fbd786)",
-concerns:["hydration","redness","brightening"],time:"8 min",servings:2,
-ingredients:[
-{emoji:"🍉",item:"3 cups watermelon (cubed)",purpose:"92% water plus L-citrulline for skin hydration"},
-{emoji:"🧀",item:"80g feta cheese (cubed)",purpose:"Probiotics and calcium for skin microbiome"},
-{emoji:"🌿",item:"Small bunch fresh mint",purpose:"Anti-inflammatory menthol and antioxidants"},
-{emoji:"🫒",item:"1 tbsp extra virgin olive oil",purpose:"Anti-inflammatory polyphenols"},
-{emoji:"🍋",item:"Juice of ½ lime",purpose:"Vitamin C and brightening citric acid"},
-{emoji:"🧂",item:"Pinch of sea salt and chilli flakes",purpose:"Electrolytes and capsaicin circulation boost"}],
-steps:[
-"Cut watermelon into bite-sized cubes, remove seeds.",
-"Place in a wide, shallow bowl or plate.",
-"Scatter feta cubes and fresh mint leaves over the top.",
-"Whisk olive oil and lime juice together and drizzle over.",
-"Finish with a pinch of sea salt and chilli flakes.",
-"Serve immediately — best eaten chilled."],
-skinBenefit:"Watermelon's L-citrulline converts to arginine, which improves blood flow to skin and boosts natural moisture. Lycopene in the flesh protects against sun-related skin damage and redness."},
-
-{id:19,name:"Almond Butter Banana Toast",emoji:"🍞",
-tagline:"Vitamin E skin shield on wholegrain",
-color:"linear-gradient(135deg,#d4a574,#c4956a)",
-concerns:["aging","hydration","acne"],time:"5 min",servings:1,
-ingredients:[
-{emoji:"🍞",item:"2 slices wholegrain bread",purpose:"Low-GI carbs to prevent insulin-driven breakouts"},
-{emoji:"🌰",item:"2 tbsp almond butter",purpose:"Vitamin E, magnesium and healthy fats for skin repair"},
-{emoji:"🍌",item:"1 banana (sliced)",purpose:"B6 for skin cell turnover and mood hormone serotonin"},
-{emoji:"🌱",item:"1 tsp chia seeds",purpose:"Omega-3 and skin hydration"},
-{emoji:"🍯",item:"Drizzle of honey",purpose:"Antibacterial and low-GI sweetener"},
-{emoji:"🌿",item:"Pinch of cinnamon",purpose:"Regulates blood sugar to prevent post-meal acne spikes"}],
-steps:[
-"Toast the wholegrain bread to your liking.",
-"Spread almond butter generously on both slices.",
-"Arrange banana slices on top.",
-"Sprinkle chia seeds and cinnamon over the banana.",
-"Finish with a light drizzle of honey.",
-"Eat immediately."],
-skinBenefit:"Almond butter is one of the richest food sources of Vitamin E, the skin's primary antioxidant shield. Combined with cinnamon's blood-sugar-stabilising effect, this toast actively prevents post-meal hormone spikes that cause breakouts."},
-
-{id:20,name:"Broccoli & Egg Fried Rice",emoji:"🍳",
-tagline:"Collagen-building detox dinner",
-color:"linear-gradient(135deg,#134e5e,#71b280)",
-concerns:["acne","aging","brightening"],time:"22 min",servings:2,
-ingredients:[
-{emoji:"🥦",item:"1 cup broccoli florets",purpose:"DIM for oestrogen detox and Vitamin C for collagen"},
-{emoji:"🥚",item:"2 eggs",purpose:"Biotin, zinc and collagen-building amino acids"},
-{emoji:"🍚",item:"1 cup cold cooked brown rice",purpose:"Resistant starch feeds skin-healthy gut bacteria"},
-{emoji:"🧄",item:"3 cloves garlic",purpose:"Allicin supports detox pathways"},
-{emoji:"🥕",item:"1 medium carrot (grated)",purpose:"Beta-carotene for skin cell renewal"},
-{emoji:"🫒",item:"1 tbsp sesame oil",purpose:"Sesamol antioxidant and anti-inflammatory compound"},
-{emoji:"🌿",item:"2 spring onions (sliced)",purpose:"Quercetin anti-inflammatory and gut prebiotic"}],
-steps:[
-"Steam broccoli for 3 minutes until just tender but still bright green.",
-"Heat sesame oil in a wok over high heat.",
-"Add garlic and stir-fry for 30 seconds.",
-"Add cold rice and stir-fry for 3 minutes until heated through.",
-"Push rice to one side, scramble eggs in the other half of the wok.",
-"Mix eggs through the rice, then add broccoli, carrot and spring onions.",
-"Toss for 2 minutes, season with soy sauce and serve."],
-skinBenefit:"DIM from broccoli clears oestrogen metabolites linked to adult acne; biotin from eggs supports cell turnover; and resistant starch feeds the gut bacteria that regulate skin inflammation via the gut-skin axis."},
-
-{id:21,name:"Carrot Ginger Immunity Soup",emoji:"🥕",
-tagline:"Beta-carotene glow from within",
-color:"linear-gradient(135deg,#f7971e,#ffd200)",
-concerns:["brightening","aging","redness"],time:"30 min",servings:3,
-ingredients:[
-{emoji:"🥕",item:"4 large carrots (chopped)",purpose:"Highest beta-carotene source — converts to skin-renewing Vitamin A"},
-{emoji:"🫚",item:"2 tsp fresh ginger (grated)",purpose:"Gingerols reduce skin inflammation and improve circulation"},
-{emoji:"🧅",item:"1 large onion",purpose:"Quercetin anti-inflammatory and prebiotic"},
-{emoji:"🧄",item:"4 cloves garlic",purpose:"Allicin for immune support and acne bacteria control"},
-{emoji:"🫒",item:"1 tbsp olive oil",purpose:"Enhances fat-soluble Vitamin A absorption"},
-{emoji:"🥛",item:"100ml coconut milk",purpose:"Creaminess and lauric acid antimicrobial"},
-{emoji:"🍋",item:"Juice of ½ lemon",purpose:"Vitamin C enhances beta-carotene conversion"}],
-steps:[
-"Sauté onion and garlic in olive oil for 4 minutes.",
-"Add ginger and stir for 1 minute.",
-"Add carrots and coat in the oil and aromatics.",
-"Pour in 700ml water or vegetable stock.",
-"Simmer for 20 minutes until carrots are very soft.",
-"Blend until smooth, stir in coconut milk and lemon juice.",
-"Season and serve with crusty bread."],
-skinBenefit:"Beta-carotene from carrots accumulates in skin tissue, giving a natural golden glow that study participants rated as more attractive than a sun tan. Ginger improves micro-circulation, delivering nutrients directly to skin cells."},
-
-{id:22,name:"Dark Chocolate Avocado Mousse",emoji:"🍫",
-tagline:"Guilt-free antioxidant dessert",
-color:"linear-gradient(135deg,#3d2010,#a05230)",
-concerns:["aging","hydration","brightening"],time:"10 min",servings:2,
-ingredients:[
-{emoji:"🥑",item:"2 ripe avocados",purpose:"Creamy base plus Vitamin E and healthy fats"},
-{emoji:"🍫",item:"3 tbsp raw cacao powder",purpose:"Flavanols boost skin circulation and hydration by up to 25%"},
-{emoji:"🍯",item:"2 tbsp honey or maple syrup",purpose:"Low-GI natural sweetener"},
-{emoji:"🥛",item:"3 tbsp coconut milk",purpose:"Creaminess and medium-chain triglycerides"},
-{emoji:"🌿",item:"½ tsp vanilla extract",purpose:"Antioxidant polyphenols"},
-{emoji:"🌸",item:"Pinch of sea salt",purpose:"Enhances chocolate flavour and mineral content"}],
-steps:[
-"Scoop avocado flesh into a food processor.",
-"Add cacao powder, honey, coconut milk, vanilla and salt.",
-"Blend until completely smooth and mousse-like.",
-"Taste and adjust sweetness.",
-"Spoon into small glasses or bowls.",
-"Refrigerate for 20 minutes for a firmer texture, or eat immediately."],
-skinBenefit:"Cacao flavanols increase skin blood flow and hydration from within — tested in studies where participants showed measurable improvements in skin density and texture after just 12 weeks of daily cacao consumption."},
-
-{id:23,name:"Green Goddess Detox Bowl",emoji:"🥗",
-tagline:"Chlorophyll cleanse for clear skin",
-color:"linear-gradient(135deg,#11998e,#38ef7d)",
-concerns:["acne","brightening","hydration"],time:"15 min",servings:1,
-ingredients:[
-{emoji:"🥑",item:"½ avocado",purpose:"Healthy fats and Vitamin E for glow"},
-{emoji:"🥦",item:"½ cup steamed broccoli",purpose:"DIM for oestrogen clearance"},
-{emoji:"🥬",item:"2 handfuls kale (massaged)",purpose:"Chlorophyll for detox and blood purification"},
-{emoji:"🥒",item:"½ cucumber (sliced)",purpose:"Silica and hydration boost"},
-{emoji:"🌱",item:"2 tbsp edamame beans",purpose:"Phytoestrogens and protein for hormonal balance"},
-{emoji:"🍋",item:"Juice of 1 lemon",purpose:"Vitamin C, liver detox support"},
-{emoji:"🫒",item:"2 tbsp tahini",purpose:"Calcium, zinc and sesame antioxidants for skin"}],
-steps:[
-"Massage kale with a little olive oil and salt until softened.",
-"Steam broccoli for 3 minutes.",
-"Arrange kale, broccoli, cucumber, edamame and avocado in a bowl.",
-"Blend tahini with lemon juice and 2 tbsp water to make dressing.",
-"Drizzle dressing over the bowl.",
-"Season and serve at room temperature."],
-skinBenefit:"Chlorophyll in kale acts as a plant blood, binding toxins and clearing them before they manifest as skin breakouts. Combined with DIM from broccoli and phytoestrogens from edamame, this bowl targets hormonal acne at its source."},
-
-{id:24,name:"Probiotic Skin Parfait",emoji:"🫙",
-tagline:"Gut-skin axis beauty boost",
-color:"linear-gradient(135deg,#84fab0,#8fd3f4)",
-concerns:["acne","hydration","brightening"],time:"5 min",servings:1,
-ingredients:[
-{emoji:"🥛",item:"150g full-fat Greek yogurt",purpose:"Live probiotics to balance gut bacteria linked to skin clarity"},
-{emoji:"🫐",item:"½ cup mixed berries",purpose:"Anthocyanins and prebiotics to feed beneficial gut bacteria"},
-{emoji:"🌾",item:"2 tbsp granola",purpose:"Fibre as prebiotic for probiotic bacteria"},
-{emoji:"🍯",item:"1 tbsp raw honey",purpose:"Prebiotic oligosaccharides and antibacterial"},
-{emoji:"🌱",item:"1 tbsp ground flaxseeds",purpose:"Lignans for hormonal balance"},
-{emoji:"🌸",item:"Pinch of rose petals or edible flowers",purpose:"Quercetin antioxidants and serotonin boost"}],
-steps:[
-"Spoon Greek yogurt into a glass or jar.",
-"Layer berries over the yogurt.",
-"Sprinkle granola and ground flaxseeds.",
-"Drizzle honey over the top.",
-"Add rose petals or edible flowers to finish.",
-"Eat immediately or refrigerate for up to 2 hours."],
-skinBenefit:"The gut-skin axis is now well-established in dermatology — the same probiotic strains in Greek yogurt that balance your gut flora directly reduce inflammatory acne. Berries act as prebiotics, feeding these beneficial bacteria."},
-
-{id:25,name:"Pumpkin Seed Pesto Pasta",emoji:"🍝",
-tagline:"Zinc-rich skin barrier pasta",
-color:"linear-gradient(135deg,#134e5e,#71b280)",
-concerns:["acne","aging","hydration"],time:"20 min",servings:2,
-ingredients:[
-{emoji:"🎃",item:"4 tbsp pumpkin seeds (toasted)",purpose:"Richest plant source of zinc for sebum regulation"},
-{emoji:"🥬",item:"2 large handfuls fresh basil + spinach",purpose:"Vitamin K, iron and chlorophyll"},
-{emoji:"🧄",item:"2 cloves garlic",purpose:"Allicin antibacterial for skin clarity"},
-{emoji:"🫒",item:"3 tbsp extra virgin olive oil",purpose:"Oleocanthal anti-inflammatory compound"},
-{emoji:"🍋",item:"Juice of ½ lemon",purpose:"Vitamin C for collagen and brightening"},
-{emoji:"🍝",item:"150g wholegrain pasta",purpose:"Complex carbs for blood sugar balance"},
-{emoji:"🧀",item:"2 tbsp nutritional yeast or parmesan",purpose:"B12, zinc and glutathione precursors"}],
-steps:[
-"Cook pasta according to packet instructions.",
-"Toast pumpkin seeds in a dry pan until lightly golden.",
-"Blend basil, spinach, garlic, pumpkin seeds, olive oil, lemon and nutritional yeast until smooth.",
-"Add a splash of pasta water to loosen the pesto.",
-"Toss drained pasta with the pesto.",
-"Serve topped with extra pumpkin seeds."],
-skinBenefit:"Pumpkin seeds are the number one plant source of zinc — the mineral most directly proven to reduce acne lesion counts in clinical trials. Their omega-6 fatty acids also reinforce the skin's moisture barrier."},
-
-{id:26,name:"Beetroot Hummus & Veggie Plate",emoji:"🫘",
-tagline:"Circulation-boosting skin brightener",
-color:"linear-gradient(135deg,#c0392b,#9b59b6)",
-concerns:["brightening","redness","aging"],time:"10 min",servings:2,
-ingredients:[
-{emoji:"🟣",item:"1 small cooked beetroot",purpose:"Betalains and nitrates boost skin micro-circulation"},
-{emoji:"🫘",item:"1 can chickpeas (drained)",purpose:"Zinc and B6 for skin clarity and hormone balance"},
-{emoji:"🧄",item:"2 cloves garlic",purpose:"Allicin for brightening and antimicrobial"},
-{emoji:"🫒",item:"2 tbsp tahini + 2 tbsp olive oil",purpose:"Calcium, zinc and anti-inflammatory polyphenols"},
-{emoji:"🍋",item:"Juice of 1 lemon",purpose:"Vitamin C for collagen and brightening"},
-{emoji:"🥕",item:"Carrot, celery and cucumber sticks",purpose:"Beta-carotene, silica and hydration"}],
-steps:[
-"Blend beetroot, chickpeas, garlic, tahini, olive oil and lemon juice until smooth.",
-"Season generously with salt and cumin.",
-"Spoon into a bowl, drizzle olive oil over the top.",
-"Arrange carrot, celery and cucumber sticks around the hummus.",
-"Serve with wholegrain pitta or crackers."],
-skinBenefit:"Dietary nitrates from beetroot convert to nitric oxide in the body, dilating blood vessels and increasing oxygen and nutrient delivery to skin cells — giving a visible rosy, brightened complexion within hours."},
-
-{id:27,name:"Lemon Ginger Chia Pudding",emoji:"🍋",
-tagline:"Collagen and hydration overnight pot",
-color:"linear-gradient(135deg,#f7d365,#f5a623)",
-concerns:["hydration","aging","brightening"],time:"5 min + 4h",servings:1,
-ingredients:[
-{emoji:"🌱",item:"3 tbsp white chia seeds",purpose:"Forms hydrating gel; omega-3 for skin barrier"},
-{emoji:"🍋",item:"Zest and juice of 1 lemon",purpose:"Vitamin C for collagen synthesis and brightening"},
-{emoji:"🫚",item:"½ tsp grated fresh ginger",purpose:"Anti-inflammatory and circulation boosting"},
-{emoji:"🥛",item:"200ml coconut milk",purpose:"Lauric acid and creaminess"},
-{emoji:"🍯",item:"1 tbsp honey",purpose:"Low-GI, prebiotic and antibacterial"},
-{emoji:"🍊",item:"1 mandarin (segmented, to top)",purpose:"Vitamin C and flavonoids for skin brightness"}],
-steps:[
-"Mix chia seeds, coconut milk, lemon zest, lemon juice, ginger and honey together.",
-"Stir well and leave for 5 minutes, then stir again to prevent clumping.",
-"Cover and refrigerate for at least 4 hours or overnight.",
-"In the morning, top with mandarin segments.",
-"Eat cold straight from the fridge."],
-skinBenefit:"Chia seeds absorb 10× their weight in water, releasing it slowly throughout the day to maintain skin hydration at a cellular level. Lemon Vitamin C stimulates collagen — making this pudding one of the most skin-hydrating breakfasts possible."},
-
-{id:28,name:"Grilled Chicken Skin Salad",emoji:"🍗",
-tagline:"Lean collagen protein with antioxidants",
-color:"linear-gradient(135deg,#f7d365,#f5a623)",
-concerns:["aging","brightening","acne"],time:"25 min",servings:1,
-ingredients:[
-{emoji:"🍗",item:"120g grilled chicken breast",purpose:"Lean protein provides glycine and proline — direct collagen building blocks"},
-{emoji:"🍅",item:"1 cup cherry tomatoes (halved)",purpose:"Lycopene and Vitamin C for collagen and UV protection"},
-{emoji:"🥬",item:"2 handfuls rocket leaves",purpose:"Erucic acid reduces inflammation and skin redness"},
-{emoji:"🧅",item:"¼ red onion (thinly sliced)",purpose:"Quercetin anti-inflammatory flavonoid"},
-{emoji:"🫒",item:"1 tbsp olive oil + balsamic",purpose:"Polyphenol-rich anti-inflammatory dressing"},
-{emoji:"🌿",item:"Fresh basil leaves",purpose:"Anti-inflammatory linalool and antioxidant rosmarinic acid"}],
-steps:[
-"Season chicken with olive oil, salt, pepper and a pinch of turmeric.",
-"Grill or pan-fry for 5–6 minutes each side until cooked through.",
-"Slice chicken and allow to rest for 2 minutes.",
-"Arrange rocket, tomatoes and red onion on a plate.",
-"Top with sliced chicken and fresh basil.",
-"Drizzle with olive oil and balsamic vinegar."],
-skinBenefit:"Chicken breast is one of the richest dietary sources of glycine and proline — the two amino acids your body uses to assemble collagen. Pairing with Vitamin C from tomatoes directly activates the enzymes that cross-link collagen fibres."},
-
-{id:29,name:"Speedy Sardine Toast",emoji:"🐟",
-tagline:"Omega-3 quick fix for glowing skin",
-color:"linear-gradient(135deg,#4D79FF,#667eea)",
-concerns:["acne","redness","aging"],time:"5 min",servings:1,
-ingredients:[
-{emoji:"🐟",item:"1 can sardines in olive oil",purpose:"Omega-3 EPA and DHA — most bioavailable form for skin"},
-{emoji:"🍞",item:"2 slices sourdough or rye bread",purpose:"Fermented prebiotic carbs for gut-skin health"},
-{emoji:"🥑",item:"¼ avocado (sliced)",purpose:"Vitamin E and oleic acid for moisture barrier"},
-{emoji:"🍋",item:"Squeeze of lemon",purpose:"Vitamin C enhances omega-3 anti-inflammatory action"},
-{emoji:"🧅",item:"Thin slices red onion",purpose:"Quercetin reduces inflammatory skin redness"},
-{emoji:"🌿",item:"Fresh parsley",purpose:"Vitamin K, C and chlorophyll for skin clarity"}],
-steps:[
-"Toast the bread until golden.",
-"Layer avocado slices on the toast.",
-"Drain sardines and place on top of avocado.",
-"Add thin slices of red onion.",
-"Squeeze lemon juice over everything.",
-"Scatter fresh parsley and eat immediately."],
-skinBenefit:"Sardines are the most bioavailable source of EPA and DHA omega-3 — these fatty acids directly reduce the inflammatory prostaglandins that cause acne, redness and skin ageing. Eating oily fish just twice a week produces measurable improvements in skin hydration."},
-
-{id:30,name:"Hibiscus Berry Ice Lolly",emoji:"🧊",
-tagline:"Antioxidant skin treat — no guilt",
-color:"linear-gradient(135deg,#f093fb,#c0392b)",
-concerns:["brightening","aging","hydration"],time:"10 min + 4h freeze",servings:4,
-ingredients:[
-{emoji:"🌺",item:"2 hibiscus tea bags",purpose:"Anthocyanins and Vitamin C more concentrated than most fruits"},
-{emoji:"🍓",item:"1 cup strawberries",purpose:"Ellagic acid — collagen-protecting antioxidant"},
-{emoji:"🫐",item:"½ cup blueberries",purpose:"Anthocyanins for skin brightening and UV protection"},
-{emoji:"🍯",item:"1 tbsp honey",purpose:"Low-GI sweetener with prebiotic properties"},
-{emoji:"🍋",item:"Juice of ½ lemon",purpose:"Vitamin C boosts collagen and antioxidant activity"},
-{emoji:"💧",item:"200ml water",purpose:"Hydration base"}],
-steps:[
-"Brew hibiscus tea in 200ml boiling water for 5 minutes, then allow to cool.",
-"Blend strawberries and blueberries until smooth.",
-"Mix berry blend with cooled hibiscus tea, honey and lemon juice.",
-"Pour into ice lolly moulds.",
-"Insert sticks and freeze for at least 4 hours.",
-"Run under warm water to release from moulds and eat."],
-skinBenefit:"Hibiscus contains the highest concentration of anthocyanins of any commonly consumed flower — these directly inhibit MMP enzymes that break down collagen and elastin, making these lollies one of the most enjoyable anti-ageing foods possible."}
+skinBenefit:"EGCG in green tea reduces sebum production and targets acne bacteria. Ginger and turmeric reduce overnight skin inflammation so your skin can repair more efficiently during sleep — when growth hormone peaks."}
 ];
 
 /* ══════════════════════════════════════
@@ -2484,338 +1146,30 @@ let vegOnly=false,halalOnly=false,query='',activeSkinType='all',selectedPhase=nu
 /* ══════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════ */
-function openSidebar(){
-  document.getElementById('mainNav').classList.add('open');
-  document.getElementById('sidebarOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeSidebar(){
-  document.getElementById('mainNav').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-/* ══ NAVIGATION ══ */
-function switchTab(id,btn){
+function switchSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  const sec=document.getElementById('sec-'+id);
-  if(sec)sec.classList.add('active');
-  if(btn)btn.classList.add('active');
-  if(id==='home')renderHome();
-  if(id==='progress')renderProgress();
-  if(id==='recipes')renderRecipesSection();
-}
-
-function switchSection(id,btn){switchTab(id,null);}
-
-function openMoreSub(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  if(!id){
-    document.getElementById('sec-more').classList.add('active');
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById('tab-more').classList.add('active');
-  } else {
-    document.getElementById('sec-'+id).classList.add('active');
-    if(id==='period')renderPhaseButtons();
-    if(id==='reminders'){renderReminders();updateNotifyNote();}
-    if(id==='journal')renderJournal();
-  }
-}
-
-/* ══ HOME SECTION ══ */
-function renderHome(){
-  const favs=JSON.parse(localStorage.getItem('glowFavs')||localStorage.getItem('glowbiteFavs')||'[]');
-  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
-  const today=new Date();today.setHours(0,0,0,0);
-  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
-  const unique=[...new Set(dates)].sort((a,b)=>b-a);
-  let streak=0;for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
-  const score=Math.min(99,60+favs.length*3);
-  const el_d=document.getElementById('homeDialNum');if(el_d)el_d.textContent=score;
-  const el_s=document.getElementById('homeStreakNum');if(el_s)el_s.textContent='🔥 '+streak;
-  const el_f=document.getElementById('homeSavedNum');if(el_f)el_f.textContent=favs.length;
-  const el_p=document.getElementById('homeScorePts');if(el_p)el_p.textContent=score>80?'✦ Glowing skin ahead':'↑ Eat well, glow more';
-  const dateEl=document.getElementById('homeDate');
-  if(dateEl){const d=new Date();dateEl.textContent=d.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'});}
-  // picks carousel
-  const topFoods=[...foods].sort((a,b)=>getFoodGlowScore(b.id)-getFoodGlowScore(a.id)).slice(0,10);
-  const ps=document.getElementById('homePicksScroll');
-  if(ps)ps.innerHTML=topFoods.map(f=>`
-    <div class="home-pick-item" onclick="openFoodModal(${f.id})">
-      <div class="home-pick-banner" style="background:${f.color}">${f.emoji}</div>
-      <div class="home-pick-name">${f.name}</div>
-      <div class="home-pick-badge">+${getFoodGlowScore(f.id)} glow</div>
-    </div>`).join('');
-  // tip
-  const tip=glowTips[new Date().getDate()%glowTips.length];
-  const tipEl=document.getElementById('homeGlowTip');
-  if(tipEl&&tip)tipEl.innerHTML=`<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:1rem 1.1rem;display:flex;gap:.75rem;align-items:flex-start"><span style="font-size:1.5rem">${tip.icon}</span><p style="font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.6;margin:0">${tip.tip}</p></div>`;
-}
-
-/* ══ RECIPES SECTION ══ */
-function switchRecipeTab(id,btn){
-  document.querySelectorAll('.recipes-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.recipes-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('rpanel-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
   btn.classList.add('active');
-}
-
-function renderRecipesSection(){
-  // Masks panel
-  const mf=masks.filter(m=>activeSkinType==='all'||m.skinTypes.includes(activeSkinType)||m.skinTypes.includes('all'));
-  const mg=document.getElementById('recipeMaskGrid');
-  if(mg)mg.innerHTML=mf.map(m=>`
-    <div class="rec-card" onclick="openMaskModal(${m.id})" style="margin-bottom:.75rem">
-      <div class="rec-banner" style="background:${m.color}">${m.emoji}</div>
-      <div class="rec-body">
-        <div class="rec-title-row">
-          <div class="rec-name">${m.name}</div>
-          <div class="rec-time-badge">⏱ ${m.time}</div>
-        </div>
-        <div class="rec-desc">${m.benefit}</div>
-        <div class="rec-chips">${m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join('')}</div>
-      </div>
-    </div>`).join('');
-  // Skin type filter for recipes
-  const sf=document.getElementById('stypeRow2');
-  if(sf&&!sf.children.length)sf.innerHTML=skinTypeLabels.map((l,i)=>`<button class="stype-btn${i===0?' active':''}" onclick="setSkinType('${skinTypeValues[i]}',this);renderRecipesSection()">${l}</button>`).join('');
-  // Meals panel
-  const meals2=activeConcern==='all'?meals:meals.filter(m=>m.concerns.includes(activeConcern));
-  const mlg=document.getElementById('recipeMealGrid');
-  if(mlg)mlg.innerHTML=meals2.map(m=>`
-    <div class="rec-card" onclick="openMealModal(${m.id})" style="margin-bottom:.75rem">
-      <div class="rec-banner" style="background:${m.color}">${m.emoji}</div>
-      <div class="rec-body">
-        <div class="rec-title-row">
-          <div class="rec-name">${m.name}</div>
-          <div class="rec-time-badge">⏱ ${m.time}</div>
-        </div>
-        <div class="rec-desc">${m.tagline}</div>
-        <div class="rec-chips">${m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join('')}</div>
-      </div>
-    </div>`).join('');
-  const cf=document.getElementById('concernRow2');
-  if(cf&&!cf.children.length)cf.innerHTML=concernLabels.map((c,i)=>`<button class="concern-btn${i===0?' active':''}" onclick="setConcern('${c.val}',this);renderRecipesSection()">${c.label}</button>`).join('');
-}
-
-/* GLOW SCORES lookup */
-const glowScores={1:95,2:92,3:88,4:82,5:90,6:79,7:78,8:86,9:74,10:80,11:78,12:87,13:83,14:81,15:86,16:75,17:71,18:82,19:88,20:84,21:80,22:74,23:71,24:73,25:79,26:85,27:70,28:82,29:78,30:72,31:66,32:70,33:86,34:74,35:77,36:90,37:68,38:71,39:67,40:66,41:83,42:81,43:78,44:76,45:75,46:73,47:69,48:68,49:72};
-function getFoodGlowScore(id){return glowScores[id]||70;}
-
-/* GLOW PICKS CAROUSEL */
-function renderGlowPicks(){
-  const topFoods=[...foods].sort((a,b)=>getFoodGlowScore(b.id)-getFoodGlowScore(a.id)).slice(0,12);
-  const el=document.getElementById('glowPicksScroll');
-  if(!el)return;
-  el.innerHTML=topFoods.map(f=>`
-    <div class="glow-pick" onclick="openFoodModal(${f.id})">
-      <div class="glow-pick-emoji">${f.emoji}</div>
-      <div class="glow-pick-name">${f.name}</div>
-      <div class="glow-pick-badge">+${getFoodGlowScore(f.id)} glow</div>
-    </div>`).join('');
-}
-
-/* PROGRESS SECTION */
-function renderProgress(){
-  renderWeeklyChart();
-  renderBadges();
-}
-
-function renderWeeklyChart(){
-  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
-  const today=new Date();today.setHours(0,0,0,0);
-  const days=['M','T','W','T','F','S','S'];
-  const todayDow=today.getDay();
-  const mondayOffset=(todayDow===0?-6:1-todayDow);
-  const weekDates=days.map((_,i)=>{const d=new Date(today);d.setDate(today.getDate()+mondayOffset+i);d.setHours(0,0,0,0);return d.getTime();});
-  const scoreByDay={};
-  entries.forEach(e=>{
-    const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);
-    const t=d.getTime();
-    if(!scoreByDay[t])scoreByDay[t]=0;
-    scoreByDay[t]+=10;
-  });
-  const todayTs=today.getTime();
-  const el=document.getElementById('weeklyBarChart');
-  if(!el)return;
-  const scores=weekDates.map((ts,i)=>{
-    const rawScore=Math.min(100,(scoreByDay[ts]||0));
-    const isToday=ts===todayTs;
-    return isToday?(rawScore||Math.min(99,60+(JSON.parse(localStorage.getItem('glowFavs')||localStorage.getItem('glowbiteFavs')||'[]')).length*3)):rawScore;
-  });
-  const nonZero=scores.filter(s=>s>0);
-  const avg=nonZero.length?Math.round(nonZero.reduce((a,b)=>a+b,0)/nonZero.length):0;
-  const avgEl=document.getElementById('weekAvgLabel');if(avgEl)avgEl.textContent=avg?`avg ${avg}`:'avg —';
-  const subEl=document.getElementById('progressSubtitle');
-  if(subEl){const streak2=JSON.parse(localStorage.getItem('glowJournal')||'[]').length;subEl.textContent=streak2?`${streak2} journal entries logged`:'Start logging to see your journey';}
-  el.innerHTML=weekDates.map((ts,i)=>{
-    const isToday=ts===todayTs;
-    const displayScore=scores[i];
-    const heightPct=Math.max(6,displayScore);
-    const bg=displayScore===0?'rgba(255,255,255,.15)':isToday?'linear-gradient(180deg,#C6FF3D,#7B2FF7)':'linear-gradient(180deg,#FF6B6B,#7B2FF7)';
-    return `<div class="bar-col">
-      <div class="bar-score">${displayScore||''}</div>
-      <div class="bar-track"><div style="width:100%;height:${heightPct}%;border-radius:6px;background:${bg};transition:height .6s cubic-bezier(.34,1.56,.64,1)"></div></div>
-      <div class="bar-day" style="${isToday?'color:#C6FF3D;font-weight:800':''}"">${days[i]}</div>
-    </div>`;
-  }).join('');
-}
-
-function renderBadges(){
-  const favs=JSON.parse(localStorage.getItem('glowFavs')||'[]');
-  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
-  const today=new Date();today.setHours(0,0,0,0);
-  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
-  const unique=[...new Set(dates)].sort((a,b)=>b-a);
-  let streak=0;
-  for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
-  const hasSavedEnough=favs.length>=5;
-  const hasStreak=streak>=3;
-  const hasGlow100=favs.length>=10;
-  const badges=[
-    {icon:'🏆',name:'Streak Star',desc:'3-day streak',earned:hasStreak,color:'#FFC857'},
-    {icon:'🥦',name:'Veggie Pro',desc:'Save 5+ foods',earned:hasSavedEnough,color:'#C6FF3D'},
-    {icon:'✨',name:'Glow 100',desc:'Save 10+ foods',earned:hasGlow100,color:'#7B2FF7'},
-  ];
-  const bg=document.getElementById('badgesGrid');
-  if(bg)bg.innerHTML=badges.map(b=>`
-    <div class="badge-card ${b.earned?'earned':'locked'}">
-      ${b.earned?'<div class="badge-earned-dot"></div>':''}
-      <div class="badge-icon">${b.icon}</div>
-      <div class="badge-name">${b.name}</div>
-      <div class="badge-desc">${b.desc}</div>
-    </div>`).join('');
-  const uc=document.getElementById('unlockCard');
-  const us=document.getElementById('unlockSub');
-  if(hasGlow100&&uc){uc.style.display='none';}
-  else if(us){
-    if(!hasSavedEnough){us.innerHTML=`Save <span>${5-favs.length} more foods</span> to earn Veggie Pro`;}
-    else{us.innerHTML=`Save <span>${10-favs.length} more foods</span> to unlock Glow 100`;}
-  }
 }
 
 /* ══════════════════════════════════════
    FOODS
 ══════════════════════════════════════ */
-function tapCard(el){el.classList.remove("tapped");void el.offsetWidth;el.classList.add("tapped");}
-
-/* ══════════════════════════════════════
-   DAILY GLOW TIPS
-══════════════════════════════════════ */
-const glowTips=[
-  {icon:"💧",tip:"Drink at least 8 glasses of water today — hydrated skin is plumper, clearer and naturally more radiant."},
-  {icon:"🐟",tip:"Add omega-3 rich fish like salmon or sardines to a meal this week to calm inflammation and strengthen your skin barrier."},
-  {icon:"🍋",tip:"Start your morning with warm lemon water — Vitamin C on an empty stomach is absorbed fastest for maximum collagen support."},
-  {icon:"🥑",tip:"Eat half an avocado today. Its oleic acid penetrates deep into skin layers for lasting hydration cream can't match."},
-  {icon:"🌿",tip:"Swap your afternoon snack for a handful of walnuts — the omega-3s reduce skin inflammation overnight."},
-  {icon:"🍵",tip:"Drink green tea instead of coffee today. EGCG reduces sebum production and fights acne-causing bacteria from within."},
-  {icon:"🥬",tip:"Add a handful of spinach to your lunch. Its iron + Vitamin C combo delivers oxygen to skin cells for a healthy glow."},
-  {icon:"🍫",tip:"One square of 70%+ dark chocolate counts as skincare — flavanols improve microcirculation for a natural flush."},
-  {icon:"🌻",tip:"Sprinkle sunflower seeds on your salad today — one tablespoon covers most of your daily Vitamin E for antioxidant skin protection."},
-  {icon:"🍠",tip:"Eat sweet potato this week. Beta-carotene builds up in your skin over time, creating a warm, healthy-looking golden tone."},
-  {icon:"🫐",tip:"A cup of blueberries today delivers 163mg of anthocyanins — among the most powerful skin anti-ageing compounds in nature."},
-  {icon:"🧄",tip:"Add garlic to your dinner — allicin fights acne-causing bacteria from the inside out."},
-  {icon:"🥝",tip:"One kiwi meets your full daily Vitamin C — eat it in the morning when collagen synthesis is most active."},
-  {icon:"🍅",tip:"Cook your tomatoes in olive oil today. Heat releases more lycopene AND fat helps absorb it — double the UV skin protection."},
-  {icon:"🥦",tip:"Eat broccoli lightly steamed, not boiled. Steaming preserves sulforaphane, the compound that activates your skin's own antioxidant system."},
-  {icon:"🌱",tip:"Add ground flaxseeds to your breakfast — they're the richest plant source of omega-3s and contain lignans that balance skin hormones."},
-  {icon:"🫒",tip:"Use extra virgin olive oil as your dressing today. Squalene in olive oil is a natural skin anti-ageing compound that declines with age."},
-  {icon:"🍳",tip:"Eat eggs for breakfast — the complete protein provides every amino acid needed to build collagen and repair skin overnight."},
-  {icon:"🥛",tip:"A bowl of Greek yogurt supports your gut-skin axis. Better gut bacteria = fewer breakouts and calmer, clearer skin."},
-  {icon:"🎃",tip:"Pumpkin seeds are the highest plant source of zinc — eat a handful to regulate sebum and speed blemish healing."},
-  {icon:"🍇",tip:"Red and black grapes contain resveratrol, which activates longevity genes in skin cells. Eat the skins for maximum benefit."},
-  {icon:"🥕",tip:"Eat your carrots with a little fat today. Beta-carotene is fat-soluble — a drizzle of olive oil increases absorption by up to 300%."},
-  {icon:"🍓",tip:"Strawberries contain ellagic acid, a compound that specifically blocks the enzyme that destroys collagen after sun exposure."},
-  {icon:"🍍",tip:"Pineapple's bromelain enzyme reduces skin inflammation and accelerates healing — great to eat after any skin irritation."},
-  {icon:"🫚",tip:"Add fresh ginger to your tea or stir-fry — gingerols improve skin microcirculation and have antibacterial effects on acne."},
-  {icon:"🥒",tip:"Cucumber is 95% water — eating it hydrates skin cells directly, plumping fine lines better than any topical cream."},
-  {icon:"🍒",tip:"Cherries are one of the only foods with measurable melatonin. Eat a handful in the evening to improve sleep and overnight skin repair."},
-  {icon:"🌽",tip:"Sweet corn contains ferulic acid — a rare antioxidant that doubles the effectiveness of Vitamins C and E in protecting your skin."},
-  {icon:"🍑",tip:"Three fresh apricots provide nearly a full day's Vitamin A — eat them regularly to speed up skin cell renewal."},
-  {icon:"🫀",tip:"Beetroot juice or roasted beets dramatically improve blood flow to skin within 2 hours — try it before a big event for an instant glow."}
-];
-
-function renderGlowTip(){
-  const wrap=document.getElementById('glowTipWrap');
-  const todayKey='glowTipDismissed_'+new Date().toDateString();
-  if(sessionStorage.getItem(todayKey)){wrap.innerHTML='';return;}
-  const idx=Math.floor(Date.now()/86400000)%glowTips.length;
-  const t=glowTips[idx];
-  wrap.innerHTML=`
-    <div class="glow-tip-card">
-      <span class="glow-tip-icon">${t.icon}</span>
-      <div class="glow-tip-content">
-        <div class="glow-tip-label">✨ Daily Glow Tip</div>
-        <div class="glow-tip-text">${t.tip}</div>
-      </div>
-      <button class="glow-tip-close" onclick="dismissGlowTip()">✕</button>
-    </div>`;
-}
-function dismissGlowTip(){
-  sessionStorage.setItem('glowTipDismissed_'+new Date().toDateString(),'1');
-  document.getElementById('glowTipWrap').innerHTML='';
-}
-
-/* ══════════════════════════════════════
-   FAVOURITES
-══════════════════════════════════════ */
-/* ══════════════════════════════════════
-   MENSTRUAL CYCLE DATA PER FOOD
-══════════════════════════════════════ */// foodId → array of {phase, benefit, tip}// Fallback for foods not in the map
-
-function flipCard(e,id){
-  e.stopPropagation();
-  const wrap=document.getElementById('fci-'+id)?.closest('.food-card-wrap');
-  if(!wrap)return;
-  wrap.classList.toggle('flipped');
-  if(navigator.vibrate)navigator.vibrate(25);
-}
-
-
-let favourites=new Set(JSON.parse(localStorage.getItem('glowbiteFavs')||'[]'));
-let favOnly=false;
-
-function saveFavs(){const arr=JSON.stringify([...favourites]);localStorage.setItem('glowbiteFavs',arr);localStorage.setItem('glowFavs',arr);if(typeof renderHome==='function')renderHome();}
-
-function toggleFav(id,btn){
-  if(favourites.has(id)){
-    favourites.delete(id);
-    btn.textContent='🤍';btn.classList.remove('faved');
-  }else{
-    favourites.add(id);
-    btn.textContent='❤️';btn.classList.add('faved');
-  }
-  saveFavs();
-  if(favOnly)renderFoods();
-}
-
-function toggleFavFilter(){
-  favOnly=!favOnly;
-  document.getElementById('favFilterBtn').classList.toggle('active',favOnly);
-  renderFoods();
-}
-
 function renderFoods(){
   const filtered=foods.filter(f=>{
     const q=query.toLowerCase();
     const ok=!q||f.name.toLowerCase().includes(q)||f.description.toLowerCase().includes(q)||
       f.category.toLowerCase().includes(q)||f.nutrients.some(n=>n.name.toLowerCase().includes(q))||
       f.skinBenefits.some(s=>s.title.toLowerCase().includes(q))||f.benefits.some(b=>b.toLowerCase().includes(q));
-    return ok&&(!vegOnly||f.isVegetarian)&&(!halalOnly||f.isHalal)&&(!favOnly||favourites.has(f.id));
+    return ok&&(!vegOnly||f.isVegetarian)&&(!halalOnly||f.isHalal);
   });
   document.getElementById('resultsCount').textContent=`Showing ${filtered.length} food${filtered.length!==1?'s':''}`;
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
-  g.innerHTML=filtered.map((f,i)=>{
-    const score=getFoodGlowScore(f.id);
-    const isFeat=i===0&&!favOnly&&!query;
-    return `
-    <div class="food-card${isFeat?' featured':''} card-enter" style="animation-delay:${i*40}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
-      <div class="card-banner" style="background:${f.color}">${f.emoji}
-        <div class="card-glow-score">${score}</div>
-        <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
-      </div>
+  g.innerHTML=filtered.map(f=>`
+    <div class="food-card" onclick="openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
+      <div class="card-banner" style="background:${f.color}">${f.emoji}</div>
       <div class="card-body">
         <h3 class="card-name">${f.name}</h3>
         <p class="card-desc">${f.description}</p>
@@ -2829,8 +1183,7 @@ function renderFoods(){
         <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
         <span class="card-cta">View →</span>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
 /* ══════════════════════════════════════
@@ -2845,9 +1198,7 @@ function openFoodModal(id){
     `<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">${f.category}</span>`+
     (f.isVegetarian?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">🌿 Vegetarian</span>`:'')+
     (f.isHalal?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">☪️ Halal</span>`:'');
-  const iconBgs=['linear-gradient(135deg,#FF6B6B,#FF3E9A)','linear-gradient(135deg,#FFC857,#f7971e)','linear-gradient(135deg,#C6FF3D,#8FCB00)','linear-gradient(135deg,#7B2FF7,#FF3E9A)','linear-gradient(135deg,#00E5CC,#7B2FF7)'];
-  const whyGlowRows=f.nutrients.slice(0,5).map((n,i)=>`<div class="why-glow-row"><div class="why-glow-icon" style="background:${iconBgs[i%iconBgs.length]}">✦</div><div class="why-glow-name">${n.name}</div><div class="why-glow-pts">+${Math.round(getFoodGlowScore(f.id)*0.12*(i===0?1:.75**i))} glow</div></div>`).join('');
-  document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">✦ Why it glows</p><div class="why-glow-list">${whyGlowRows}</div><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
   document.getElementById('tab-nu').innerHTML=f.nutrients.map(n=>`<div class="ncard"><div class="ntop"><span class="nname">${n.name}</span><span class="namount">${n.amount} / 100g</span></div><p class="nskin">🔬 ${n.skinBenefit}</p></div>`).join('');
   document.getElementById('tab-sk').innerHTML=f.skinBenefits.map(s=>`<div class="scard"><span class="sicon">${s.icon}</span><div><p class="stitle">${s.title}</p><p class="sdesc">${s.desc}</p></div></div>`).join('');
   switchTab('ov',document.querySelector('#foodOverlay .tab-btn'));
@@ -2881,8 +1232,8 @@ function selectPhase(id){
   document.getElementById('pbtn-'+id).classList.add('sel');
   selectedPhase=id;
   const recFoods=p.foodIds.map(fid=>foods.find(f=>f.id===fid)).filter(Boolean);
-  const _pd=document.getElementById('phaseDetail');
-  _pd.innerHTML=`<div class="phase-card" id="phaseCardEl">
+  document.getElementById('phaseDetail').innerHTML=`
+    <div class="phase-card">
       <div class="phase-head" style="background:${p.color}">
         <h3>${p.emoji} ${p.name} <span style="font-size:.75rem;font-weight:600;opacity:.85">${p.days}</span></h3>
         <p>Select your current cycle phase to see personalised food & skin guidance</p>
@@ -2901,9 +1252,6 @@ function selectPhase(id){
       </div>
       <p class="disclaimer">ℹ️ This is general nutritional guidance, not medical advice. Consult your healthcare provider for personal recommendations.</p>
     </div>`;
-  // retrigger fade-up animation every phase switch
-  const _el=document.getElementById('phaseCardEl');
-  if(_el){_el.style.animation='none';_el.offsetHeight;_el.style.animation='';}
 }
 
 /* ══════════════════════════════════════
@@ -2929,8 +1277,8 @@ function renderMasks(){
     if(activeSkinType==='all')return true;
     return m.skinTypes.includes(activeSkinType)||m.skinTypes.includes('all');
   });
-  document.getElementById('maskGrid').innerHTML=filtered.map((m,i)=>`
-    <div class="mask-card card-enter" style="animation-delay:${i*40}ms" onclick="openMaskModal(${m.id})">
+  document.getElementById('maskGrid').innerHTML=filtered.map(m=>`
+    <div class="mask-card" onclick="openMaskModal(${m.id})">
       <div class="mask-banner" style="background:${m.color}">${m.emoji}</div>
       <div class="mask-body">
         <h3 class="mask-name">${m.name}</h3>
@@ -2940,7 +1288,6 @@ function renderMasks(){
           <span class="badge-time">⏱ ${m.time}</span>
         </div>
       </div>
-      <div class="ingr-pills">${m.ingredients.slice(0,4).map(i=>`<span class="ingr-pill">${i.emoji} ${i.item}</span>`).join('')}</div>
       <div class="mask-footer">
         <span class="mask-hint">🧴 ${m.ingredients.length} ingredients</span>
         <span class="mask-cta">See recipe →</span>
@@ -3010,7 +1357,6 @@ function renderMeals(){
           ${m.concerns.map(c=>{const cl=concernLabels.find(l=>l.val===c);return cl?`<span class="badge-concern">${cl.label}</span>`:''}).join('')}
         </div>
       </div>
-      <div class="ingr-pills">${m.ingredients.slice(0,4).map(i=>`<span class="ingr-pill">${i.emoji} ${i.item}</span>`).join('')}</div>
       <div class="meal-footer">
         <span class="meal-hint">🍴 ${m.ingredients.length} ingredients</span>
         <span class="meal-cta">See recipe →</span>
@@ -3039,89 +1385,6 @@ function openMealModal(id){
 function closeMealModal(){document.getElementById('mealOverlay').classList.remove('open');document.body.style.overflow='';}
 
 /* ══════════════════════════════════════
-   REMINDERS
-══════════════════════════════════════ */
-let reminders;
-if(localStorage.getItem('glowbiteReminders')===null){
-  reminders=[{id:Date.now(),text:'💧 Drink water',time:'09:00',repeat:'daily'}];
-  localStorage.setItem('glowbiteReminders',JSON.stringify(reminders));
-}else{
-  reminders=JSON.parse(localStorage.getItem('glowbiteReminders'));
-}
-const remFiredToday={};
-
-function saveReminders(){localStorage.setItem('glowbiteReminders',JSON.stringify(reminders));}
-
-function addReminder(){
-  const text=document.getElementById('remText').value.trim();
-  const time=document.getElementById('remTime').value;
-  const repeat=document.getElementById('remRepeat').value;
-  if(!text||!time)return;
-  reminders.push({id:Date.now(),text,time,repeat});
-  saveReminders();
-  document.getElementById('remText').value='';
-  document.getElementById('remTime').value='';
-  renderReminders();
-  if('Notification' in window && Notification.permission==='default'){Notification.requestPermission();}
-}
-
-function deleteReminder(id){
-  reminders=reminders.filter(r=>r.id!==id);
-  saveReminders();
-  renderReminders();
-}
-
-function renderReminders(){
-  const list=document.getElementById('remList');
-  if(!reminders.length){
-    list.innerHTML='<div class="rem-empty"><div class="nre">⏰</div><h3>No reminders yet</h3><p>Add one above to stay consistent with your glow routine.</p></div>';
-    return;
-  }
-  const sorted=[...reminders].sort((a,b)=>a.time.localeCompare(b.time));
-  list.innerHTML=sorted.map(r=>`
-    <div class="rem-card">
-      <span class="rem-emoji">${r.repeat==='daily'?'🔁':'⏰'}</span>
-      <div class="rem-info">
-        <div class="rem-text">${r.text}</div>
-        <div class="rem-meta">${r.time} · ${r.repeat==='daily'?'Repeats daily':'One-time'}</div>
-      </div>
-      <button class="rem-del" onclick="deleteReminder(${r.id})">✕</button>
-    </div>`).join('');
-}
-
-function checkReminders(){
-  const now=new Date();
-  const hhmm=now.toTimeString().slice(0,5);
-  const todayKey=now.toDateString();
-  reminders.forEach(r=>{
-    if(r.time!==hhmm)return;
-    const fireKey=r.id+'_'+todayKey;
-    if(remFiredToday[fireKey])return;
-    remFiredToday[fireKey]=true;
-    if('Notification' in window && Notification.permission==='granted'){
-      new Notification('✨ GlowBite Reminder',{body:r.text});
-    }else{
-      alert('✨ GlowBite Reminder: '+r.text);
-    }
-    if(r.repeat==='once'){
-      reminders=reminders.filter(x=>x.id!==r.id);
-      saveReminders();
-      renderReminders();
-    }
-  });
-}
-
-function updateNotifyNote(){
-  const note=document.getElementById('remNotifyNote');
-  if(!('Notification' in window)){note.textContent='Browser notifications are not supported here — reminders will show as alerts.';return;}
-  if(Notification.permission==='granted'){note.textContent='🔔 Browser notifications are enabled.';}
-  else if(Notification.permission==='denied'){note.textContent='🔕 Notifications are blocked — reminders will show as alerts instead.';}
-  else{note.textContent='Allow notifications when prompted so reminders can alert you even on another tab.';}
-}
-
-setInterval(checkReminders,1000*30);
-
-/* ══════════════════════════════════════
    EVENTS
 ══════════════════════════════════════ */
 document.getElementById('searchInput').addEventListener('input',e=>{query=e.target.value;renderFoods();});
@@ -3130,351 +1393,17 @@ document.getElementById('halalToggle').addEventListener('change',e=>{halalOnly=e
 document.getElementById('foodOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('foodOverlay'))closeFoodModal();});
 document.getElementById('maskOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('maskOverlay'))closeMaskModal();});
 document.getElementById('mealOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('mealOverlay'))closeMealModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();closeSidebar();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();}});
 
 /* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
-renderGlowTip();
-renderHome();
 renderFoods();
-renderGlowPicks();
-
-/* ══════════════════════════════════════
-   SPLASH SCREEN
-══════════════════════════════════════ */
-window.addEventListener('load',()=>{
-  const splash=document.getElementById('splash');
-
-  // Generate sparkle particles
-  const colours=['#fff','#FFD6EC','#E8CFFF','#C4E0FF','#FFEAA7','#FFB3DE'];
-  const emojis=['✨','⭐','💫','🌟','✦','·'];
-  for(let i=0;i<28;i++){
-    const el=document.createElement('span');
-    el.className='splash-sparkle';
-    const size=Math.random()*18+6;
-    const angle=Math.random()*Math.PI*2;
-    const dist=Math.random()*160+60;
-    const isEmoji=Math.random()>.5;
-    if(isEmoji){
-      el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-      el.style.cssText=`font-size:${size}px;left:${40+Math.random()*20}%;top:${30+Math.random()*20}%;`;
-    }else{
-      el.style.cssText=`width:${size}px;height:${size}px;background:${colours[Math.floor(Math.random()*colours.length)]};left:${40+Math.random()*20}%;top:${30+Math.random()*20}%;box-shadow:0 0 ${size}px ${colours[Math.floor(Math.random()*colours.length)]};`;
-    }
-    el.style.setProperty('--tx', Math.round(Math.cos(angle)*dist)+'px');
-    el.style.setProperty('--ty', Math.round(Math.sin(angle)*dist)+'px');
-    el.style.setProperty('--rot', Math.round(Math.random()*360)+'deg');
-    el.style.setProperty('--dur', (.8+Math.random()*1.2).toFixed(2)+'s');
-    el.style.setProperty('--delay', (Math.random()*1.2).toFixed(2)+'s');
-    splash.appendChild(el);
-  }
-
-  setTimeout(()=>splash.classList.add('hidden'),2400);
-});
-
-/* ══════════════════════════════════════
-   INSTALL / FULLSCREEN
-══════════════════════════════════════ */
-let deferredInstallPrompt=null;
-const isStandalone=()=>window.matchMedia('(display-mode:standalone)').matches||window.navigator.standalone;
-
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  deferredInstallPrompt=e;
-  if(!isStandalone()&&!sessionStorage.getItem('installDismissed')){
-    document.getElementById('installBanner').style.display='flex';
-  }
-});
-
-function triggerInstall(){
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    deferredInstallPrompt.userChoice.then(()=>{deferredInstallPrompt=null;dismissInstallBanner();});
-  }else{
-    alert('To install GlowBite:\n\n1. Tap the Share button in Safari\n2. Tap "Add to Home Screen"\n3. Tap Add');
-  }
-}
-
-function dismissInstallBanner(){
-  document.getElementById('installBanner').style.display='none';
-  sessionStorage.setItem('installDismissed','1');
-}
-
-function toggleFullscreen(){
-  const btn=document.getElementById('fsBtn');
-  if(!document.fullscreenElement){
-    document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();
-    btn.textContent='✕';btn.title='Exit full screen';
-  }else{
-    document.exitFullscreen&&document.exitFullscreen();
-    btn.textContent='⛶';btn.title='Full screen';
-  }
-}
-document.addEventListener('fullscreenchange',()=>{
-  if(!document.fullscreenElement)document.getElementById('fsBtn').textContent='⛶';
-});
-
-// Show install banner on iOS Safari if not already installed
-if(!isStandalone()&&/iphone|ipad|ipod/i.test(navigator.userAgent)&&!sessionStorage.getItem('installDismissed')){
-  setTimeout(()=>{document.getElementById('installBanner').style.display='flex';},2000);
-}
-
-/* ══════════════════════════════════════
-   SKIN JOURNAL
-══════════════════════════════════════ */
-let journalEntries = JSON.parse(localStorage.getItem('glowbiteJournal') || '[]');
-let editingJournalId = null;
-let journalPhotoB64 = null;
-
-function vibe(pattern){if(navigator.vibrate)navigator.vibrate(pattern);}
-
-function openJournalModal(id){
-  editingJournalId = id || null;
-  journalPhotoB64 = null;
-  const overlay = document.getElementById('journalOverlay');
-  document.getElementById('jmodalTitle').textContent = id ? 'Edit Entry' : "Today's Skin Entry";
-  document.getElementById('jNotes').value = '';
-  document.getElementById('jPhotoPreview').style.display = 'none';
-  document.getElementById('jPhotoPreview').src = '';
-  document.querySelectorAll('.rating-opt').forEach(b=>b.classList.remove('sel'));
-  document.querySelectorAll('.skin-tag-opt').forEach(b=>b.classList.remove('sel'));
-
-  if(id){
-    const entry = journalEntries.find(e=>e.id===id);
-    if(entry){
-      document.querySelectorAll('.rating-opt').forEach(b=>{if(b.dataset.val===entry.rating)b.classList.add('sel');});
-      (entry.tags||[]).forEach(t=>{document.querySelectorAll('.skin-tag-opt').forEach(b=>{if(b.dataset.val===t)b.classList.add('sel');});});
-      document.getElementById('jNotes').value = entry.notes || '';
-      if(entry.photo){
-        journalPhotoB64 = entry.photo;
-        const pv = document.getElementById('jPhotoPreview');
-        pv.src = entry.photo;
-        pv.style.display = 'block';
-      }
-    }
-  }
-  overlay.classList.add('open');
-  vibe(30);
-}
-
-function closeJournalModal(){
-  document.getElementById('journalOverlay').classList.remove('open');
-  vibe(15);
-}
-
-function handleJournalPhoto(input){
-  const file = input.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    journalPhotoB64 = e.target.result;
-    const pv = document.getElementById('jPhotoPreview');
-    pv.src = journalPhotoB64;
-    pv.style.display = 'block';
-    vibe([20,10,20]);
-  };
-  reader.readAsDataURL(file);
-}
-
-function saveJournalEntry(){
-  const rating = document.querySelector('.rating-opt.sel')?.dataset.val || '';
-  const tags = [...document.querySelectorAll('.skin-tag-opt.sel')].map(b=>b.dataset.val);
-  const notes = document.getElementById('jNotes').value.trim();
-  if(!rating && !notes){vibe([40,20,40]);alert('Add a skin rating or a note first.');return;}
-
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-  const timeStr = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-
-  if(editingJournalId){
-    const idx = journalEntries.findIndex(e=>e.id===editingJournalId);
-    if(idx>-1){
-      journalEntries[idx] = {...journalEntries[idx], rating, tags, notes, photo: journalPhotoB64||journalEntries[idx].photo};
-    }
-  } else {
-    journalEntries.unshift({id:Date.now(), date:dateStr, time:timeStr, rating, tags, notes, photo:journalPhotoB64});
-  }
-
-  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));
-  closeJournalModal();
-  renderJournal();
-  vibe([30,20,60]);
-}
-
-function deleteJournalEntry(id){
-  if(!confirm('Delete this journal entry?')) return;
-  journalEntries = journalEntries.filter(e=>e.id!==id);
-  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));
-  renderJournal();
-  vibe([20,10,20,10,40]);
-}
-
-function renderJournal(){
-  const container = document.getElementById('journalEntries');
-  if(!container) return;
-  if(!journalEntries.length){
-    container.innerHTML = '<div class="journal-empty"><div class="je-icon">📓</div><p>No entries yet.<br>Start tracking your skin today!</p></div>';
-    return;
-  }
-  const ratingEmoji = r => r ? r.split(' ')[0] : '📝';
-  container.innerHTML = journalEntries.map(e=>`
-    <div class="journal-card" id="jcard-${e.id}">
-      <div class="jc-header">
-        <div class="jc-rating">${ratingEmoji(e.rating)}</div>
-        <div class="jc-meta">
-          <div class="jc-date">${e.date}${e.time?' · '+e.time:''}</div>
-          <div class="jc-mood">${e.rating||'No rating'}</div>
-        </div>
-        <div class="jc-actions">
-          <button class="jc-edit-btn" onclick="openJournalModal(${e.id})" title="Edit">✏️</button>
-          <button class="jc-del-btn" onclick="deleteJournalEntry(${e.id})" title="Delete">🗑️</button>
-        </div>
-      </div>
-      ${e.notes||e.tags?.length ? `<div class="jc-body">
-        ${e.notes?`<div class="jc-note">${e.notes}</div>`:''}
-        ${e.tags?.length?`<div class="jc-skin-row">${e.tags.map(t=>`<span class="jc-skin-tag">${t}</span>`).join('')}</div>`:''}
-      </div>`:''}
-      ${e.photo?`<img class="jc-photo" src="${e.photo}" alt="Skin photo" onclick="openPhotoViewer('${e.id}')">`:''}
-    </div>
-  `).join('');
-}
-
-function openPhotoViewer(id){
-  const entry = journalEntries.find(e=>e.id==id);
-  if(!entry?.photo) return;
-  const ov = document.createElement('div');
-  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer';
-  ov.innerHTML=`<img src="${entry.photo}" style="max-width:96vw;max-height:96vh;border-radius:12px;object-fit:contain">`;
-  ov.onclick=()=>document.body.removeChild(ov);
-  document.body.appendChild(ov);
-  vibe(20);
-}
-
-// Rating & tag toggle
-document.getElementById('ratingRow').addEventListener('click',e=>{
-  const btn = e.target.closest('.rating-opt');
-  if(!btn) return;
-  document.querySelectorAll('.rating-opt').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  vibe(25);
-});
-document.getElementById('skinTagRow').addEventListener('click',e=>{
-  const btn = e.target.closest('.skin-tag-opt');
-  if(!btn) return;
-  btn.classList.toggle('sel');
-  vibe(20);
-});
-
-// Close journal modal on overlay tap outside modal
-document.getElementById('journalOverlay').addEventListener('click',e=>{
-  if(e.target===document.getElementById('journalOverlay')) closeJournalModal();
-});
-
-renderJournal();
-
-/* FLOATING FRUITS */
-(function(){
-  const fruits=['🍓','🥑','🍋','🍇','🍊','🥝','🍑','🫐','🍒','🥭','🍍','🌿','🫚','🍅','🥕','🌸','🍈','🥦'];
-  const layer=document.getElementById('fruitLayer');
-  const items=[
-    {e:'🍓',x:'8%', y:'15%',sz:'2.2rem',op:.22,dur:'8s', del:'0s',  ty:'-38px',rot:'-10deg',bdur:'3.8s'},
-    {e:'🥑',x:'78%',y:'10%',sz:'2.6rem',op:.18,dur:'11s',del:'1.2s',ty:'-44px',rot:'8deg', bdur:'5s'},
-    {e:'🍋',x:'55%',y:'22%',sz:'1.9rem',op:.20,dur:'9s', del:'0.5s',ty:'-32px',rot:'15deg',bdur:'4.2s'},
-    {e:'🍇',x:'90%',y:'35%',sz:'2.4rem',op:.17,dur:'13s',del:'2s',  ty:'-50px',rot:'-6deg',bdur:'6s'},
-    {e:'🍊',x:'3%', y:'55%',sz:'2rem',  op:.21,dur:'10s',del:'3s',  ty:'-36px',rot:'12deg',bdur:'4.5s'},
-    {e:'🥝',x:'40%',y:'70%',sz:'2.2rem',op:.19,dur:'7s', del:'0.8s',ty:'-28px',rot:'-14deg',bdur:'3.5s'},
-    {e:'🍑',x:'65%',y:'60%',sz:'2.5rem',op:.16,dur:'14s',del:'4s',  ty:'-46px',rot:'6deg', bdur:'7s'},
-    {e:'🫐',x:'22%',y:'82%',sz:'1.8rem',op:.22,dur:'8s', del:'1.8s',ty:'-34px',rot:'-8deg',bdur:'4s'},
-    {e:'🍒',x:'82%',y:'78%',sz:'2rem',  op:.18,dur:'12s',del:'2.5s',ty:'-40px',rot:'10deg',bdur:'5.5s'},
-    {e:'🥭',x:'30%',y:'40%',sz:'2.8rem',op:.14,dur:'16s',del:'5s',  ty:'-52px',rot:'-5deg',bdur:'8s'},
-    {e:'🍍',x:'50%',y:'88%',sz:'2.3rem',op:.17,dur:'11s',del:'3.5s',ty:'-42px',rot:'7deg', bdur:'5.2s'},
-    {e:'🌿',x:'15%',y:'30%',sz:'2rem',  op:.20,dur:'9s', del:'1s',  ty:'-30px',rot:'-18deg',bdur:'4.8s'},
-    {e:'🍅',x:'72%',y:'48%',sz:'1.9rem',op:.18,dur:'10s',del:'2.8s',ty:'-36px',rot:'14deg',bdur:'4.4s'},
-    {e:'🥕',x:'48%',y:'5%', sz:'2.1rem',op:.16,dur:'13s',del:'4.5s',ty:'-44px',rot:'-9deg',bdur:'6.2s'},
-    {e:'🌸',x:'92%',y:'18%',sz:'2.4rem',op:.20,dur:'8s', del:'0.3s',ty:'-38px',rot:'20deg',bdur:'3.6s'},
-  ];
-  items.forEach(f=>{
-    const el=document.createElement('span');
-    el.className='fruit';
-    el.textContent=f.e;
-    el.style.cssText=`left:${f.x};top:${f.y};--fsz:${f.sz};--fop:${f.op};--fdur:${f.dur};--fdel:${f.del};--fty:${f.ty};--frot:${f.rot};--fbdur:${f.bdur}`;
-    el.addEventListener('click',()=>{
-      el.classList.add('burst');
-      if(navigator.vibrate)navigator.vibrate(30);
-      setTimeout(()=>{el.classList.remove('burst');},520);
-    });
-    layer.appendChild(el);
-  });
-})();
-
-/* BACKGROUND BUBBLES */
-(function(){
-  const colours=['#C44DFF','#FF6B9D','#4D79FF','#FFB3DE','#A78BFA','#67E8F9','#FDE68A'];
-  const wrap=document.getElementById('bgBubbles');
-  const bubbles=[
-    {s:320,x:'12%',y:'8%',bx:'28px',by:'-22px',bs:1.08,dur:'14s',del:'0s'},
-    {s:180,x:'72%',y:'5%',bx:'-18px',by:'24px',bs:1.12,dur:'11s',del:'1.5s'},
-    {s:240,x:'85%',y:'38%',bx:'20px',by:'-28px',bs:1.06,dur:'16s',del:'3s'},
-    {s:140,x:'5%',y:'42%',bx:'16px',by:'20px',bs:1.15,dur:'9s',del:'0.8s'},
-    {s:280,x:'45%',y:'62%',bx:'-24px',by:'-18px',bs:1.09,dur:'13s',del:'2.2s'},
-    {s:200,x:'20%',y:'75%',bx:'22px',by:'16px',bs:1.07,dur:'18s',del:'4s'},
-    {s:160,x:'65%',y:'80%',bx:'-16px',by:'-24px',bs:1.13,dur:'10s',del:'1s'},
-    {s:360,x:'38%',y:'20%',bx:'14px',by:'22px',bs:1.05,dur:'20s',del:'5s'},
-    {s:120,x:'90%',y:'68%',bx:'-20px',by:'18px',bs:1.18,dur:'8s',del:'2.8s'},
-    {s:220,x:'55%',y:'90%',bx:'18px',by:'-20px',bs:1.1,dur:'15s',del:'3.5s'},
-  ];
-  bubbles.forEach((b,i)=>{
-    const el=document.createElement('div');
-    el.className='bg-bubble';
-    el.style.cssText=`width:${b.s}px;height:${b.s}px;left:${b.x};top:${b.y};background:${colours[i%colours.length]};--bx:${b.bx};--by:${b.by};--bs:${b.bs};--bdur:${b.dur};--bdel:${b.del};filter:blur(${Math.round(b.s*.28)}px)`;
-    wrap.appendChild(el);
-  });
-})();
-
-// Sparkle canvas
-(function(){
-  const cv=document.getElementById('sparkle-canvas');
-  if(!cv)return;
-  const cx=cv.getContext('2d');
-  let W,H,pts=[];
-  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  const COLS=['#E040FB','#FFB800','#00E5CC','#FF6B6B','#C8FF57','#ffffff'];
-  function mk(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.4,vx:(Math.random()-.5)*.25,vy:-Math.random()*.4-.08,a:Math.random()*.5+.15,c:COLS[Math.floor(Math.random()*COLS.length)],life:Math.random()*180+80,age:0,tw:Math.random()*Math.PI*2};}
-  for(let i=0;i<50;i++)pts.push(mk());
-  function draw(){
-    cx.clearRect(0,0,W,H);
-    pts.forEach((p,i)=>{
-      p.age++;p.x+=p.vx;p.y+=p.vy;p.tw+=.05;
-      const a=p.a*Math.sin(p.tw)*(1-p.age/p.life);
-      if(a<=0||p.age>=p.life){pts[i]=mk();return;}
-      cx.save();cx.globalAlpha=Math.max(0,a);cx.fillStyle=p.c;
-      cx.shadowBlur=5;cx.shadowColor=p.c;
-      cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fill();cx.restore();
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-
-/* Update glow score widget counts */
-(function(){
-  function updateGlowWidget(){
-    if(typeof renderHome==='function')renderHome();
-  }
-  updateGlowWidget();
-  window.updateGlowWidget=updateGlowWidget;
-})();
-
-if('serviceWorker' in navigator){
-  // Unregister old service workers and clear all caches to force fresh load
-  navigator.serviceWorker.getRegistrations().then(regs=>{
-    regs.forEach(r=>r.unregister());
-  });
-  caches.keys().then(keys=>keys.forEach(k=>caches.delete(k)));
-  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
-}
+renderPhaseButtons();
+renderSkinTypeFilter();
+renderMasks();
+renderConcernFilter();
+renderMeals();
 </script>
 </body>
 </html>

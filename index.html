@@ -3058,26 +3058,37 @@ try{
   }
 }catch(e){console.warn('Supabase init failed',e);}
 
+function showLogin(){
+  document.getElementById('loginScreen').classList.remove('hidden');
+}
+
 async function initAuth(){
+  // Failsafe: always show login within 3 seconds no matter what
+  const fallback=setTimeout(showLogin, 3000);
+
   if(!supabase){
-    // CDN failed to load — open app in guest mode silently
-    document.getElementById('loginScreen').classList.remove('hidden');
+    clearTimeout(fallback);
+    showLogin();
     return;
   }
   try{
-    const{data:{session}}=await supabase.auth.getSession();
+    const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),2800));
+    const authCheck=supabase.auth.getSession();
+    const{data:{session}}=await Promise.race([authCheck,timeout]);
+    clearTimeout(fallback);
     if(session){
       currentUser=session.user;
       onSignedIn(session.user);
     }else{
-      document.getElementById('loginScreen').classList.remove('hidden');
+      showLogin();
     }
     supabase.auth.onAuthStateChange((_event,session)=>{
       if(session){currentUser=session.user;onSignedIn(session.user);}
     });
   }catch(e){
+    clearTimeout(fallback);
     console.warn('Auth check failed',e);
-    document.getElementById('loginScreen').classList.remove('hidden');
+    showLogin();
   }
 }
 

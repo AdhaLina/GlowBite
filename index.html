@@ -3095,31 +3095,13 @@ async function initAuth(){
   }
 }
 
-async function signInWithGoogle(){
+function signInWithGoogle(){
   const loadEl=document.getElementById('loginLoading');
-  if(!supabase){
-    // Supabase CDN not ready yet — try initialising once more
-    tryInitSupabase();
-    if(!supabase){
-      loadEl.textContent='Connection error — please try again in a moment';
-      loadEl.style.display='block';
-      setTimeout(()=>{loadEl.style.display='none';loadEl.textContent='Signing you in…';},3000);
-      return;
-    }
-  }
   loadEl.textContent='Signing you in…';
   loadEl.style.display='block';
-  try{
-    const redirectTo=window.location.origin+window.location.pathname;
-    await supabase.auth.signInWithOAuth({
-      provider:'google',
-      options:{redirectTo}
-    });
-  }catch(e){
-    loadEl.style.display='none';
-    console.warn('OAuth failed',e);
-    alert('Sign-in failed: '+e.message);
-  }
+  // Direct OAuth redirect — no library needed
+  const redirectTo=encodeURIComponent('https://adhalina.github.io/GlowBite');
+  window.location.href='https://'+SUPA_URL.split('//')[1]+'/auth/v1/authorize?provider=google&redirect_to='+redirectTo;
 }
 
 function onSignedIn(user){

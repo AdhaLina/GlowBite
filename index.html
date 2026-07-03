@@ -3048,32 +3048,51 @@ function renderJournalEntries(){renderJournal();}
 ══════════════════════════════════════ */
 const SUPA_URL='https://gbiinonyapnsnjcesedn.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdiaWlub255YXBuc25qY2VzZWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTE0OTksImV4cCI6MjA5ODY2NzQ5OX0.Ma1lvSCsI4vbqRGJrZFoWh0Xz8gvDcWtthlLvWCWqnQ';
-const supabase=window.supabase.createClient(SUPA_URL,SUPA_KEY);
 
+let supabase=null;
 let currentUser=null;
 
-async function initAuth(){
-  const{data:{session}}=await supabase.auth.getSession();
-  if(session){
-    currentUser=session.user;
-    onSignedIn(session.user);
-  }else{
-    document.getElementById('loginScreen').classList.remove('hidden');
+try{
+  if(window.supabase){
+    supabase=window.supabase.createClient(SUPA_URL,SUPA_KEY);
   }
-  supabase.auth.onAuthStateChange((_event,session)=>{
+}catch(e){console.warn('Supabase init failed',e);}
+
+async function initAuth(){
+  if(!supabase){
+    // CDN failed to load — open app in guest mode silently
+    document.getElementById('loginScreen').classList.remove('hidden');
+    return;
+  }
+  try{
+    const{data:{session}}=await supabase.auth.getSession();
     if(session){
       currentUser=session.user;
       onSignedIn(session.user);
+    }else{
+      document.getElementById('loginScreen').classList.remove('hidden');
     }
-  });
+    supabase.auth.onAuthStateChange((_event,session)=>{
+      if(session){currentUser=session.user;onSignedIn(session.user);}
+    });
+  }catch(e){
+    console.warn('Auth check failed',e);
+    document.getElementById('loginScreen').classList.remove('hidden');
+  }
 }
 
 async function signInWithGoogle(){
+  if(!supabase)return;
   document.getElementById('loginLoading').style.display='block';
-  await supabase.auth.signInWithOAuth({
-    provider:'google',
-    options:{redirectTo:window.location.href}
-  });
+  try{
+    await supabase.auth.signInWithOAuth({
+      provider:'google',
+      options:{redirectTo:window.location.href}
+    });
+  }catch(e){
+    document.getElementById('loginLoading').style.display='none';
+    console.warn('OAuth failed',e);
+  }
 }
 
 function onSignedIn(user){
@@ -3114,6 +3133,7 @@ function showAccountInfo(){
 }
 
 function signOut(){
+  if(!supabase)return;
   supabase.auth.signOut().then(()=>{
     currentUser=null;
     localStorage.removeItem('glowbiteName');

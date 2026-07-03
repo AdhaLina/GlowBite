@@ -474,109 +474,6 @@ button,input,select{font-size:16px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .card-enter{opacity:0;transform:translateY(20px);animation:cardEnter .35s ease forwards}
 @keyframes cardEnter{to{opacity:1;transform:translateY(0)}}
-
-/* ── BOTTOM TAB BAR ── */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(18,8,26,.88);border-top:1px solid rgba(255,255,255,.1);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;padding:0 0 env(safe-area-inset-bottom)}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:.6rem .25rem .5rem;border:none;background:none;cursor:pointer;color:rgba(255,255,255,.35);font-size:.58rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;transition:color .18s}
-.tab-btn .tab-icon{font-size:1.35rem;line-height:1;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
-.tab-btn.active{color:#FF3E9A}
-.tab-btn.active .tab-icon{transform:scale(1.18)}
-
-/* ── COMPACT TOP BAR ── */
-.top-bar{position:fixed;top:0;left:0;right:0;z-index:10;padding:calc(env(safe-area-inset-top) + .55rem) 1.1rem .55rem;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
-.top-bar-brand{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.15rem;font-weight:800;background:linear-gradient(100deg,#fff 30%,#FFD9EC 60%,#C6FF3D 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.top-bar-avatar{width:36px;height:36px;border-radius:11px;background:var(--grad-btn);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:14px;font-weight:800;color:#fff;pointer-events:all;cursor:pointer;flex-shrink:0}
-
-/* ── HOME SECTION ── */
-.home-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 1.1rem calc(5.5rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1rem}
-.home-greeting-row{display:flex;align-items:flex-start;justify-content:space-between}
-.home-date{font-size:.75rem;color:rgba(255,255,255,.4);font-weight:600;margin-bottom:.2rem}
-.home-greeting{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-.02em}
-.home-avatar{width:44px;height:44px;border-radius:14px;background:var(--grad-btn);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:17px;font-weight:800;color:#fff;flex-shrink:0}
-/* glow score hero card (home) */
-.home-glow-card{border-radius:28px;padding:22px;background:linear-gradient(155deg,rgba(255,107,107,.18),rgba(123,47,247,.22));border:1px solid rgba(255,255,255,.12);overflow:hidden;position:relative}
-.home-glow-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,61,.35),transparent 70%);pointer-events:none}
-.home-glow-inner{display:flex;align-items:center;gap:18px;position:relative}
-.home-dial{position:relative;width:110px;height:110px;border-radius:50%;background:conic-gradient(#C6FF3D 0deg,#FFC857 90deg,#FF6B6B 200deg,#7B2FF7 300deg,#C6FF3D 360deg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.home-dial-inner{width:86px;height:86px;border-radius:50%;background:#1B1024;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.home-dial-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:28px;font-weight:800;color:#fff;line-height:1}
-.home-dial-lbl{font-size:9px;color:rgba(255,255,255,.5);font-weight:700;letter-spacing:.05em;margin-top:1px}
-.home-score-pts{font-size:13px;font-weight:700;color:#C6FF3D;margin-bottom:5px}
-.home-score-desc{font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.5}
-/* streak row */
-.home-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.home-stat-card{border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:1rem;display:flex;flex-direction:column;gap:5px}
-.home-stat-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:22px;font-weight:800;line-height:1}
-.home-stat-lbl{font-size:11.5px;color:rgba(255,255,255,.5);font-weight:600}
-/* scan CTA */
-.home-scan-btn{width:100%;border:none;border-radius:20px;padding:17px;background:var(--grad-btn);color:#fff;font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.01em;box-shadow:0 12px 30px rgba(255,62,154,.35);cursor:pointer;transition:transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
-.home-scan-btn:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(255,62,154,.45)}
-/* picks */
-.home-picks-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
-.home-picks-title{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.05rem;font-weight:700;color:#fff}
-.home-picks-see{font-size:.75rem;color:rgba(255,255,255,.4);font-weight:600;cursor:pointer}
-.home-picks-scroll{display:flex;gap:.75rem;overflow-x:auto;padding-bottom:.3rem;scrollbar-width:none}
-.home-picks-scroll::-webkit-scrollbar{display:none}
-.home-pick-item{flex:0 0 108px;display:flex;flex-direction:column;gap:.5rem}
-.home-pick-banner{width:108px;height:84px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0}
-.home-pick-name{font-size:.8rem;font-weight:700;color:#fff}
-.home-pick-badge{display:inline-flex;width:fit-content;font-size:.65rem;font-weight:800;color:#12081a;background:#C6FF3D;padding:.18rem .55rem;border-radius:50px}
-
-/* ── FOODS SECTION (updated) ── */
-.foods-page-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 0 calc(5.5rem + env(safe-area-inset-bottom))}
-.foods-page-hdr{padding:0 1.1rem .5rem}
-.foods-page-hdr h2{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em}
-.foods-page-hdr p{font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.2rem}
-
-/* ── PROGRESS (gradient bars) ── */
-.bar-fill-grad{width:100%;border-radius:6px;background:linear-gradient(180deg,#FF6B6B,#7B2FF7);transition:height .6s cubic-bezier(.34,1.56,.64,1)}
-.bar-fill-today2{background:linear-gradient(180deg,#C6FF3D,#7B2FF7) !important}
-.bar-fill-empty{background:rgba(255,255,255,.15) !important}
-.progress-avg{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:.9rem;font-weight:800;color:#C6FF3D}
-
-/* ── RECIPES SECTION ── */
-.recipes-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 1.1rem calc(5.5rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1.1rem}
-.recipes-hdr h2{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em}
-.recipes-hdr p{font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.2rem}
-.recipes-tab-row{display:flex;gap:.5rem}
-.recipes-tab{flex:1;text-align:center;padding:.7rem;border-radius:14px;border:none;cursor:pointer;font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:.85rem;font-weight:800;transition:background .2s,color .2s}
-.recipes-tab.active{background:var(--grad-btn);color:#fff;box-shadow:0 6px 18px rgba(255,62,154,.3)}
-.recipes-tab:not(.active){background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
-.recipes-panel{display:none}.recipes-panel.active{display:flex;flex-direction:column;gap:.9rem}
-/* recipe card with image banner */
-.rec-card{border-radius:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);overflow:hidden;cursor:pointer;transition:transform .2s}
-.rec-card:active{transform:scale(.97)}
-.rec-banner{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative}
-.rec-body{padding:1rem;display:flex;flex-direction:column;gap:.6rem}
-.rec-title-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-.rec-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1rem;font-weight:800;color:#fff;flex:1}
-.rec-time-badge{font-size:.65rem;font-weight:800;color:#12081a;background:#C6FF3D;padding:.22rem .6rem;border-radius:50px;flex-shrink:0}
-.rec-desc{font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.5}
-.rec-chips{display:flex;flex-wrap:wrap;gap:.35rem}
-.rec-chip{font-size:.65rem;font-weight:700;color:#fff;background:rgba(255,255,255,.1);padding:.22rem .6rem;border-radius:50px}
-/* list-style food card for foods page */
-.food-list-card{display:flex;align-items:center;gap:.9rem;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:.85rem;cursor:pointer;transition:transform .15s;position:relative}
-.food-list-card:active{transform:scale(.97)}
-.food-list-emoji{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.9rem;flex-shrink:0}
-.food-list-info{flex:1;min-width:0}
-.food-list-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:.9rem;font-weight:800;color:#fff}
-.food-list-sub{font-size:.72rem;color:rgba(255,255,255,.45);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.food-list-score{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:1rem;font-weight:800;color:#C6FF3D;flex-shrink:0}
-
-/* ── MORE SECTION ── */
-.more-wrap{padding:calc(env(safe-area-inset-top) + 3.8rem) 1.1rem calc(5.5rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:.75rem}
-.more-hdr{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:.4rem}
-.more-link{display:flex;align-items:center;gap:.85rem;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:1rem 1.1rem;cursor:pointer;transition:background .15s}
-.more-link:hover{background:rgba(255,255,255,.1)}
-.more-link-icon{font-size:1.5rem;flex-shrink:0}
-.more-link-text{flex:1}
-.more-link-name{font-size:.9rem;font-weight:700;color:#fff}
-.more-link-sub{font-size:.72rem;color:rgba(255,255,255,.4);margin-top:.1rem}
-.more-link-arrow{color:rgba(255,255,255,.3);font-size:.85rem}
-.more-back-btn{display:flex;align-items:center;gap:.5rem;background:none;border:none;color:rgba(255,255,255,.55);font-size:.85rem;font-weight:700;cursor:pointer;padding:.2rem 0;margin-bottom:.4rem}
-
-/* hide old sidebar elements */
-.header,.main-nav,.sidebar-overlay,.menu-dot-btn,.fullscreen-btn{display:none!important}
 </style>
 </head>
 <body>
@@ -606,71 +503,38 @@ button,input,select{font-size:16px}
   <button class="install-dismiss" onclick="dismissInstallBanner()">✕</button>
 </div>
 
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="top-bar-brand">GlowBite ✦</div>
-  <div class="top-bar-avatar" id="topAvatar">G</div>
-</div>
+<header class="header">
+  <button class="menu-dot-btn" onclick="openSidebar()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fsBtn" title="Full screen">⛶</button>
+  <h1><em class="sparkle">Glow</em>Bite ✦</h1>
+  <p>Eat your way to glowing skin</p>
+</header>
 
-<!-- BOTTOM TAB BAR -->
-<nav class="bottom-nav" id="bottomNav">
-  <button class="tab-btn active" id="tab-home" onclick="switchTab('home',this)"><span class="tab-icon">🏠</span>Home</button>
-  <button class="tab-btn" id="tab-foods" onclick="switchTab('foods',this)"><span class="tab-icon">🥗</span>Foods</button>
-  <button class="tab-btn" id="tab-progress" onclick="switchTab('progress',this)"><span class="tab-icon">📈</span>Progress</button>
-  <button class="tab-btn" id="tab-recipes" onclick="switchTab('recipes',this)"><span class="tab-icon">🧖</span>Recipes</button>
-  <button class="tab-btn" id="tab-more" onclick="switchTab('more',this)"><span class="tab-icon">⋯</span>More</button>
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- LEFT SIDEBAR NAV -->
+<nav class="main-nav" id="mainNav">
+  <div class="sidebar-brand">
+    <span class="sidebar-brand-icon">✨</span>
+    <div>
+      <div class="sidebar-brand-name">GlowBite</div>
+      <div class="sidebar-brand-sub">Foods for glowing skin</div>
+    </div>
+  </div>
+  <button class="nav-btn active" onclick="switchSection('foods',this)"><span class="nb-icon">🥗</span>Foods</button>
+  <button class="nav-btn" onclick="switchSection('progress',this)"><span class="nb-icon">📈</span>Progress</button>
+  <button class="nav-btn" onclick="switchSection('period',this)"><span class="nb-icon">🌙</span>Period Guide</button>
+  <button class="nav-btn" onclick="switchSection('masks',this)"><span class="nb-icon">🧖</span>Face Masks</button>
+  <button class="nav-btn" onclick="switchSection('meals',this)"><span class="nb-icon">🍽️</span>Meal Ideas</button>
+  <button class="nav-btn" onclick="switchSection('reminders',this)"><span class="nb-icon">⏰</span>Reminders</button>
+  <button class="nav-btn" onclick="switchSection('journal',this)"><span class="nb-icon">📓</span>Skin Journal</button>
 </nav>
 
-<!-- HOME SECTION -->
-<div class="section active" id="sec-home">
-  <div class="home-wrap">
-    <div class="home-greeting-row">
-      <div>
-        <div class="home-date" id="homeDate"></div>
-        <div class="home-greeting">Hey, you ✦</div>
-      </div>
-      <div class="home-avatar" id="homeAvatar">G</div>
-    </div>
-    <div class="home-glow-card">
-      <div class="home-glow-inner">
-        <div class="home-dial">
-          <div class="home-dial-inner">
-            <div class="home-dial-num" id="homeDialNum">60</div>
-            <div class="home-dial-lbl">GLOW SCORE</div>
-          </div>
-        </div>
-        <div>
-          <div class="home-score-pts" id="homeScorePts">↑ Eat well, glow more</div>
-          <div class="home-score-desc">Save your favourite glow foods to raise your score.</div>
-        </div>
-      </div>
-    </div>
-    <div class="home-stat-row">
-      <div class="home-stat-card">
-        <div class="home-stat-num" style="color:#FFC857" id="homeStreakNum">🔥 0</div>
-        <div class="home-stat-lbl">day streak</div>
-      </div>
-      <div class="home-stat-card">
-        <div class="home-stat-num" style="color:#FF6B6B" id="homeSavedNum">0</div>
-        <div class="home-stat-lbl">foods saved</div>
-      </div>
-    </div>
-    <button class="home-scan-btn" onclick="switchTab('foods',document.getElementById('tab-foods'))">🥗 Explore Glow Foods ✦</button>
-    <div>
-      <div class="home-picks-hdr">
-        <div class="home-picks-title">Glow-boosting picks</div>
-        <div class="home-picks-see" onclick="switchTab('foods',document.getElementById('tab-foods'))">See all</div>
-      </div>
-      <div class="home-picks-scroll" id="homePicksScroll"></div>
-    </div>
-    <div id="homeGlowTip"></div>
-  </div>
-</div>
-
 <!-- FOODS -->
-<div class="section" id="sec-foods">
-  <div class="foods-page-wrap">
-  <div class="foods-page-hdr"><h2>Food Library</h2><p>Nutrients &amp; skin benefits, at a glance</p></div>
+<div class="section active" id="sec-foods">
   <div class="foods-controls">
     <div class="ctrl-inner">
       <div class="search-bar">
@@ -728,27 +592,23 @@ button,input,select{font-size:16px}
     <p class="results-count" id="resultsCount"></p>
     <div class="food-grid" id="foodGrid"></div>
   </div>
-  </div><!-- /foods-page-wrap -->
 </div>
 
 <!-- PROGRESS -->
 <div class="section" id="sec-progress">
-  <div class="progress-wrap" style="padding:calc(env(safe-area-inset-top) + 3.8rem) 1rem calc(5.5rem + env(safe-area-inset-bottom))">
-    <div style="margin-bottom:1rem">
-      <h2 style="font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em">Your Glow Journey</h2>
-      <p style="font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.2rem" id="progressSubtitle">Track your weekly glow score</p>
+  <div class="progress-wrap">
+    <div class="sec-hero">
+      <h2>📈 Your Progress</h2>
+      <p>Track your glow score, streaks and unlock badges</p>
     </div>
     <div class="progress-chart-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-        <div class="progress-chart-title" style="margin-bottom:0">This week</div>
-        <div class="progress-avg" id="weekAvgLabel">avg —</div>
-      </div>
+      <div class="progress-chart-title">Weekly Glow Score</div>
       <div class="bar-chart" id="weeklyBarChart"></div>
     </div>
     <div class="progress-badges-title">✦ Badges</div>
     <div class="badges-grid" id="badgesGrid"></div>
     <div class="progress-unlock-card" id="unlockCard">
-      <div class="unlock-icon">✦</div>
+      <div class="unlock-icon">🔒</div>
       <div class="unlock-text">
         <div class="unlock-title">Keep going!</div>
         <div class="unlock-sub" id="unlockSub">Save <span>5 more foods</span> to unlock Glow 100</div>
@@ -757,61 +617,10 @@ button,input,select{font-size:16px}
   </div>
 </div>
 
-<!-- RECIPES (masks + meals combined) -->
-<div class="section" id="sec-recipes">
-  <div class="recipes-wrap">
-    <div class="recipes-hdr"><h2>Recipes for you</h2><p>Masks &amp; meals for glowing skin</p></div>
-    <div class="recipes-tab-row">
-      <button class="recipes-tab active" id="rtab-masks" onclick="switchRecipeTab('masks',this)">Home Masks</button>
-      <button class="recipes-tab" id="rtab-meals" onclick="switchRecipeTab('meals',this)">Meals</button>
-    </div>
-    <div class="recipes-panel active" id="rpanel-masks">
-      <div class="stype-row" id="stypeRow2"></div>
-      <div id="recipeMaskGrid"></div>
-    </div>
-    <div class="recipes-panel" id="rpanel-meals">
-      <div class="concern-row" id="concernRow2"></div>
-      <div id="recipeMealGrid"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MORE -->
-<div class="section" id="sec-more">
-  <div class="more-wrap">
-    <div class="more-hdr">More</div>
-    <div class="more-link" onclick="openMoreSub('period')">
-      <div class="more-link-icon">🌙</div>
-      <div class="more-link-text">
-        <div class="more-link-name">Period Guide</div>
-        <div class="more-link-sub">Foods for every phase of your cycle</div>
-      </div>
-      <div class="more-link-arrow">›</div>
-    </div>
-    <div class="more-link" onclick="openMoreSub('reminders')">
-      <div class="more-link-icon">⏰</div>
-      <div class="more-link-text">
-        <div class="more-link-name">Reminders</div>
-        <div class="more-link-sub">Set daily glow routine alerts</div>
-      </div>
-      <div class="more-link-arrow">›</div>
-    </div>
-    <div class="more-link" onclick="openMoreSub('journal')">
-      <div class="more-link-icon">📓</div>
-      <div class="more-link-text">
-        <div class="more-link-name">Skin Journal</div>
-        <div class="more-link-sub">Track your skin's daily journey</div>
-      </div>
-      <div class="more-link-arrow">›</div>
-    </div>
-  </div>
-</div>
-
 <!-- PERIOD GUIDE -->
 <div class="section" id="sec-period">
-  <div class="period-wrap" style="padding-top:calc(env(safe-area-inset-top) + 3.8rem)">
+  <div class="period-wrap">
     <div class="sec-hero">
-      <button class="more-back-btn" onclick="openMoreSub(null)">‹ More</button>
       <h2>🌙 Period Guide</h2>
       <p>Foods to support your skin &amp; health at every phase of your cycle</p>
     </div>
@@ -846,9 +655,8 @@ button,input,select{font-size:16px}
 
 <!-- REMINDERS -->
 <div class="section" id="sec-reminders">
-  <div class="reminders-wrap" style="padding-top:calc(env(safe-area-inset-top) + 3.8rem)">
+  <div class="reminders-wrap">
     <div class="sec-hero">
-      <button class="more-back-btn" onclick="openMoreSub(null)">‹ More</button>
       <h2>⏰ Glow Reminders</h2>
       <p>Set daily reminders to eat, hydrate or apply your skincare ritual</p>
     </div>
@@ -878,9 +686,8 @@ button,input,select{font-size:16px}
 
 <!-- SKIN JOURNAL -->
 <div class="section" id="sec-journal">
-  <div class="journal-wrap" style="padding-top:calc(env(safe-area-inset-top) + 3.8rem)">
+  <div class="journal-wrap">
     <div class="sec-hero">
-      <button class="more-back-btn" onclick="openMoreSub(null)">‹ More</button>
       <h2>📓 Skin Journal</h2>
       <p>Track your skin's journey — daily mood, notes &amp; photos</p>
     </div>
@@ -2495,108 +2302,13 @@ function closeSidebar(){
   document.body.style.overflow='';
 }
 
-/* ══ NAVIGATION ══ */
-function switchTab(id,btn){
+function switchSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  const sec=document.getElementById('sec-'+id);
-  if(sec)sec.classList.add('active');
-  if(btn)btn.classList.add('active');
-  if(id==='home')renderHome();
-  if(id==='progress')renderProgress();
-  if(id==='recipes')renderRecipesSection();
-}
-
-function switchSection(id,btn){switchTab(id,null);}
-
-function openMoreSub(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  if(!id){
-    document.getElementById('sec-more').classList.add('active');
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById('tab-more').classList.add('active');
-  } else {
-    document.getElementById('sec-'+id).classList.add('active');
-    if(id==='period')renderPhaseButtons();
-    if(id==='reminders'){renderReminders();updateNotifyNote();}
-    if(id==='journal')renderJournal();
-  }
-}
-
-/* ══ HOME SECTION ══ */
-function renderHome(){
-  const favs=JSON.parse(localStorage.getItem('glowFavs')||localStorage.getItem('glowbiteFavs')||'[]');
-  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
-  const today=new Date();today.setHours(0,0,0,0);
-  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
-  const unique=[...new Set(dates)].sort((a,b)=>b-a);
-  let streak=0;for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
-  const score=Math.min(99,60+favs.length*3);
-  const el_d=document.getElementById('homeDialNum');if(el_d)el_d.textContent=score;
-  const el_s=document.getElementById('homeStreakNum');if(el_s)el_s.textContent='🔥 '+streak;
-  const el_f=document.getElementById('homeSavedNum');if(el_f)el_f.textContent=favs.length;
-  const el_p=document.getElementById('homeScorePts');if(el_p)el_p.textContent=score>80?'✦ Glowing skin ahead':'↑ Eat well, glow more';
-  const dateEl=document.getElementById('homeDate');
-  if(dateEl){const d=new Date();dateEl.textContent=d.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'});}
-  // picks carousel
-  const topFoods=[...foods].sort((a,b)=>getFoodGlowScore(b.id)-getFoodGlowScore(a.id)).slice(0,10);
-  const ps=document.getElementById('homePicksScroll');
-  if(ps)ps.innerHTML=topFoods.map(f=>`
-    <div class="home-pick-item" onclick="openFoodModal(${f.id})">
-      <div class="home-pick-banner" style="background:${f.color}">${f.emoji}</div>
-      <div class="home-pick-name">${f.name}</div>
-      <div class="home-pick-badge">+${getFoodGlowScore(f.id)} glow</div>
-    </div>`).join('');
-  // tip
-  const tip=glowTips[new Date().getDate()%glowTips.length];
-  const tipEl=document.getElementById('homeGlowTip');
-  if(tipEl&&tip)tipEl.innerHTML=`<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:1rem 1.1rem;display:flex;gap:.75rem;align-items:flex-start"><span style="font-size:1.5rem">${tip.icon}</span><p style="font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.6;margin:0">${tip.tip}</p></div>`;
-}
-
-/* ══ RECIPES SECTION ══ */
-function switchRecipeTab(id,btn){
-  document.querySelectorAll('.recipes-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.recipes-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('rpanel-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
   btn.classList.add('active');
-}
-
-function renderRecipesSection(){
-  // Masks panel
-  const mf=masks.filter(m=>activeSkinType==='all'||m.skinTypes.includes(activeSkinType)||m.skinTypes.includes('all'));
-  const mg=document.getElementById('recipeMaskGrid');
-  if(mg)mg.innerHTML=mf.map(m=>`
-    <div class="rec-card" onclick="openMaskModal(${m.id})" style="margin-bottom:.75rem">
-      <div class="rec-banner" style="background:${m.color}">${m.emoji}</div>
-      <div class="rec-body">
-        <div class="rec-title-row">
-          <div class="rec-name">${m.name}</div>
-          <div class="rec-time-badge">⏱ ${m.time}</div>
-        </div>
-        <div class="rec-desc">${m.benefit}</div>
-        <div class="rec-chips">${m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join('')}</div>
-      </div>
-    </div>`).join('');
-  // Skin type filter for recipes
-  const sf=document.getElementById('stypeRow2');
-  if(sf&&!sf.children.length)sf.innerHTML=skinTypeLabels.map((l,i)=>`<button class="stype-btn${i===0?' active':''}" onclick="setSkinType('${skinTypeValues[i]}',this);renderRecipesSection()">${l}</button>`).join('');
-  // Meals panel
-  const meals2=activeConcern==='all'?meals:meals.filter(m=>m.concerns.includes(activeConcern));
-  const mlg=document.getElementById('recipeMealGrid');
-  if(mlg)mlg.innerHTML=meals2.map(m=>`
-    <div class="rec-card" onclick="openMealModal(${m.id})" style="margin-bottom:.75rem">
-      <div class="rec-banner" style="background:${m.color}">${m.emoji}</div>
-      <div class="rec-body">
-        <div class="rec-title-row">
-          <div class="rec-name">${m.name}</div>
-          <div class="rec-time-badge">⏱ ${m.time}</div>
-        </div>
-        <div class="rec-desc">${m.tagline}</div>
-        <div class="rec-chips">${m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join('')}</div>
-      </div>
-    </div>`).join('');
-  const cf=document.getElementById('concernRow2');
-  if(cf&&!cf.children.length)cf.innerHTML=concernLabels.map((c,i)=>`<button class="concern-btn${i===0?' active':''}" onclick="setConcern('${c.val}',this);renderRecipesSection()">${c.label}</button>`).join('');
+  closeSidebar();
+  if(id==='progress')renderProgress();
 }
 
 /* GLOW SCORES lookup */
@@ -2639,25 +2351,15 @@ function renderWeeklyChart(){
   const todayTs=today.getTime();
   const el=document.getElementById('weeklyBarChart');
   if(!el)return;
-  const scores=weekDates.map((ts,i)=>{
+  el.innerHTML=weekDates.map((ts,i)=>{
     const rawScore=Math.min(100,(scoreByDay[ts]||0));
     const isToday=ts===todayTs;
-    return isToday?(rawScore||Math.min(99,60+(JSON.parse(localStorage.getItem('glowFavs')||localStorage.getItem('glowbiteFavs')||'[]')).length*3)):rawScore;
-  });
-  const nonZero=scores.filter(s=>s>0);
-  const avg=nonZero.length?Math.round(nonZero.reduce((a,b)=>a+b,0)/nonZero.length):0;
-  const avgEl=document.getElementById('weekAvgLabel');if(avgEl)avgEl.textContent=avg?`avg ${avg}`:'avg —';
-  const subEl=document.getElementById('progressSubtitle');
-  if(subEl){const streak2=JSON.parse(localStorage.getItem('glowJournal')||'[]').length;subEl.textContent=streak2?`${streak2} journal entries logged`:'Start logging to see your journey';}
-  el.innerHTML=weekDates.map((ts,i)=>{
-    const isToday=ts===todayTs;
-    const displayScore=scores[i];
+    const displayScore=isToday?(rawScore||Math.min(99,60+(JSON.parse(localStorage.getItem('glowFavs')||'[]')).length*3)):rawScore;
     const heightPct=Math.max(6,displayScore);
-    const bg=displayScore===0?'rgba(255,255,255,.15)':isToday?'linear-gradient(180deg,#C6FF3D,#7B2FF7)':'linear-gradient(180deg,#FF6B6B,#7B2FF7)';
     return `<div class="bar-col">
       <div class="bar-score">${displayScore||''}</div>
-      <div class="bar-track"><div style="width:100%;height:${heightPct}%;border-radius:6px;background:${bg};transition:height .6s cubic-bezier(.34,1.56,.64,1)"></div></div>
-      <div class="bar-day" style="${isToday?'color:#C6FF3D;font-weight:800':''}"">${days[i]}</div>
+      <div class="bar-track"><div class="bar-fill${isToday?' today':''}" style="height:${heightPct}%"></div></div>
+      <div class="bar-day">${days[i]}</div>
     </div>`;
   }).join('');
 }
@@ -2776,7 +2478,7 @@ function flipCard(e,id){
 let favourites=new Set(JSON.parse(localStorage.getItem('glowbiteFavs')||'[]'));
 let favOnly=false;
 
-function saveFavs(){const arr=JSON.stringify([...favourites]);localStorage.setItem('glowbiteFavs',arr);localStorage.setItem('glowFavs',arr);if(typeof renderHome==='function')renderHome();}
+function saveFavs(){localStorage.setItem('glowbiteFavs',JSON.stringify([...favourites]));}
 
 function toggleFav(id,btn){
   if(favourites.has(id)){
@@ -3136,9 +2838,15 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();cl
    INIT
 ══════════════════════════════════════ */
 renderGlowTip();
-renderHome();
 renderFoods();
 renderGlowPicks();
+renderPhaseButtons();
+renderSkinTypeFilter();
+renderMasks();
+renderConcernFilter();
+renderMeals();
+renderReminders();
+updateNotifyNote();
 
 /* ══════════════════════════════════════
    SPLASH SCREEN
@@ -3461,7 +3169,27 @@ renderJournal();
 /* Update glow score widget counts */
 (function(){
   function updateGlowWidget(){
-    if(typeof renderHome==='function')renderHome();
+    const favs=JSON.parse(localStorage.getItem('glowFavs')||'[]');
+    const sn=document.getElementById('savedNum');
+    if(sn)sn.textContent=favs.length;
+    // Simple streak: count consecutive days with journal entries
+    const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
+    let streak=0;
+    if(entries.length){
+      const today=new Date();today.setHours(0,0,0,0);
+      const dates=entries.map(e=>new Date(e.date||e.ts||0)).map(d=>{d.setHours(0,0,0,0);return d.getTime()});
+      const unique=[...new Set(dates)].sort((a,b)=>b-a);
+      for(let i=0;i<unique.length;i++){
+        const expected=today.getTime()-i*86400000;
+        if(unique[i]===expected)streak++;else break;
+      }
+    }
+    const st=document.getElementById('streakNum');
+    if(st)st.textContent='🔥 '+streak;
+    // Glow dial score: 60 + (favs * 3) capped at 99
+    const score=Math.min(99,60+favs.length*3);
+    const dn=document.getElementById('glowDialNum');
+    if(dn)dn.textContent=score;
   }
   updateGlowWidget();
   window.updateGlowWidget=updateGlowWidget;

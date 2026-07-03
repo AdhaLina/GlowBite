@@ -457,6 +457,49 @@ button,input,select{font-size:16px}
 .mask-tip strong,.meal-tip strong{color:#FFC857}
 .patch-note{text-align:center;font-size:.72rem;color:rgba(255,255,255,.4);padding:.5rem 1rem .9rem}
 
+/* UNLOCKABLE RECIPES */
+.ul-strip{display:flex;align-items:center;gap:.8rem;background:linear-gradient(#140823,#140823) padding-box,linear-gradient(120deg,#FF2D9B,#9B2FFF,#C8FF3D) border-box;border:1.5px solid transparent;border-radius:18px;padding:.8rem 1rem;margin:0 1.1rem 1rem}
+.ul-strip .ul-sn{font-size:1.55rem;font-weight:900;color:#C8FF3D;letter-spacing:-.02em}
+.ul-strip .ul-st{flex:1}
+.ul-strip .ul-st b{display:block;font-size:.72rem;font-weight:800;color:#fff}
+.ul-strip .ul-st small{font-size:.6rem;color:rgba(255,255,255,.4);font-weight:600}
+.ul-next{font-size:.56rem;font-weight:800;color:#FF6BBE;background:rgba(255,45,155,.1);border:1px solid rgba(255,45,155,.25);border-radius:9px;padding:.3rem .55rem;text-align:center;line-height:1.35}
+.ul-next b{color:#C8FF3D}
+.ul-bar{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-top:.4rem}
+.ul-fill{height:100%;background:linear-gradient(90deg,#FF2D9B,#C8FF3D);border-radius:3px;transition:width .8s ease}
+.ul-banner{display:flex;align-items:center;gap:.7rem;background:linear-gradient(#171028,#171028) padding-box,linear-gradient(120deg,#C8FF3D,#7DFFD4) border-box;border:1.5px solid transparent;border-radius:16px;padding:.75rem .9rem;margin:0 1.1rem 1rem;animation:ulPop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ulPop{from{transform:scale(.9);opacity:0}}
+.ul-banner .ul-ue{font-size:1.5rem}
+.ul-banner b{display:block;font-size:.72rem;font-weight:800;color:#C8FF3D}
+.ul-banner small{font-size:.6rem;color:rgba(255,255,255,.45);font-weight:600}
+.ul-label{font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,255,61,.75);margin:.4rem 0 .55rem}
+.ul-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1rem}
+.ul-card{position:relative;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);padding:.85rem .8rem;min-height:118px;display:flex;flex-direction:column;gap:.3rem;cursor:pointer;font-family:inherit;text-align:left;transition:border-color .2s}
+.ul-card:hover{border-color:rgba(200,255,61,.3)}
+.ul-card .ul-re{font-size:1.7rem;line-height:1}
+.ul-card .ul-rn{font-size:.72rem;font-weight:800;color:#fff;line-height:1.25}
+.ul-card .ul-rb{font-size:.55rem;color:rgba(255,255,255,.4);font-weight:600;line-height:1.4}
+.ul-card .ul-rt{margin-top:auto;font-size:.52rem;font-weight:800;color:#C8FF3D}
+.ul-card.locked{cursor:default}
+.ul-card.locked:hover{border-color:rgba(255,255,255,.09)}
+.ul-card.locked .ul-re,.ul-card.locked .ul-rn,.ul-card.locked .ul-rb,.ul-card.locked .ul-rt{filter:blur(4px);opacity:.5}
+.ul-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;background:rgba(10,4,20,.55);backdrop-filter:blur(2px)}
+.ul-lock-ico{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;background:linear-gradient(135deg,rgba(255,45,155,.25),rgba(155,47,255,.25));border:1.5px solid rgba(255,255,255,.2)}
+.ul-lock-req{font-size:.56rem;font-weight:800;color:#fff;text-align:center;line-height:1.3}
+.ul-lock-req b{color:#C8FF3D}
+.ul-card.gold{border-color:rgba(255,200,87,.2)}
+.ul-card.gold .ul-lock-ico{background:linear-gradient(135deg,rgba(255,200,87,.3),rgba(255,140,50,.25));border-color:rgba(255,200,87,.45)}
+.ul-card.gold .ul-lock-req b{color:#FFC857}
+.ul-new{position:absolute;top:8px;right:8px;font-size:.48rem;font-weight:900;letter-spacing:.06em;color:#0a0412;background:#C8FF3D;border-radius:7px;padding:.18rem .4rem;box-shadow:0 0 14px rgba(200,255,61,.5)}
+.ul-detail{grid-column:1/-1;background:rgba(255,255,255,.045);border:1px solid rgba(200,255,61,.2);border-radius:18px;padding:1rem;animation:ulPop .35s ease}
+.ul-detail-h{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,255,61,.75);margin-bottom:.45rem}
+.ul-detail ul{list-style:none;display:flex;flex-direction:column;gap:.3rem;margin:0 0 .9rem}
+.ul-detail ul li{font-size:.72rem;color:rgba(255,255,255,.55);display:flex;gap:.45rem;line-height:1.4}
+.ul-detail ul li::before{content:'·';color:#C8FF3D;font-weight:900}
+.ul-detail ol{list-style:none;counter-reset:ulstep;display:flex;flex-direction:column;gap:.55rem;margin:0}
+.ul-detail ol li{font-size:.73rem;color:rgba(255,255,255,.6);line-height:1.5;display:flex;gap:.6rem;counter-increment:ulstep}
+.ul-detail ol li::before{content:counter(ulstep);flex-shrink:0;width:19px;height:19px;border-radius:7px;background:rgba(255,45,155,.15);border:1px solid rgba(255,45,155,.35);color:#FF6BBE;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:.05rem}
+
 /* QR SHARE */
 .qr-share{max-height:0;overflow:hidden;transition:max-height .45s ease}
 .qr-share.open{max-height:480px}
@@ -830,18 +873,22 @@ button,input,select{font-size:16px}
     <h2>🍽️ Recipes</h2>
     <p>DIY face masks and skin-boosting meal ideas</p>
   </div>
+  <div id="ulStrip"></div>
+  <div id="ulBanner"></div>
   <div class="recipe-tabs">
     <button class="rtab-btn active" onclick="switchRecipePanel('masks',this)">🧖 Face Masks</button>
     <button class="rtab-btn" onclick="switchRecipePanel('meals',this)">🍽️ Meal Ideas</button>
   </div>
   <div class="rpanel active" id="rpanel-masks">
     <div class="masks-wrap" style="padding-top:0">
+      <div id="ulMasks"></div>
       <div class="stype-row" id="stypeRow"></div>
       <div class="mask-grid" id="maskGrid"></div>
     </div>
   </div>
   <div class="rpanel" id="rpanel-meals">
     <div class="meals-wrap" style="padding-top:0">
+      <div id="ulMeals"></div>
       <div class="concern-row" id="concernRow"></div>
       <div class="meal-grid" id="mealGrid"></div>
     </div>
@@ -2656,6 +2703,7 @@ function updateHomeDashboard(){
     else if(score>=70)pts.textContent='✦ Glowing skin ahead';
     else pts.textContent='✦ Start saving glow foods';
   }
+  try{renderUnlocks();}catch(e){}
 }
 
 /* GLOW SCORES lookup */
@@ -3196,6 +3244,157 @@ document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='
 function renderJournalEntries(){renderJournal();}
 
 /* ══════════════════════════════════════
+   UNLOCKABLE RECIPES
+══════════════════════════════════════ */
+const UL_MASKS=[
+  {id:'cuke',req:70,emoji:'🥒',name:'Cucumber Ice Facial',desc:'de-puff · morning reset',
+   need:['½ cucumber, blended','Ice cube tray','1 tsp aloe vera gel (optional)'],
+   steps:['Blend the cucumber until smooth and mix in the aloe.','Pour into an ice cube tray, freeze overnight.','Wrap a cube in thin cloth and glide over your face for 2–3 min.','Pat dry — instant de-puff before school or work.']},
+  {id:'honey',req:85,emoji:'🍯',name:'Honey Glow Mask',desc:'antibacterial · acne-prone',
+   need:['1 tbsp raw honey','½ tsp cinnamon (skip if sensitive)','Warm water to rinse'],
+   steps:['Mix honey and cinnamon into a paste.','Apply a thin layer to clean skin, avoiding eyes.','Leave 10–15 minutes while the honey does its thing.','Rinse with warm water and pat dry. Glow ✨']},
+  {id:'strawpeel',req:100,emoji:'🍓',name:'Strawberry Enzyme Peel',desc:'brightening · dull skin',
+   need:['3 ripe strawberries','1 tsp plain yogurt','1 tsp honey'],
+   steps:['Mash the strawberries into a pulp.','Stir in yogurt and honey.','Apply and leave 10 min — the fruit enzymes gently exfoliate.','Rinse cool. Use once a week max.']},
+  {id:'matcha',req:120,emoji:'🍵',name:'Matcha Clay Detox',desc:'pore care · oily skin',
+   need:['1 tsp matcha powder','1 tbsp green clay (or kaolin)','Rose water to mix'],
+   steps:['Mix matcha and clay, add rose water until creamy.','Apply avoiding the eye area.','Leave 10 min — don\'t let it fully crack-dry.','Rinse and moisturise. Pores = handled.']},
+  {id:'rosegold',req:150,gold:true,emoji:'🌹',name:'Rose Gold Elixir Mask',desc:'anti-ageing · glass skin',
+   need:['1 tbsp rosehip oil','1 tsp honey','2 drops vitamin E oil','1 tsp rose water'],
+   steps:['Whisk everything into a silky elixir.','Massage into skin upwards for 2 minutes.','Leave 20 minutes like the royalty you are.','Tissue off the excess — do not rinse fully. Sleep on the glow.']},
+  {id:'ritual24',req:200,gold:true,emoji:'✨',name:'24h Glow Ritual',desc:'full routine · main character',
+   need:['Morning: cucumber ice cube','Day: 2L water + one glow meal','Evening: honey glow mask','Night: rosehip elixir'],
+   steps:['AM — cucumber ice facial to wake the skin up.','Midday — glow meal + hydration check.','PM — honey mask while you journal.','Night — rose gold elixir. Repeat tomorrow. Unstoppable.']},
+];
+const UL_MEALS=[
+  {id:'citrus2',req:60,emoji:'🥤',name:'Citrus Glow Smoothie',desc:'vit C · collagen boost',
+   need:['1 peeled orange','½ cup blueberries','½ cup Greek yogurt','Handful of ice'],
+   steps:['Blend everything 30–45 seconds.','Adjust thickness with water or ice.','Drink immediately — vitamin C fades fast ⚡']},
+  {id:'sushi',req:100,emoji:'🍣',name:'Glow Sushi Night',desc:'omega-3 feast · date night',
+   need:['Sushi rice (1 cup) + rice vinegar','Fresh salmon (sashimi grade) or smoked salmon','Avocado, cucumber','Nori sheets, soy sauce'],
+   steps:['Cook rice, season with vinegar, let it cool.','Lay nori shiny-side down, spread rice thinly.','Add salmon, avocado and cucumber strips.','Roll tight with a mat (or clean towel), slice with a wet knife.','Omega-3 date night, secured.']},
+  {id:'ramen',req:110,emoji:'🍲',name:'Golden Turmeric Ramen',desc:'anti-inflammatory · cosy era',
+   need:['1 pack ramen noodles (ditch the sachet)','2 cups veg or chicken broth','1 tsp turmeric + 1 tsp grated ginger','1 soft-boiled egg, spinach, spring onion'],
+   steps:['Simmer broth with turmeric and ginger 5 min.','Cook noodles separately, drain.','Add noodles and spinach to the golden broth.','Top with the jammy egg and spring onion. Cosy era activated.']},
+  {id:'zinc',req:150,gold:true,emoji:'🦪',name:'Zinc Queen Platter',desc:'oysters · skin healing',
+   need:['6 fresh oysters (or grilled)','Lemon wedges','Pumpkin seeds + wholegrain bread','Side salad with olive oil'],
+   steps:['Shuck (or ask your fishmonger to) and chill the oysters.','Serve on ice with lemon.','Add the seedy bread and salad on the side.','Oysters are the #1 zinc food on earth — skin healing on a plate.']},
+  {id:'feast',req:200,gold:true,emoji:'🥂',name:'Glow Feast Menu',desc:'3-course · flex on em',
+   need:['Starter: berry glow bowl','Main: salmon glow bowl','Dessert: choco walnut bites','Drink: citrus glow smoothie'],
+   steps:['Prep the choco bites first — they need to chill.','Blend the smoothie and plate the berry bowl.','Cook the salmon bowl fresh as the main.','Serve all three courses. You built this glow. Flex on em 🥂']},
+];
+
+function computeGlowScore(){
+  const favs=JSON.parse(localStorage.getItem('glowbiteFavs')||'[]');
+  const scans=JSON.parse(localStorage.getItem('glowScans')||'{}');
+  const totalScans=Object.values(scans).reduce((a,b)=>a+b,0);
+  const entries=JSON.parse(localStorage.getItem('glowbiteJournal')||'[]');
+  const today=new Date();today.setHours(0,0,0,0);
+  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
+  const unique=[...new Set(dates)].sort((a,b)=>b-a);
+  let streak=0;
+  for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
+  return Math.min(200,60+favs.length*3+streak*2+totalScans*2);
+}
+
+function ulSeen(){return JSON.parse(localStorage.getItem('glowUnlocksSeen')||'[]');}
+function ulMarkSeen(id){
+  const s=ulSeen();
+  if(!s.includes(id)){s.push(id);localStorage.setItem('glowUnlocksSeen',JSON.stringify(s));}
+}
+
+let ulOpenId=null;
+
+function renderUnlocks(){
+  const score=computeGlowScore();
+  const all=[...UL_MASKS,...UL_MEALS];
+  const thresholds=[...new Set(all.map(u=>u.req))].sort((a,b)=>a-b);
+  const next=thresholds.find(t=>t>score);
+
+  // score strip
+  const strip=document.getElementById('ulStrip');
+  if(strip){
+    const prev=thresholds.filter(t=>t<=score).pop()||0;
+    const pct=next?Math.round((score-prev)/(next-prev)*100):100;
+    strip.innerHTML=`<div class="ul-strip">
+      <span class="ul-sn">${score}</span>
+      <div class="ul-st">
+        <b>ur glow score</b>
+        <small>${next?(next-score)+' pts to next unlock 👀':'everything unlocked — legend 👑'}</small>
+        <div class="ul-bar"><div class="ul-fill" style="width:${pct}%"></div></div>
+      </div>
+      ${next?`<div class="ul-next">next unlock<br>at <b>${next}</b></div>`:''}
+    </div>`;
+  }
+
+  // new-unlock banner
+  const banner=document.getElementById('ulBanner');
+  if(banner){
+    const seen=ulSeen();
+    const fresh=all.filter(u=>score>=u.req&&!seen.includes(u.id));
+    banner.innerHTML=fresh.length
+      ?`<div class="ul-banner"><span class="ul-ue">🎉</span><div><b>NEW UNLOCK — ${fresh[0].name}</b><small>you hit ${fresh[0].req} · keep the streak going bestie</small></div></div>`
+      :'';
+  }
+
+  renderUlGrid('ulMasks',UL_MASKS,score);
+  renderUlGrid('ulMeals',UL_MEALS,score);
+}
+
+function renderUlGrid(elId,items,score){
+  const el=document.getElementById(elId);
+  if(!el)return;
+  const seen=ulSeen();
+  const unlocked=items.filter(u=>score>=u.req);
+  const locked=items.filter(u=>score<u.req);
+  let html='';
+  if(unlocked.length){
+    html+=`<div class="ul-label">level-up recipes · ${unlocked.length} unlocked</div><div class="ul-grid">`;
+    unlocked.forEach(u=>{
+      html+=`<button class="ul-card" onclick="ulOpen('${u.id}')">
+        <span class="ul-re">${u.emoji}</span>
+        <div class="ul-rn">${u.name}</div>
+        <div class="ul-rb">${u.desc}</div>
+        <div class="ul-rt">✦ unlocked at ${u.req}</div>
+        ${!seen.includes(u.id)?'<span class="ul-new">NEW</span>':''}
+      </button>`;
+      if(ulOpenId===u.id){
+        html+=`<div class="ul-detail">
+          <div class="ul-detail-h">You'll need</div>
+          <ul>${u.need.map(n=>`<li>${n}</li>`).join('')}</ul>
+          <div class="ul-detail-h">How to make it</div>
+          <ol>${u.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+        </div>`;
+      }
+    });
+    html+='</div>';
+  }
+  if(locked.length){
+    html+=`<div class="ul-label">locked · keep glowing 🔒</div><div class="ul-grid">`;
+    locked.forEach(u=>{
+      html+=`<div class="ul-card locked${u.gold?' gold':''}">
+        <span class="ul-re">${u.emoji}</span>
+        <div class="ul-rn">${u.name}</div>
+        <div class="ul-rb">${u.desc}</div>
+        <div class="ul-rt">✦ ???</div>
+        <div class="ul-lock">
+          <div class="ul-lock-ico">${u.gold?'👑':'🔒'}</div>
+          <div class="ul-lock-req">${u.gold?'legendary':'unlock at'}<br><b>${u.req} score</b></div>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}
+
+function ulOpen(id){
+  ulMarkSeen(id);
+  ulOpenId=(ulOpenId===id)?null:id;
+  renderUnlocks();
+}
+
+/* ══════════════════════════════════════
    GLOW SCAN
 ══════════════════════════════════════ */
 const GS_INGREDIENTS=[
@@ -3572,6 +3771,7 @@ renderConcernFilter();
 renderMeals();
 renderGsPicker();
 updateGsStat();
+renderUnlocks();
 
 /* ══════════════════════════════════════
    SPLASH SCREEN

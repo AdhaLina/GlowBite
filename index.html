@@ -513,6 +513,19 @@ button,input,select{font-size:16px}
 .gs-ben{display:flex;gap:.5rem;font-size:.72rem;color:rgba(255,255,255,.55);line-height:1.45}
 .gs-ben b{color:rgba(255,255,255,.85)}
 .gs-ben::before{content:'✦';color:#FF2D9B;font-size:.6rem;flex-shrink:0;margin-top:.15rem}
+.gs-recipe-toggle{width:100%;display:flex;align-items:center;justify-content:center;gap:.4rem;background:rgba(155,47,255,.1);border:1px solid rgba(155,47,255,.25);color:rgba(255,255,255,.75);font-size:.72rem;font-weight:800;font-family:inherit;padding:.55rem;border-radius:12px;cursor:pointer;margin-top:.8rem;transition:background .18s}
+.gs-recipe-toggle:hover{background:rgba(155,47,255,.18)}
+.gs-rt-arrow{transition:transform .25s;display:inline-block}
+.gs-recipe-toggle.open .gs-rt-arrow{transform:rotate(180deg)}
+.gs-recipe{display:none;padding-top:.85rem}
+.gs-recipe.open{display:block;animation:gsUp .35s ease}
+.gs-recipe-h{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,255,61,.75);margin-bottom:.45rem}
+.gs-need{list-style:none;display:flex;flex-direction:column;gap:.3rem;margin:0 0 .9rem}
+.gs-need li{font-size:.72rem;color:rgba(255,255,255,.55);display:flex;gap:.45rem;line-height:1.4}
+.gs-need li::before{content:'·';color:#C8FF3D;font-weight:900}
+.gs-steps{list-style:none;counter-reset:gstep;display:flex;flex-direction:column;gap:.55rem;margin:0}
+.gs-steps li{font-size:.73rem;color:rgba(255,255,255,.6);line-height:1.5;display:flex;gap:.6rem;counter-increment:gstep}
+.gs-steps li::before{content:counter(gstep);flex-shrink:0;width:19px;height:19px;border-radius:7px;background:rgba(255,45,155,.15);border:1px solid rgba(255,45,155,.35);color:#FF6BBE;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:.05rem}
 
 /* LOGIN SCREEN */
 #loginScreen{position:fixed;inset:0;background:radial-gradient(ellipse 130% 70% at 20% 0%,#1e0a3c,#0D0618 55%,#080310);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;transition:opacity .5s,visibility .5s}
@@ -3151,30 +3164,76 @@ const GS_INGREDIENTS=[
   {id:'darkchoc',emoji:'🍫',name:'Dark Chocolate',nutrient:'Flavanols',pct:75},
 ];
 const GS_MEALS=[
-  {emoji:'🥗',name:'Salmon Glow Bowl',ings:['salmon','avocado','spinach'],bens:[
+  {emoji:'🥗',name:'Salmon Glow Bowl',time:'20 min',serves:'1 bowl',ings:['salmon','avocado','spinach'],bens:[
     ['Omega-3','from salmon calms redness & strengthens the skin barrier'],
     ['Vitamin E','from avocado deeply moisturises from within'],
-    ['Vitamin A','from spinach speeds up skin cell renewal']]},
-  {emoji:'🍝',name:'Tomato Glow Pasta',ings:['tomato','spinach'],bens:[
+    ['Vitamin A','from spinach speeds up skin cell renewal']],
+   need:['1 salmon fillet (120g)','½ ripe avocado','2 handfuls baby spinach','½ cup cooked rice or quinoa','1 tbsp olive oil','Squeeze of lemon, salt & pepper'],
+   steps:[
+    'Season the salmon with salt, pepper and a little olive oil.',
+    'Pan-fry skin-side down for 4 minutes, flip and cook 3 more minutes until golden.',
+    'Wilt the spinach in the same pan for 1 minute.',
+    'Build your bowl: rice on the bottom, spinach, flaked salmon, sliced avocado on top.',
+    'Finish with lemon juice and a drizzle of olive oil. Glow time ✨']},
+  {emoji:'🍝',name:'Tomato Glow Pasta',time:'25 min',serves:'2 plates',ings:['tomato','spinach'],bens:[
     ['Lycopene','from cooked tomato is a natural sun-damage shield'],
-    ['Iron','from spinach boosts oxygen flow for a healthy flush']]},
-  {emoji:'🥙',name:'Avocado Glow Toast',ings:['avocado','tomato','egg'],bens:[
+    ['Iron','from spinach boosts oxygen flow for a healthy flush']],
+   need:['150g pasta of choice','4 ripe tomatoes (or 1 can chopped)','2 handfuls spinach','2 garlic cloves','2 tbsp olive oil','Basil, salt & pepper'],
+   steps:[
+    'Cook the pasta in salted water until al dente. Save a cup of pasta water.',
+    'Gently fry sliced garlic in olive oil for 1 minute — don\'t brown it.',
+    'Add chopped tomatoes and simmer 10 minutes until saucy. Cooking boosts the lycopene!',
+    'Stir in the spinach until just wilted.',
+    'Toss the pasta through with a splash of pasta water. Top with basil.']},
+  {emoji:'🥙',name:'Avocado Glow Toast',time:'10 min',serves:'1 serving',ings:['avocado','tomato','egg'],bens:[
     ['Healthy fats','keep skin plump and reduce fine lines'],
     ['Biotin','from egg strengthens skin, hair and nails'],
-    ['Vitamin C','from fresh tomato helps build collagen']]},
-  {emoji:'🥣',name:'Berry Glow Bowl',ings:['blueberry','yogurt','oats'],bens:[
+    ['Vitamin C','from fresh tomato helps build collagen']],
+   need:['1 slice sourdough or wholegrain bread','½ ripe avocado','1 egg','A few cherry tomatoes','Chilli flakes, salt & lemon'],
+   steps:[
+    'Toast the bread until golden.',
+    'Mash the avocado with a squeeze of lemon and pinch of salt, spread on toast.',
+    'Fry or poach the egg — runny yolk is the move.',
+    'Top the toast with the egg and halved cherry tomatoes.',
+    'Finish with chilli flakes. Eat while warm 🤌']},
+  {emoji:'🥣',name:'Berry Glow Bowl',time:'5 min',serves:'1 bowl',ings:['blueberry','yogurt','oats'],bens:[
     ['Antioxidants','from blueberries fight dullness and early ageing'],
     ['Probiotics','from yogurt balance your skin from the gut up'],
-    ['Zinc','from oats helps calm breakouts']]},
-  {emoji:'🍳',name:'Sunrise Glow Plate',ings:['egg','sweetpotato','spinach'],bens:[
+    ['Zinc','from oats helps calm breakouts']],
+   need:['1 cup Greek yogurt','½ cup blueberries','⅓ cup oats','1 tsp honey','Optional: chia seeds, nuts'],
+   steps:[
+    'Spoon the yogurt into a bowl.',
+    'Top with oats and blueberries.',
+    'Drizzle with honey and add chia seeds or nuts if you have them.',
+    'For extra-thick vibes, prep it the night before so the oats soften.']},
+  {emoji:'🍳',name:'Sunrise Glow Plate',time:'30 min',serves:'1 plate',ings:['egg','sweetpotato','spinach'],bens:[
     ['Beta-carotene','from sweet potato gives a natural warm glow'],
-    ['Biotin','from egg supports skin renewal']]},
-  {emoji:'🥤',name:'Citrus Glow Smoothie',ings:['orange','blueberry','yogurt'],bens:[
+    ['Biotin','from egg supports skin renewal']],
+   need:['1 medium sweet potato','2 eggs','2 handfuls spinach','1 tbsp olive oil','Paprika, salt & pepper'],
+   steps:[
+    'Cube the sweet potato, toss with olive oil and paprika, roast at 200°C for 20–25 min.',
+    'Wilt the spinach in a pan with a tiny bit of oil.',
+    'Fry the eggs sunny-side up.',
+    'Plate the sweet potato, spinach, then eggs on top. Season and serve.']},
+  {emoji:'🥤',name:'Citrus Glow Smoothie',time:'5 min',serves:'1 glass',ings:['orange','blueberry','yogurt'],bens:[
     ['Vitamin C','from orange is essential for collagen production'],
-    ['Antioxidants','protect against environmental damage']]},
-  {emoji:'🍫',name:'Choco Walnut Bites',ings:['darkchoc','walnut','oats'],bens:[
+    ['Antioxidants','protect against environmental damage']],
+   need:['1 peeled orange','½ cup blueberries','½ cup Greek yogurt','½ cup cold water or milk','Handful of ice'],
+   steps:[
+    'Throw everything in a blender.',
+    'Blend 30–45 seconds until smooth.',
+    'Too thick? Add a splash more water. Too thin? More ice.',
+    'Pour and drink immediately — vitamin C fades fast ⚡']},
+  {emoji:'🍫',name:'Choco Walnut Bites',time:'15 min + chill',serves:'8 bites',ings:['darkchoc','walnut','oats'],bens:[
     ['Flavanols','from dark chocolate boost skin hydration & blood flow'],
-    ['Omega-3','from walnuts keeps the skin barrier strong']]},
+    ['Omega-3','from walnuts keeps the skin barrier strong']],
+   need:['100g dark chocolate (70%+)','½ cup crushed walnuts','½ cup oats','1 tbsp honey','Pinch of sea salt'],
+   steps:[
+    'Melt the dark chocolate in short bursts in the microwave, stirring between.',
+    'Mix in the walnuts, oats and honey.',
+    'Spoon into little clusters on baking paper.',
+    'Sprinkle with sea salt and chill 30 minutes until set.',
+    'Store in the fridge — if they last that long 🍫']},
 ];
 const gsSelected=new Set();
 
@@ -3200,6 +3259,11 @@ function renderGsBox(){
     ?items.map(i=>`<div class="gs-box-food" data-ing="${i.id}"><span class="gs-tag">${i.name} · ${i.nutrient}</span>${i.emoji}</div>`).join('')
     :'<div class="gs-box-empty">Tap ingredients above to add them here</div>';
   box.innerHTML='<div class="gs-frame"><span class="fc1"></span><span class="fc2"></span><span class="fc3"></span><span class="fc4"></span></div><div class="gs-laser"></div>'+inner;
+}
+
+function gsToggleRecipe(btn){
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
 }
 
 let gsScanning=false;
@@ -3244,14 +3308,21 @@ function renderGsResults(){
     `<div class="gs-label">${picked.length} glow ingredient${picked.length>1?'s':''} detected</div>`+
     `<div class="gs-chips">${picked.map(i=>`<span class="gs-chip">${i.emoji} ${i.name} <span class="gs-pct">${i.pct}% glow</span></span>`).join('')}</div>`+
     `<div class="gs-label">Skin-boost meals you can make</div>`+
-    meals.map(m=>
+    meals.map((m,idx)=>
       `<div class="gs-meal">
         <div class="gs-meal-top">
           <div class="gs-meal-emoji">${m.emoji}</div>
-          <div><div class="gs-meal-name">${m.name}</div><div class="gs-meal-ing">${m.ings.map(ingName).join(' · ')}</div></div>
+          <div><div class="gs-meal-name">${m.name}</div><div class="gs-meal-ing">${m.time} · ${m.serves}</div></div>
           <span class="gs-meal-match">${m.score}% match</span>
         </div>
         <div class="gs-bens">${m.bens.map(b=>`<div class="gs-ben"><span><b>${b[0]}</b> ${b[1]}</span></div>`).join('')}</div>
+        <button class="gs-recipe-toggle" onclick="gsToggleRecipe(this)">📖 View recipe <span class="gs-rt-arrow">▾</span></button>
+        <div class="gs-recipe">
+          <div class="gs-recipe-h">You'll need</div>
+          <ul class="gs-need">${m.need.map(n=>`<li>${n}</li>`).join('')}</ul>
+          <div class="gs-recipe-h">How to make it</div>
+          <ol class="gs-steps">${m.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+        </div>
       </div>`
     ).join('');
 }

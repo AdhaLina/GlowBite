@@ -788,14 +788,14 @@ button,input,select{font-size:16px}
       <button class="recipes-tab active" id="rtab-masks" onclick="switchRecipePanel('masks',this)">Home Masks</button>
       <button class="recipes-tab" id="rtab-meals" onclick="switchRecipePanel('meals',this)">Meals</button>
     </div>
-    <!-- MASKS SECTION -->
-    <div id="rpanel-masks">
-      <div class="rec-section-label" id="maskSectionLabel">Based on your favourites</div>
+    <!-- MASKS PANEL -->
+    <div id="rpanel-masks" style="display:flex;flex-direction:column;gap:1rem">
+      <div class="rec-section-label">Based on your favourites</div>
       <div class="stype-row" id="stypeRow2"></div>
       <div id="recipeMaskGrid"></div>
     </div>
-    <!-- MEALS SECTION -->
-    <div id="rpanel-meals" style="margin-top:.5rem">
+    <!-- MEALS PANEL -->
+    <div id="rpanel-meals" style="display:none;flex-direction:column;gap:1rem">
       <div class="rec-section-label">Glow Meals</div>
       <div class="concern-row" id="concernRow2"></div>
       <div id="recipeMealGrid"></div>
@@ -2589,7 +2589,7 @@ function renderHome(){
   // tip
   const tip=glowTips[new Date().getDate()%glowTips.length];
   const tipEl=document.getElementById('homeGlowTip');
-  if(tipEl&&tip)tipEl.innerHTML=`<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:1rem 1.1rem;display:flex;gap:.75rem;align-items:flex-start"><span style="font-size:1.5rem">${tip.icon}</span><p style="font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.6;margin:0">${tip.tip}</p></div>`;
+  if(tipEl&&tip)tipEl.innerHTML=`<div style="margin-top:.25rem"><div style="font-size:.72rem;font-weight:800;color:rgba(255,255,255,.4);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem">Daily Glow Tip</div><div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:1rem 1.1rem;display:flex;gap:.75rem;align-items:flex-start"><span style="font-size:1.5rem">${tip.icon}</span><p style="font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.6;margin:0">${tip.tip}</p></div></div>`;
 }
 
 /* ══ RECIPES SECTION ══ */
@@ -2603,8 +2603,9 @@ function switchRecipeTab(id,btn){
 function switchRecipePanel(id,btn){
   document.querySelectorAll('.recipes-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  document.querySelectorAll('#rpanel-masks,#rpanel-meals').forEach(p=>p.style.display='none');
   const el=document.getElementById('rpanel-'+id);
-  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  if(el){el.style.display='flex';el.style.flexDirection='column';el.style.gap='1rem';}
 }
 function renderRecipesSection(){
   // Skin type filter

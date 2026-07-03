@@ -2479,26 +2479,25 @@ function renderProgress(){
 }
 
 function renderWeeklyChart(){
-  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
+  const activity=JSON.parse(localStorage.getItem('glowActivity')||'{}');
   const today=new Date();today.setHours(0,0,0,0);
   const days=['M','T','W','T','F','S','S'];
   const todayDow=today.getDay();
   const mondayOffset=(todayDow===0?-6:1-todayDow);
-  const weekDates=days.map((_,i)=>{const d=new Date(today);d.setDate(today.getDate()+mondayOffset+i);d.setHours(0,0,0,0);return d.getTime();});
-  const scoreByDay={};
-  entries.forEach(e=>{
-    const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);
-    const t=d.getTime();
-    if(!scoreByDay[t])scoreByDay[t]=0;
-    scoreByDay[t]+=10;
-  });
+  const weekDates=days.map((_,i)=>{const d=new Date(today);d.setDate(today.getDate()+mondayOffset+i);d.setHours(0,0,0,0);return d;});
   const todayTs=today.getTime();
   const el=document.getElementById('weeklyBarChart');
   if(!el)return;
-  const scores=weekDates.map(ts=>{const raw=Math.min(100,(scoreByDay[ts]||0));const isT=ts===todayTs;return isT?(raw||Math.min(99,60+(JSON.parse(localStorage.getItem('glowFavs')||'[]')).length*3)):raw;});
+  const scores=weekDates.map(d=>{
+    const key=d.toDateString();
+    const count=activity[key]||0;
+    const raw=Math.min(100,count*15);
+    const isT=d.getTime()===todayTs;
+    return isT?(raw||Math.min(99,60+(JSON.parse(localStorage.getItem('glowbiteFavs')||'[]')).length*3)):raw;
+  });
   const maxScore=Math.max(...scores);
-  el.innerHTML=weekDates.map((ts,i)=>{
-    const isToday=ts===todayTs;
+  el.innerHTML=weekDates.map((d,i)=>{
+    const isToday=d.getTime()===todayTs;
     const displayScore=scores[i];
     const isPeak=displayScore>0&&displayScore===maxScore&&!isToday;
     const heightPct=Math.max(6,displayScore);
@@ -2627,6 +2626,13 @@ let favOnly=false;
 
 function saveFavs(){localStorage.setItem('glowbiteFavs',JSON.stringify([...favourites]));}
 
+function logDailyActivity(){
+  const data=JSON.parse(localStorage.getItem('glowActivity')||'{}');
+  const key=new Date().toDateString();
+  data[key]=(data[key]||0)+1;
+  localStorage.setItem('glowActivity',JSON.stringify(data));
+}
+
 function toggleFav(id,btn){
   if(favourites.has(id)){
     favourites.delete(id);
@@ -2634,6 +2640,7 @@ function toggleFav(id,btn){
   }else{
     favourites.add(id);
     btn.textContent='❤️';btn.classList.add('faved');
+    logDailyActivity();
   }
   saveFavs();
   updateHomeDashboard();

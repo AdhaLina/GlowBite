@@ -457,6 +457,63 @@ button,input,select{font-size:16px}
 .mask-tip strong,.meal-tip strong{color:#FFC857}
 .patch-note{text-align:center;font-size:.72rem;color:rgba(255,255,255,.4);padding:.5rem 1rem .9rem}
 
+/* GLOW SCAN */
+.gs-hero{position:relative;border-radius:24px;padding:1.3rem 1.2rem;margin:.9rem 0 .5rem;overflow:hidden;background:radial-gradient(circle at 85% 15%,rgba(200,255,61,.16),transparent 45%),radial-gradient(circle at 10% 90%,rgba(255,45,155,.2),transparent 50%),linear-gradient(135deg,#1c0a35,#150726 60%,#1a0930);border:1.5px solid rgba(200,255,61,.22);box-shadow:0 12px 40px rgba(0,0,0,.45);cursor:pointer;transition:transform .18s}
+.gs-hero:active{transform:scale(.98)}
+.gs-hero::before{content:'';position:absolute;top:0;bottom:0;width:60%;left:-70%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.07) 45%,rgba(200,255,61,.1) 55%,transparent);transform:skewX(-18deg);animation:shimmer 3.2s ease-in-out infinite}
+.gs-hero-tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.56rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#C8FF3D;background:rgba(200,255,61,.12);border:1px solid rgba(200,255,61,.3);padding:.28rem .6rem;border-radius:20px;margin-bottom:.65rem}
+.gs-hero-tag .gs-dot{width:5px;height:5px;border-radius:50%;background:#C8FF3D;box-shadow:0 0 8px #C8FF3D;animation:gsPulse 1.6s infinite}
+@keyframes gsPulse{50%{opacity:.3}}
+.gs-hero-title{font-size:1.35rem;font-weight:900;letter-spacing:-.03em;line-height:1.15;color:#fff;margin-bottom:.3rem}
+.gs-hero-title .gs-holo{background:linear-gradient(95deg,#C8FF3D 10%,#7DFFD4 35%,#FF9BD4 65%,#C8FF3D 90%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gsHolo 4s linear infinite}
+@keyframes gsHolo{to{background-position:200% 0}}
+.gs-hero-sub{font-size:.72rem;color:rgba(255,255,255,.5);line-height:1.5;max-width:220px;margin-bottom:.9rem}
+.gs-hero-cta{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(100deg,#FF2D9B,#9B2FFF);color:#fff;font-size:.8rem;font-weight:800;font-family:inherit;border:none;border-radius:14px;padding:.7rem 1.1rem;cursor:pointer;box-shadow:0 6px 24px rgba(255,45,155,.4);position:relative;z-index:1}
+.gs-sticker{position:absolute;font-size:1.6rem;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4));animation:gsBob 3s ease-in-out infinite}
+.gs-sticker.g1{top:12px;right:48px;transform:rotate(12deg);font-size:1.9rem}
+.gs-sticker.g2{top:54px;right:14px;transform:rotate(-8deg);animation-delay:.6s}
+.gs-sticker.g3{bottom:12px;right:30px;transform:rotate(6deg);font-size:1.3rem;animation-delay:1.1s}
+@keyframes gsBob{50%{translate:0 -6px}}
+.gs-title{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;color:#fff;margin:.6rem 0 .15rem}
+.gs-sub{font-size:.74rem;color:rgba(255,255,255,.42);margin-bottom:1rem}
+.gs-label{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,255,61,.75);margin:.9rem 0 .55rem}
+.gs-picker{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.9rem}
+.gs-pick{display:flex;align-items:center;gap:.35rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.11);border-radius:12px;padding:.5rem .7rem;font-size:.74rem;font-weight:700;color:rgba(255,255,255,.75);cursor:pointer;font-family:inherit;transition:border-color .18s,background .18s,color .18s}
+.gs-pick.on{background:rgba(200,255,61,.12);border-color:#C8FF3D;color:#C8FF3D}
+.gs-box{position:relative;border-radius:22px;overflow:hidden;min-height:190px;background:radial-gradient(circle at 30% 40%,rgba(200,255,61,.06),transparent 50%),radial-gradient(circle at 70% 60%,rgba(255,45,155,.05),transparent 50%),#120a1e;border:1.5px solid rgba(255,255,255,.1);margin-bottom:.9rem;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1rem;padding:2rem 1rem}
+.gs-frame{position:absolute;inset:14px;pointer-events:none}
+.gs-frame span{position:absolute;width:24px;height:24px;border:3px solid #C8FF3D;border-radius:4px}
+.gs-frame .fc1{top:0;left:0;border-right:none;border-bottom:none}
+.gs-frame .fc2{top:0;right:0;border-left:none;border-bottom:none}
+.gs-frame .fc3{bottom:0;left:0;border-right:none;border-top:none}
+.gs-frame .fc4{bottom:0;right:0;border-left:none;border-top:none}
+.gs-box-food{font-size:2.4rem;position:relative}
+.gs-box-food .gs-tag{position:absolute;top:-26px;left:50%;transform:translateX(-50%) scale(0);background:rgba(9,3,18,.92);border:1.5px solid #C8FF3D;color:#C8FF3D;font-size:.55rem;font-weight:800;padding:.2rem .45rem;border-radius:8px;white-space:nowrap;transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:3}
+.gs-box-food .gs-tag.show{transform:translateX(-50%) scale(1)}
+.gs-box-empty{font-size:.74rem;color:rgba(255,255,255,.3);font-weight:600;text-align:center}
+.gs-laser{position:absolute;left:8%;right:8%;height:2.5px;top:20%;background:linear-gradient(90deg,transparent,#C8FF3D 20%,#fff 50%,#C8FF3D 80%,transparent);box-shadow:0 0 18px #C8FF3D,0 0 40px rgba(200,255,61,.5);border-radius:2px;opacity:0;z-index:2}
+.gs-box.scanning .gs-laser{opacity:1;animation:gsSweep 1.4s ease-in-out infinite}
+@keyframes gsSweep{0%{top:10%}50%{top:86%}100%{top:10%}}
+.gs-scan-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:.6rem;padding:.95rem;border-radius:18px;border:none;cursor:pointer;font-size:.92rem;font-weight:800;font-family:inherit;background:linear-gradient(100deg,#FF2D9B,#9B2FFF);color:#fff;box-shadow:0 8px 32px rgba(255,45,155,.35);transition:transform .15s;margin-bottom:1.2rem}
+.gs-scan-btn:active{transform:scale(.97)}
+.gs-scan-btn:disabled{opacity:.55}
+.gs-results{display:none}
+.gs-results.show{display:block;animation:gsUp .5s ease}
+@keyframes gsUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.gs-chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.1rem}
+.gs-chip{display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.45rem .7rem;font-size:.72rem;font-weight:700;color:#fff}
+.gs-chip .gs-pct{font-size:.58rem;font-weight:800;color:#C8FF3D}
+.gs-meal{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:1rem;margin-bottom:.8rem}
+.gs-meal-top{display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem}
+.gs-meal-emoji{width:44px;height:44px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:rgba(155,47,255,.14);border:1px solid rgba(155,47,255,.25)}
+.gs-meal-name{font-size:.88rem;font-weight:800;color:#fff;line-height:1.25}
+.gs-meal-ing{font-weight:600;font-size:.63rem;color:rgba(255,255,255,.4)}
+.gs-meal-match{margin-left:auto;flex-shrink:0;font-size:.6rem;font-weight:800;color:#C8FF3D;background:rgba(200,255,61,.1);border:1px solid rgba(200,255,61,.25);border-radius:8px;padding:.25rem .5rem}
+.gs-bens{display:flex;flex-direction:column;gap:.35rem}
+.gs-ben{display:flex;gap:.5rem;font-size:.72rem;color:rgba(255,255,255,.55);line-height:1.45}
+.gs-ben b{color:rgba(255,255,255,.85)}
+.gs-ben::before{content:'✦';color:#FF2D9B;font-size:.6rem;flex-shrink:0;margin-top:.15rem}
+
 /* LOGIN SCREEN */
 #loginScreen{position:fixed;inset:0;background:radial-gradient(ellipse 130% 70% at 20% 0%,#1e0a3c,#0D0618 55%,#080310);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;transition:opacity .5s,visibility .5s}
 #loginScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
@@ -501,6 +558,8 @@ button,input,select{font-size:16px}
 .bottom-tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(9,3,18,.94);border-top:1px solid rgba(255,255,255,.07);padding:.42rem 0 calc(.42rem + env(safe-area-inset-bottom,0px));z-index:200;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
 .btab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.5rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:.2rem 0;font-family:inherit;}
 .btab.active{color:#FF2D9B;}
+.btab-scan-ico{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(120deg,#FF2D9B,#9B2FFF);box-shadow:0 4px 20px rgba(255,45,155,.45),0 0 0 4px rgba(9,3,18,.94);margin-top:-18px;font-size:1.25rem;}
+.btab-scan.active{color:#C8FF3D;}
 .btab-icon{font-size:1.2rem;line-height:1;}
 .btab.active .btab-icon{filter:drop-shadow(0 0 6px rgba(255,45,155,.65));}
 
@@ -635,6 +694,16 @@ button,input,select{font-size:16px}
     </div>
     <div class="home-tip-lbl">✦ Daily Glow Tip</div>
     <div id="glowTipWrap"></div>
+
+    <div class="gs-hero" onclick="switchMainTab('scan',document.querySelector('.btab[data-tab=scan]'))">
+      <span class="gs-sticker g1">🥑</span>
+      <span class="gs-sticker g2">📸</span>
+      <span class="gs-sticker g3">🍓</span>
+      <div class="gs-hero-tag"><span class="gs-dot"></span> new · glow scan</div>
+      <div class="gs-hero-title">scan ur fridge,<br><span class="gs-holo">unlock ur glow</span></div>
+      <div class="gs-hero-sub">pick the ingredients you have — get instant skin-boost meals, no guessing fr</div>
+      <button class="gs-hero-cta">✨ Glow Scan</button>
+    </div>
   </div>
 </div>
 
@@ -716,6 +785,26 @@ button,input,select{font-size:16px}
 </div>
 
 <!-- MORE -->
+<div class="section" id="sec-scan">
+  <div style="padding:0 1.1rem 6rem;max-width:560px;margin:0 auto">
+    <div class="gs-title">Glow Scan 📸</div>
+    <div class="gs-sub">Pick what's in your fridge — get skin-boosting meal ideas</div>
+
+    <div class="gs-label">What do you have?</div>
+    <div class="gs-picker" id="gsPicker"></div>
+
+    <div class="gs-box" id="gsBox">
+      <div class="gs-frame"><span class="fc1"></span><span class="fc2"></span><span class="fc3"></span><span class="fc4"></span></div>
+      <div class="gs-laser"></div>
+      <div class="gs-box-empty" id="gsBoxEmpty">Tap ingredients above to add them here</div>
+    </div>
+
+    <button class="gs-scan-btn" id="gsScanBtn" onclick="runGlowScan()">✨ Scan Ingredients</button>
+
+    <div class="gs-results" id="gsResults"></div>
+  </div>
+</div>
+
 <div class="section" id="sec-more">
   <div class="sec-hero">
     <h2>✦ More</h2>
@@ -3045,6 +3134,129 @@ document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='
 function renderJournalEntries(){renderJournal();}
 
 /* ══════════════════════════════════════
+   GLOW SCAN
+══════════════════════════════════════ */
+const GS_INGREDIENTS=[
+  {id:'avocado',emoji:'🥑',name:'Avocado',nutrient:'Vit E',pct:92},
+  {id:'salmon',emoji:'🐟',name:'Salmon',nutrient:'Omega-3',pct:96},
+  {id:'tomato',emoji:'🍅',name:'Tomato',nutrient:'Lycopene',pct:85},
+  {id:'spinach',emoji:'🥬',name:'Spinach',nutrient:'Vit A',pct:89},
+  {id:'blueberry',emoji:'🫐',name:'Blueberry',nutrient:'Antiox',pct:90},
+  {id:'egg',emoji:'🥚',name:'Egg',nutrient:'Biotin',pct:82},
+  {id:'sweetpotato',emoji:'🍠',name:'Sweet Potato',nutrient:'Beta-carotene',pct:88},
+  {id:'walnut',emoji:'🌰',name:'Walnuts',nutrient:'Omega-3',pct:84},
+  {id:'yogurt',emoji:'🥛',name:'Greek Yogurt',nutrient:'Probiotics',pct:80},
+  {id:'oats',emoji:'🌾',name:'Oats',nutrient:'Zinc',pct:78},
+  {id:'orange',emoji:'🍊',name:'Orange',nutrient:'Vit C',pct:87},
+  {id:'darkchoc',emoji:'🍫',name:'Dark Chocolate',nutrient:'Flavanols',pct:75},
+];
+const GS_MEALS=[
+  {emoji:'🥗',name:'Salmon Glow Bowl',ings:['salmon','avocado','spinach'],bens:[
+    ['Omega-3','from salmon calms redness & strengthens the skin barrier'],
+    ['Vitamin E','from avocado deeply moisturises from within'],
+    ['Vitamin A','from spinach speeds up skin cell renewal']]},
+  {emoji:'🍝',name:'Tomato Glow Pasta',ings:['tomato','spinach'],bens:[
+    ['Lycopene','from cooked tomato is a natural sun-damage shield'],
+    ['Iron','from spinach boosts oxygen flow for a healthy flush']]},
+  {emoji:'🥙',name:'Avocado Glow Toast',ings:['avocado','tomato','egg'],bens:[
+    ['Healthy fats','keep skin plump and reduce fine lines'],
+    ['Biotin','from egg strengthens skin, hair and nails'],
+    ['Vitamin C','from fresh tomato helps build collagen']]},
+  {emoji:'🥣',name:'Berry Glow Bowl',ings:['blueberry','yogurt','oats'],bens:[
+    ['Antioxidants','from blueberries fight dullness and early ageing'],
+    ['Probiotics','from yogurt balance your skin from the gut up'],
+    ['Zinc','from oats helps calm breakouts']]},
+  {emoji:'🍳',name:'Sunrise Glow Plate',ings:['egg','sweetpotato','spinach'],bens:[
+    ['Beta-carotene','from sweet potato gives a natural warm glow'],
+    ['Biotin','from egg supports skin renewal']]},
+  {emoji:'🥤',name:'Citrus Glow Smoothie',ings:['orange','blueberry','yogurt'],bens:[
+    ['Vitamin C','from orange is essential for collagen production'],
+    ['Antioxidants','protect against environmental damage']]},
+  {emoji:'🍫',name:'Choco Walnut Bites',ings:['darkchoc','walnut','oats'],bens:[
+    ['Flavanols','from dark chocolate boost skin hydration & blood flow'],
+    ['Omega-3','from walnuts keeps the skin barrier strong']]},
+];
+const gsSelected=new Set();
+
+function renderGsPicker(){
+  const el=document.getElementById('gsPicker');
+  if(!el)return;
+  el.innerHTML=GS_INGREDIENTS.map(i=>
+    `<button class="gs-pick${gsSelected.has(i.id)?' on':''}" onclick="gsToggle('${i.id}')">${i.emoji} ${i.name}</button>`
+  ).join('');
+  renderGsBox();
+}
+
+function gsToggle(id){
+  gsSelected.has(id)?gsSelected.delete(id):gsSelected.add(id);
+  renderGsPicker();
+  document.getElementById('gsResults').classList.remove('show');
+}
+
+function renderGsBox(){
+  const box=document.getElementById('gsBox');
+  const items=GS_INGREDIENTS.filter(i=>gsSelected.has(i.id));
+  const inner=items.length
+    ?items.map(i=>`<div class="gs-box-food" data-ing="${i.id}"><span class="gs-tag">${i.name} · ${i.nutrient}</span>${i.emoji}</div>`).join('')
+    :'<div class="gs-box-empty">Tap ingredients above to add them here</div>';
+  box.innerHTML='<div class="gs-frame"><span class="fc1"></span><span class="fc2"></span><span class="fc3"></span><span class="fc4"></span></div><div class="gs-laser"></div>'+inner;
+}
+
+let gsScanning=false;
+function runGlowScan(){
+  if(gsScanning)return;
+  if(!gsSelected.size){alert('Pick at least one ingredient first ✨');return;}
+  gsScanning=true;
+  const box=document.getElementById('gsBox');
+  const btn=document.getElementById('gsScanBtn');
+  const results=document.getElementById('gsResults');
+  results.classList.remove('show');
+  box.classList.add('scanning');
+  btn.disabled=true;btn.textContent='Scanning…';
+
+  const tags=box.querySelectorAll('.gs-tag');
+  tags.forEach((t,i)=>setTimeout(()=>t.classList.add('show'),700+i*550));
+
+  setTimeout(()=>{
+    box.classList.remove('scanning');
+    btn.disabled=false;btn.textContent='✨ Scan Ingredients';
+    renderGsResults();
+    results.classList.add('show');
+    gsScanning=false;
+    logDailyActivity();
+    updateHomeDashboard();
+  },900+tags.length*550+800);
+}
+
+function renderGsResults(){
+  const el=document.getElementById('gsResults');
+  const picked=GS_INGREDIENTS.filter(i=>gsSelected.has(i.id));
+  const meals=GS_MEALS
+    .map(m=>{
+      const have=m.ings.filter(x=>gsSelected.has(x)).length;
+      return {...m,score:Math.round(have/m.ings.length*100),have};
+    })
+    .filter(m=>m.have>0)
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,4);
+  const ingName=id=>{const f=GS_INGREDIENTS.find(i=>i.id===id);return f?f.name:id;};
+  el.innerHTML=
+    `<div class="gs-label">${picked.length} glow ingredient${picked.length>1?'s':''} detected</div>`+
+    `<div class="gs-chips">${picked.map(i=>`<span class="gs-chip">${i.emoji} ${i.name} <span class="gs-pct">${i.pct}% glow</span></span>`).join('')}</div>`+
+    `<div class="gs-label">Skin-boost meals you can make</div>`+
+    meals.map(m=>
+      `<div class="gs-meal">
+        <div class="gs-meal-top">
+          <div class="gs-meal-emoji">${m.emoji}</div>
+          <div><div class="gs-meal-name">${m.name}</div><div class="gs-meal-ing">${m.ings.map(ingName).join(' · ')}</div></div>
+          <span class="gs-meal-match">${m.score}% match</span>
+        </div>
+        <div class="gs-bens">${m.bens.map(b=>`<div class="gs-ben"><span><b>${b[0]}</b> ${b[1]}</span></div>`).join('')}</div>
+      </div>`
+    ).join('');
+}
+
+/* ══════════════════════════════════════
    SUPABASE AUTH
 ══════════════════════════════════════ */
 const SUPA_URL='https://gbiinonyapnsnjcesedn.supabase.co';
@@ -3182,6 +3394,7 @@ renderSkinTypeFilter();
 renderMasks();
 renderConcernFilter();
 renderMeals();
+renderGsPicker();
 
 /* ══════════════════════════════════════
    SPLASH SCREEN
@@ -3557,6 +3770,9 @@ if('serviceWorker' in navigator){
   </button>
   <button class="btab" data-tab="foods" onclick="switchMainTab('foods',this)">
     <span class="btab-icon">🥗</span><span>Foods</span>
+  </button>
+  <button class="btab btab-scan" data-tab="scan" onclick="switchMainTab('scan',this)">
+    <span class="btab-icon btab-scan-ico">📸</span><span>Scan</span>
   </button>
   <button class="btab" data-tab="progress" onclick="switchMainTab('progress',this)">
     <span class="btab-icon">📈</span><span>Progress</span>

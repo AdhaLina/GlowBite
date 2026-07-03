@@ -473,8 +473,9 @@ button,input,select{font-size:16px}
 .login-guest-btn:hover{color:rgba(255,255,255,.6)}
 
 /* SPLASH */
-#splash{position:fixed;inset:0;background:radial-gradient(ellipse 120% 80% at 15% 0%,#2a1339,#12081a 55%,#0c0512);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;transition:opacity .6s,visibility .6s}
-#splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#splash{position:fixed;inset:0;background:radial-gradient(ellipse 120% 80% at 15% 0%,#2a1339,#12081a 55%,#0c0512);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;transition:opacity .6s,visibility .6s;animation:splashAutohide 0s 4s forwards}
+@keyframes splashAutohide{to{opacity:0;visibility:hidden;pointer-events:none}}
+#splash.hidden{opacity:0;visibility:hidden;pointer-events:none;animation:none}
 .splash-logo{font-size:4rem;animation:splashPop .6s cubic-bezier(.34,1.56,.64,1)}
 @keyframes splashPop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
 .splash-title{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:2.2rem;font-weight:800;color:#fff;letter-spacing:-.03em;background:linear-gradient(100deg,#fff 30%,#FFD9EC 60%,#C6FF3D 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -559,7 +560,7 @@ button,input,select{font-size:16px}
 <div class="fruit-layer" id="fruitLayer"></div>
 
 <!-- LOGIN SCREEN -->
-<div id="loginScreen" class="hidden">
+<div id="loginScreen">
   <div class="login-logo">✨</div>
   <div class="login-title">GlowBite</div>
   <div class="login-sub">Foods for glowing skin — sign in to save your progress across all your devices</div>

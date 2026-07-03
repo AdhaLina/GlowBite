@@ -788,14 +788,14 @@ button,input,select{font-size:16px}
       <button class="recipes-tab active" id="rtab-masks" onclick="switchRecipePanel('masks',this)">Home Masks</button>
       <button class="recipes-tab" id="rtab-meals" onclick="switchRecipePanel('meals',this)">Meals</button>
     </div>
-    <!-- MASKS PANEL -->
-    <div class="rec-panel" id="rpanel-masks">
-      <div class="rec-section-label">Based on your favourites</div>
+    <!-- MASKS SECTION -->
+    <div id="rpanel-masks">
+      <div class="rec-section-label" id="maskSectionLabel">Based on your favourites</div>
       <div class="stype-row" id="stypeRow2"></div>
       <div id="recipeMaskGrid"></div>
     </div>
-    <!-- MEALS PANEL -->
-    <div class="rec-panel" id="rpanel-meals" style="display:none">
+    <!-- MEALS SECTION -->
+    <div id="rpanel-meals" style="margin-top:.5rem">
       <div class="rec-section-label">Glow Meals</div>
       <div class="concern-row" id="concernRow2"></div>
       <div id="recipeMealGrid"></div>
@@ -2603,15 +2603,10 @@ function switchRecipeTab(id,btn){
 function switchRecipePanel(id,btn){
   document.querySelectorAll('.recipes-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.rec-panel').forEach(p=>p.style.display='none');
-  document.getElementById('rpanel-'+id).style.display='flex';
-  document.getElementById('rpanel-'+id).style.flexDirection='column';
-  document.getElementById('rpanel-'+id).style.gap='1rem';
+  const el=document.getElementById('rpanel-'+id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function renderRecipesSection(){
-  // Ensure active panel shows as flex
-  const ap=document.getElementById('rpanel-masks');
-  if(ap&&ap.style.display!=='none'){ap.style.display='flex';ap.style.flexDirection='column';ap.style.gap='1rem';}
   // Skin type filter
   const sf=document.getElementById('stypeRow2');
   if(sf&&!sf.children.length)sf.innerHTML=skinTypeLabels.map((l,i)=>`<button class="stype-btn${i===0?' active':''}" onclick="setSkinType('${skinTypeValues[i]}',this);renderRecipesSection()">${l}</button>`).join('');

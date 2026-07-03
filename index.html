@@ -406,14 +406,29 @@ button,input,select{font-size:16px}
 /* FOOD MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;display:flex;align-items:flex-end;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .overlay.open{opacity:1;visibility:visible}
-.modal{background:#1B1024;border-radius:28px 28px 0 0;width:100%;max-height:92vh;overflow-y:auto;border-top:1px solid rgba(255,255,255,.1)}
+.modal{background:linear-gradient(180deg,#1B0E28,#0F0817);border-radius:28px 28px 0 0;width:100%;max-height:92vh;overflow-y:auto;border-top:1px solid rgba(255,255,255,.1)}
 .modal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:.8rem auto .4rem}
-.modal-head{padding:1.4rem 1.2rem 1rem;color:#fff;position:relative}
-.fm-emoji,.m-emoji{font-size:3rem;margin-bottom:.4rem;display:block}
-.fm-name,.m-name{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem}
-.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.12);border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center}
-.m-tags{display:flex;gap:.35rem;flex-wrap:wrap}
-.m-tags .tag{background:rgba(255,255,255,.12);color:#fff}
+/* Result-style food modal */
+.fm-banner{width:100%;height:190px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:visible;flex-shrink:0}
+.fm-score-badge{position:absolute;top:12px;right:22px;width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#E7FF9C,#C6FF3D 55%,#8FCB00);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(198,255,61,.4);border:3px solid #0F0817;z-index:2}
+.fm-score-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:24px;font-weight:800;color:#12081a;line-height:1}
+.fm-score-lbl{font-size:8.5px;font-weight:800;color:#12081a;letter-spacing:.03em}
+.fm-info{padding:0 1.2rem 1rem}
+.fm-name2{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-.02em;color:#fff;margin-bottom:.2rem}
+.fm-sub{font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:.8rem}
+.modal-close{position:absolute;top:.75rem;right:1rem;background:rgba(0,0,0,.4);border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);z-index:10}
+.fm-why-card{margin:0 1.2rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:1.1rem 1rem}
+.fm-why-label{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.85rem}
+.fm-why-row{display:flex;align-items:center;gap:12px;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.fm-why-row:last-child{border-bottom:none;padding-bottom:0}
+.fm-why-icon{width:34px;height:34px;border-radius:10px;flex-shrink:0}
+.fm-why-name{font-size:.88rem;font-weight:700;color:#fff;flex:1}
+.fm-why-sub{font-size:.72rem;color:rgba(255,255,255,.45);margin-top:1px}
+.fm-why-pts{font-size:.82rem;font-weight:800;color:#C6FF3D}
+.fm-routine-btn{display:block;width:calc(100% - 2.4rem);margin:0 1.2rem;border:none;border-radius:20px;padding:17px;background:var(--grad-btn);color:#fff;font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.01em;box-shadow:0 12px 30px rgba(255,62,154,.35);cursor:pointer;transition:transform .15s;text-align:center}
+.fm-routine-btn:active{transform:scale(.97)}
+.fm-extra-section{padding:1.2rem 1.2rem .5rem;border-top:1px solid rgba(255,255,255,.08);margin-top:1.2rem}
+.fm-extra-label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:.75rem}
 .tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.08);padding:0 1.2rem}
 .tab-btn{padding:.75rem .9rem;border:none;background:none;cursor:pointer;font-size:.84rem;font-weight:700;color:rgba(255,255,255,.45);border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;white-space:nowrap}
 .tab-btn.active{color:#C6FF3D;border-bottom-color:#C6FF3D}
@@ -550,6 +565,8 @@ button,input,select{font-size:16px}
 .recipes-tab.active{background:var(--grad-btn);color:#fff;box-shadow:0 6px 18px rgba(255,62,154,.3)}
 .recipes-tab:not(.active){background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
 .recipes-panel{display:none}.recipes-panel.active{display:flex;flex-direction:column;gap:.9rem}
+/* recipe section label */
+.rec-section-label{font-size:.78rem;font-weight:800;color:rgba(255,255,255,.55);letter-spacing:.06em;text-transform:uppercase}
 /* recipe card with image banner */
 .rec-card{border-radius:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);overflow:hidden;cursor:pointer;transition:transform .2s}
 .rec-card:active{transform:scale(.97)}
@@ -659,10 +676,10 @@ button,input,select{font-size:16px}
       </div>
       <div class="home-stat-card">
         <div class="home-stat-num" style="color:#FF6B6B" id="homeSavedNum">0</div>
-        <div class="home-stat-lbl">foods saved</div>
+        <div class="home-stat-lbl">foods scanned</div>
       </div>
     </div>
-    <button class="home-scan-btn" onclick="switchTab('foods',document.getElementById('tab-foods'))">Scan a food ✦</button>
+    <button class="home-scan-btn" onclick="switchTab('foods',document.getElementById('tab-foods'))">🥗 Explore Glow Foods ✦</button>
     <div>
       <div class="home-picks-hdr">
         <div class="home-picks-title">Glow-boosting picks</div>
@@ -761,22 +778,16 @@ button,input,select{font-size:16px}
   </div>
 </div>
 
-<!-- RECIPES (masks + meals combined) -->
+<!-- RECIPES (masks + meals on same page) -->
 <div class="section" id="sec-recipes">
   <div class="recipes-wrap">
-    <div class="recipes-hdr"><h2>Recipes for you</h2><p>Masks &amp; meals for glowing skin</p></div>
-    <div class="recipes-tab-row">
-      <button class="recipes-tab active" id="rtab-masks" onclick="switchRecipeTab('masks',this)">Home Masks</button>
-      <button class="recipes-tab" id="rtab-meals" onclick="switchRecipeTab('meals',this)">Meals</button>
-    </div>
-    <div class="recipes-panel active" id="rpanel-masks">
-      <div class="stype-row" id="stypeRow2"></div>
-      <div id="recipeMaskGrid"></div>
-    </div>
-    <div class="recipes-panel" id="rpanel-meals">
-      <div class="concern-row" id="concernRow2"></div>
-      <div id="recipeMealGrid"></div>
-    </div>
+    <div class="recipes-hdr"><h2>Recipes for you</h2><p>Made from foods for glowing skin</p></div>
+    <div class="rec-section-label">🧖 Home Masks</div>
+    <div class="stype-row" id="stypeRow2"></div>
+    <div id="recipeMaskGrid"></div>
+    <div class="rec-section-label" style="margin-top:.5rem">🍽️ Glow Meals</div>
+    <div class="concern-row" id="concernRow2"></div>
+    <div id="recipeMealGrid"></div>
   </div>
 </div>
 
@@ -943,22 +954,34 @@ button,input,select{font-size:16px}
 
 <!-- FOOD MODAL -->
 <div class="overlay" id="foodOverlay">
-  <div class="modal">
-    <div class="modal-head" id="fmHead">
-      <button class="modal-close" onclick="closeFoodModal()">✕</button>
-      <span class="m-emoji" id="fmEmoji"></span>
-      <h2 class="m-name" id="fmName"></h2>
-      <div class="m-tags" id="fmTags"></div>
+  <div class="modal" style="position:relative">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeFoodModal()" style="position:absolute;top:1rem;right:1rem">✕</button>
+    <div class="fm-banner" id="fmBanner">
+      <span id="fmEmoji" style="position:relative;z-index:1"></span>
+      <div class="fm-score-badge" id="fmScoreBadge">
+        <div class="fm-score-num" id="fmScoreNum">—</div>
+        <div class="fm-score-lbl">GLOW</div>
+      </div>
     </div>
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('ov',this)">Overview</button>
-      <button class="tab-btn" onclick="switchTab('nu',this)">Nutrients</button>
-      <button class="tab-btn" onclick="switchTab('sk',this)">Skin Benefits</button>
+    <div class="fm-info">
+      <div class="fm-name2" id="fmName"></div>
+      <div class="fm-sub" id="fmSub"></div>
     </div>
-    <div class="tab-content">
-      <div class="tab-panel active" id="tab-ov"></div>
-      <div class="tab-panel" id="tab-nu"></div>
-      <div class="tab-panel" id="tab-sk"></div>
+    <div class="fm-why-card" id="fmWhyCard"></div>
+    <button class="fm-routine-btn" id="fmRoutineBtn" onclick="fmToggleFav()">Add to my routine ✦</button>
+    <div class="fm-extra-section">
+      <div class="fm-extra-label">More details</div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('ov',this)">Overview</button>
+        <button class="tab-btn" onclick="switchTab('nu',this)">Nutrients</button>
+        <button class="tab-btn" onclick="switchTab('sk',this)">Skin Benefits</button>
+      </div>
+      <div class="tab-content">
+        <div class="tab-panel active" id="tab-ov"></div>
+        <div class="tab-panel" id="tab-nu"></div>
+        <div class="tab-panel" id="tab-sk"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -2566,41 +2589,32 @@ function switchRecipeTab(id,btn){
 }
 
 function renderRecipesSection(){
-  // Masks panel
-  const mf=masks.filter(m=>activeSkinType==='all'||m.skinTypes.includes(activeSkinType)||m.skinTypes.includes('all'));
-  const mg=document.getElementById('recipeMaskGrid');
-  if(mg)mg.innerHTML=mf.map(m=>`
-    <div class="rec-card" onclick="openMaskModal(${m.id})" style="margin-bottom:.75rem">
-      <div class="rec-banner" style="background:${m.color}">${m.emoji}</div>
+  const recCard=(emoji,color,name,time,desc,chips,onclick)=>`
+    <div class="rec-card" onclick="${onclick}">
+      <div class="rec-banner" style="background:${color}">${emoji}</div>
       <div class="rec-body">
         <div class="rec-title-row">
-          <div class="rec-name">${m.name}</div>
-          <div class="rec-time-badge">⏱ ${m.time}</div>
+          <div class="rec-name">${name}</div>
+          <div class="rec-time-badge">${time}</div>
         </div>
-        <div class="rec-desc">${m.benefit}</div>
-        <div class="rec-chips">${m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join('')}</div>
+        <div class="rec-desc">${desc}</div>
+        <div class="rec-chips">${chips}</div>
       </div>
-    </div>`).join('');
-  // Skin type filter for recipes
+    </div>`;
+  // Skin type filter
   const sf=document.getElementById('stypeRow2');
   if(sf&&!sf.children.length)sf.innerHTML=skinTypeLabels.map((l,i)=>`<button class="stype-btn${i===0?' active':''}" onclick="setSkinType('${skinTypeValues[i]}',this);renderRecipesSection()">${l}</button>`).join('');
-  // Meals panel
-  const meals2=activeConcern==='all'?meals:meals.filter(m=>m.concerns.includes(activeConcern));
-  const mlg=document.getElementById('recipeMealGrid');
-  if(mlg)mlg.innerHTML=meals2.map(m=>`
-    <div class="rec-card" onclick="openMealModal(${m.id})" style="margin-bottom:.75rem">
-      <div class="rec-banner" style="background:${m.color}">${m.emoji}</div>
-      <div class="rec-body">
-        <div class="rec-title-row">
-          <div class="rec-name">${m.name}</div>
-          <div class="rec-time-badge">⏱ ${m.time}</div>
-        </div>
-        <div class="rec-desc">${m.tagline}</div>
-        <div class="rec-chips">${m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join('')}</div>
-      </div>
-    </div>`).join('');
+  // Masks
+  const mf=masks.filter(m=>activeSkinType==='all'||m.skinTypes.includes(activeSkinType)||m.skinTypes.includes('all'));
+  const mg=document.getElementById('recipeMaskGrid');
+  if(mg)mg.innerHTML=mf.map(m=>recCard(m.emoji,m.color,m.name,'⏱ '+m.time,m.benefit,m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join(''),`openMaskModal(${m.id})`)).join('');
+  // Concern filter
   const cf=document.getElementById('concernRow2');
   if(cf&&!cf.children.length)cf.innerHTML=concernLabels.map((c,i)=>`<button class="concern-btn${i===0?' active':''}" onclick="setConcern('${c.val}',this);renderRecipesSection()">${c.label}</button>`).join('');
+  // Meals
+  const meals2=activeConcern==='all'?meals:meals.filter(m=>m.concerns.includes(activeConcern));
+  const mlg=document.getElementById('recipeMealGrid');
+  if(mlg)mlg.innerHTML=meals2.map(m=>recCard(m.emoji,m.color,m.name,'⏱ '+m.time,m.tagline,m.ingredients.slice(0,4).map(i=>`<span class="rec-chip">${i.emoji} ${i.item}</span>`).join(''),`openMealModal(${m.id})`)).join('');
 }
 
 /* GLOW SCORES lookup */
@@ -2786,7 +2800,7 @@ function flipCard(e,id){
 let favourites=new Set(JSON.parse(localStorage.getItem('glowbiteFavs')||'[]'));
 let favOnly=false;
 
-function saveFavs(){const arr=JSON.stringify([...favourites]);localStorage.setItem('glowbiteFavs',arr);localStorage.setItem('glowFavs',arr);if(typeof renderHome==='function')renderHome();}
+function saveFavs(){const arr=JSON.stringify([...favourites]);localStorage.setItem('glowbiteFavs',arr);localStorage.setItem('glowFavs',arr);if(typeof renderHome==='function')renderHome();if(typeof updateFmRoutineBtn==='function')updateFmRoutineBtn();}
 
 function toggleFav(id,btn){
   if(favourites.has(id)){
@@ -2855,25 +2869,66 @@ function renderFoods(){
 /* ══════════════════════════════════════
    FOOD MODAL
 ══════════════════════════════════════ */
+let currentFoodModalId=null;
 function openFoodModal(id){
   const f=foods.find(x=>x.id===id);if(!f)return;
+  currentFoodModalId=id;
+  const score=getFoodGlowScore(f.id);
+  // Banner
   document.getElementById('fmEmoji').textContent=f.emoji;
+  document.getElementById('fmEmoji').style.fontSize='5rem';
+  const banner=document.getElementById('fmBanner');
+  banner.style.background=f.color;
+  banner.style.borderRadius='0';
+  // Score badge
+  document.getElementById('fmScoreNum').textContent=score;
+  // Name + subtitle
   document.getElementById('fmName').textContent=f.name;
-  document.getElementById('fmHead').style.background=f.color;
-  document.getElementById('fmTags').innerHTML=
-    `<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">${f.category}</span>`+
-    (f.isVegetarian?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">🌿 Vegetarian</span>`:'')+
-    (f.isHalal?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">☪️ Halal</span>`:'');
-  const iconBgs=['linear-gradient(135deg,#FF6B6B,#FF3E9A)','linear-gradient(135deg,#FFC857,#f7971e)','linear-gradient(135deg,#C6FF3D,#8FCB00)','linear-gradient(135deg,#7B2FF7,#FF3E9A)','linear-gradient(135deg,#00E5CC,#7B2FF7)'];
-  const whyGlowRows=f.nutrients.slice(0,5).map((n,i)=>`<div class="why-glow-row"><div class="why-glow-icon" style="background:${iconBgs[i%iconBgs.length]}">✦</div><div class="why-glow-name">${n.name}</div><div class="why-glow-pts">+${Math.round(getFoodGlowScore(f.id)*0.12*(i===0?1:.75**i))} glow</div></div>`).join('');
-  document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">✦ Why it glows</p><div class="why-glow-list">${whyGlowRows}</div><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  document.getElementById('fmSub').textContent=f.category+(f.isVegetarian?' · 🌿 Vegetarian':'')+(f.isHalal?' · ☪️ Halal':'');
+  // Why it glows card
+  const iconBgs=['linear-gradient(135deg,#FFC857,#FF6B6B)','linear-gradient(135deg,#7B2FF7,#FF3E9A)','linear-gradient(135deg,#C6FF3D,#22C55E)','linear-gradient(135deg,#FF6B6B,#FF3E9A)','linear-gradient(135deg,#00E5CC,#7B2FF7)'];
+  const whyRows=f.nutrients.slice(0,3).map((n,i)=>`
+    <div class="fm-why-row">
+      <div class="fm-why-icon" style="background:${iconBgs[i%iconBgs.length]}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="fm-why-name">${n.name}</div>
+        <div class="fm-why-sub">${n.skinBenefit||''}</div>
+      </div>
+      <div class="fm-why-pts">+${Math.round(score*0.14*(i===0?1:.75**i))}</div>
+    </div>`).join('');
+  document.getElementById('fmWhyCard').innerHTML=`<div class="fm-why-label">Why it glows</div>${whyRows}`;
+  // Routine button state
+  updateFmRoutineBtn();
+  // Extra detail tabs
+  const whyGlowRows=f.nutrients.slice(0,5).map((n,i)=>`<div class="why-glow-row"><div class="why-glow-icon" style="background:${iconBgs[i%iconBgs.length]}">✦</div><div class="why-glow-name">${n.name}</div><div class="why-glow-pts">+${Math.round(score*0.12*(i===0?1:.75**i))} glow</div></div>`).join('');
+  document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
   document.getElementById('tab-nu').innerHTML=f.nutrients.map(n=>`<div class="ncard"><div class="ntop"><span class="nname">${n.name}</span><span class="namount">${n.amount} / 100g</span></div><p class="nskin">🔬 ${n.skinBenefit}</p></div>`).join('');
   document.getElementById('tab-sk').innerHTML=f.skinBenefits.map(s=>`<div class="scard"><span class="sicon">${s.icon}</span><div><p class="stitle">${s.title}</p><p class="sdesc">${s.desc}</p></div></div>`).join('');
   switchTab('ov',document.querySelector('#foodOverlay .tab-btn'));
   document.getElementById('foodOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function closeFoodModal(){document.getElementById('foodOverlay').classList.remove('open');document.body.style.overflow='';}
+function updateFmRoutineBtn(){
+  if(currentFoodModalId===null)return;
+  const btn=document.getElementById('fmRoutineBtn');
+  if(!btn)return;
+  const isFav=favourites.has(currentFoodModalId);
+  btn.textContent=isFav?'❤️ In my routine':'Add to my routine ✦';
+  btn.style.background=isFav?'rgba(255,62,154,.2)':'var(--grad-btn)';
+  btn.style.border=isFav?'1.5px solid rgba(255,62,154,.4)':'none';
+}
+function fmToggleFav(){
+  if(currentFoodModalId===null)return;
+  const btn=document.querySelector(`[onclick*="toggleFav(${currentFoodModalId}"]`);
+  if(btn)btn.click();
+  else{
+    if(favourites.has(currentFoodModalId))favourites.delete(currentFoodModalId);
+    else favourites.add(currentFoodModalId);
+    saveFavs();
+  }
+  updateFmRoutineBtn();
+}
+function closeFoodModal(){document.getElementById('foodOverlay').classList.remove('open');document.body.style.overflow='';currentFoodModalId=null;}
 
 function switchTab(name,btn){
   document.querySelectorAll('#foodOverlay .tab-panel').forEach(p=>p.classList.remove('active'));

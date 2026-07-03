@@ -493,7 +493,21 @@ button,input,select{font-size:16px}
 .home-ava{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#FF2D9B,#9B2FFF);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:#fff;}
 .home-scroll{padding:0 1rem 6rem;}
 .home-date-lbl{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:.15rem;}
-.home-greeting{font-size:1.55rem;font-weight:900;letter-spacing:-.02em;background:linear-gradient(90deg,#fff,#FFB3DA);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:.75rem;}
+.home-greeting{font-size:1.55rem;font-weight:900;letter-spacing:-.02em;background:linear-gradient(90deg,#fff,#FFB3DA);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:.75rem;cursor:pointer;display:flex;align-items:center;gap:.45rem;}
+.home-greeting::after{content:'✎';font-size:.85rem;opacity:.35;font-style:normal;background:none;-webkit-background-clip:initial;background-clip:initial;color:rgba(255,255,255,.35);}
+
+/* NAME EDIT MODAL */
+.name-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:700;display:flex;align-items:flex-end;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;}
+.name-modal-overlay.open{opacity:1;visibility:visible;}
+.name-modal{background:#1B1024;border-radius:28px 28px 0 0;width:100%;padding:1.4rem 1.2rem calc(1.8rem + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(255,255,255,.1);}
+.name-modal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:0 auto 1.2rem;}
+.name-modal h3{font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:.35rem;}
+.name-modal p{font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:1rem;}
+.name-input{width:100%;border:1.5px solid rgba(255,255,255,.12);border-radius:14px;padding:.8rem 1rem;font-size:1rem;font-family:inherit;outline:none;color:#fff;background:rgba(255,255,255,.06);transition:border-color .2s;margin-bottom:1rem;}
+.name-input:focus{border-color:#FF2D9B;box-shadow:0 0 0 3px rgba(255,45,155,.15);}
+.name-modal-actions{display:flex;gap:.65rem;}
+.name-save-btn{flex:1;background:linear-gradient(90deg,#FF2D9B,#9B2FFF);color:#fff;border:none;border-radius:14px;padding:.85rem;font-size:.95rem;font-weight:900;cursor:pointer;font-family:inherit;}
+.name-cancel-btn{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:14px;padding:.85rem 1.2rem;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;}
 .explore-glow-btn{width:100%;border:none;border-radius:16px;padding:.85rem;background:linear-gradient(90deg,#FF2D9B,#9B2FFF);color:#fff;font-weight:900;font-size:.9rem;display:flex;align-items:center;justify-content:center;gap:.4rem;margin-bottom:.8rem;box-shadow:0 8px 24px rgba(255,45,155,.4);cursor:pointer;position:relative;overflow:hidden;font-family:inherit;}
 .explore-glow-btn::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:shimmer 2.5s infinite;}
 .home-tip-lbl{font-size:.63rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin:.75rem 0 .4rem;}
@@ -551,7 +565,7 @@ button,input,select{font-size:16px}
   </div>
   <div class="home-scroll">
     <div class="home-date-lbl" id="homeDate">Friday, July 4</div>
-    <div class="home-greeting">Hey, you ✦</div>
+    <div class="home-greeting" id="homeGreeting" onclick="editGreetingName()" title="Tap to set your name"><span id="greetingText">Hey, you ✦</span></div>
     <div class="glow-score-wrap" style="padding:0 0 .75rem">
       <div class="glow-score-card">
         <div class="glow-score-inner">
@@ -740,6 +754,20 @@ button,input,select{font-size:16px}
       </div>
       <button class="journal-add-btn" onclick="openJournalModal()">✏️ Add Today's Entry</button>
       <div class="journal-entries" id="journalEntries"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAME EDIT MODAL -->
+<div class="name-modal-overlay" id="nameModalOverlay" onclick="if(event.target===this)closeNameModal()">
+  <div class="name-modal">
+    <div class="name-modal-handle"></div>
+    <h3>What's your name? ✦</h3>
+    <p>Your greeting will show on the Home screen</p>
+    <input class="name-input" id="nameInput" type="text" placeholder="e.g. Adha" maxlength="24" autocomplete="off">
+    <div class="name-modal-actions">
+      <button class="name-save-btn" onclick="saveGreetingName()">Save ✦</button>
+      <button class="name-cancel-btn" onclick="closeNameModal()">Cancel</button>
     </div>
   </div>
 </div>
@@ -2379,6 +2407,34 @@ function renderHomeDate(){
   el.textContent=d.toLocaleDateString('en-GB',{weekday:'long',month:'long',day:'numeric'});
 }
 
+function renderGreeting(){
+  const name=localStorage.getItem('glowbiteName')||'';
+  const t=document.getElementById('greetingText');
+  if(t)t.textContent='Hey, '+(name||'you')+' ✦';
+  const av=document.querySelector('.home-ava');
+  if(av)av.textContent=name?name[0].toUpperCase():'G';
+}
+
+function editGreetingName(){
+  const name=localStorage.getItem('glowbiteName')||'';
+  const inp=document.getElementById('nameInput');
+  inp.value=name;
+  document.getElementById('nameModalOverlay').classList.add('open');
+  setTimeout(()=>inp.focus(),200);
+}
+
+function saveGreetingName(){
+  const val=document.getElementById('nameInput').value.trim();
+  if(val)localStorage.setItem('glowbiteName',val);
+  else localStorage.removeItem('glowbiteName');
+  renderGreeting();
+  closeNameModal();
+}
+
+function closeNameModal(){
+  document.getElementById('nameModalOverlay').classList.remove('open');
+}
+
 function updateHomeDashboard(){
   const favs=JSON.parse(localStorage.getItem('glowbiteFavs')||'[]');
   const entries=JSON.parse(localStorage.getItem('glowbiteJournal')||'[]');
@@ -2924,7 +2980,8 @@ document.getElementById('halalToggle').addEventListener('change',e=>{halalOnly=e
 document.getElementById('foodOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('foodOverlay'))closeFoodModal();});
 document.getElementById('maskOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('maskOverlay'))closeMaskModal();});
 document.getElementById('mealOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('mealOverlay'))closeMealModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();closeNameModal();}});
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveGreetingName();});
 
 function renderJournalEntries(){renderJournal();}
 
@@ -2932,6 +2989,7 @@ function renderJournalEntries(){renderJournal();}
    INIT
 ══════════════════════════════════════ */
 renderHomeDate();
+renderGreeting();
 updateHomeDashboard();
 renderGlowTip();
 renderFoods();

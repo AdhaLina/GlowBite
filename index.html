@@ -780,20 +780,26 @@ button,input,select{font-size:16px}
   </div>
 </div>
 
-<!-- RECIPES (masks + meals on same page) -->
+<!-- RECIPES -->
 <div class="section" id="sec-recipes">
   <div class="recipes-wrap">
     <div class="recipes-hdr"><h2>Recipes for you</h2><p>Made from foods already in your kitchen</p></div>
     <div class="recipes-tab-row">
-      <button class="recipes-tab active" id="rtab-masks" onclick="scrollToRec('masks',this)">Home Masks</button>
-      <button class="recipes-tab" id="rtab-meals" onclick="scrollToRec('meals',this)">Meals</button>
+      <button class="recipes-tab active" id="rtab-masks" onclick="switchRecipePanel('masks',this)">Home Masks</button>
+      <button class="recipes-tab" id="rtab-meals" onclick="switchRecipePanel('meals',this)">Meals</button>
     </div>
-    <div class="rec-section-label" id="rec-anchor-masks">Based on your favourites</div>
-    <div class="stype-row" id="stypeRow2"></div>
-    <div id="recipeMaskGrid"></div>
-    <div class="rec-section-label" id="rec-anchor-meals" style="margin-top:.5rem">Glow Meals</div>
-    <div class="concern-row" id="concernRow2"></div>
-    <div id="recipeMealGrid"></div>
+    <!-- MASKS PANEL -->
+    <div class="rec-panel" id="rpanel-masks">
+      <div class="rec-section-label">Based on your favourites</div>
+      <div class="stype-row" id="stypeRow2"></div>
+      <div id="recipeMaskGrid"></div>
+    </div>
+    <!-- MEALS PANEL -->
+    <div class="rec-panel" id="rpanel-meals" style="display:none">
+      <div class="rec-section-label">Glow Meals</div>
+      <div class="concern-row" id="concernRow2"></div>
+      <div id="recipeMealGrid"></div>
+    </div>
   </div>
 </div>
 
@@ -2594,13 +2600,18 @@ function switchRecipeTab(id,btn){
   btn.classList.add('active');
 }
 
-function scrollToRec(id,btn){
+function switchRecipePanel(id,btn){
   document.querySelectorAll('.recipes-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  const anchor=document.getElementById('rec-anchor-'+id);
-  if(anchor)anchor.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.rec-panel').forEach(p=>p.style.display='none');
+  document.getElementById('rpanel-'+id).style.display='flex';
+  document.getElementById('rpanel-'+id).style.flexDirection='column';
+  document.getElementById('rpanel-'+id).style.gap='1rem';
 }
 function renderRecipesSection(){
+  // Ensure active panel shows as flex
+  const ap=document.getElementById('rpanel-masks');
+  if(ap&&ap.style.display!=='none'){ap.style.display='flex';ap.style.flexDirection='column';ap.style.gap='1rem';}
   // Skin type filter
   const sf=document.getElementById('stypeRow2');
   if(sf&&!sf.children.length)sf.innerHTML=skinTypeLabels.map((l,i)=>`<button class="stype-btn${i===0?' active':''}" onclick="setSkinType('${skinTypeValues[i]}',this);renderRecipesSection()">${l}</button>`).join('');

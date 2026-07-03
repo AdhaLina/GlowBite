@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — GlowBite</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0D0618;
+  --surface:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.08);
+  --text:#ECE7F5;
+  --muted:rgba(236,231,245,0.5);
+  --dim:rgba(236,231,245,0.28);
+  --pink:#FF2D9B;
+  --purple:#9B2FFF;
+  --lime:#C8FF3D;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  background:radial-gradient(ellipse 130% 70% at 20% 0%,#1e0a3c,#0D0618 55%,#080310) fixed;
+  background-color:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:0 0 4rem;
+  line-height:1.7;
+}
+
+/* Header */
+.pp-header{
+  background:rgba(13,6,24,0.9);
+  border-bottom:1px solid var(--border);
+  padding:1.25rem 1.5rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  position:sticky;
+  top:0;
+  z-index:10;
+  backdrop-filter:blur(16px);
+}
+.pp-back{
+  background:rgba(255,255,255,0.07);
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--text);
+  font-size:0.85rem;
+  font-weight:600;
+  padding:6px 14px;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.pp-back:hover{background:rgba(255,255,255,0.12)}
+.pp-header-title{
+  font-size:1rem;
+  font-weight:800;
+  color:var(--text);
+}
+
+/* Content */
+.pp-wrap{
+  max-width:680px;
+  margin:0 auto;
+  padding:2.5rem 1.5rem 0;
+}
+
+.pp-brand{
+  font-size:1.5rem;
+  font-weight:900;
+  background:linear-gradient(100deg,#fff 30%,#FFD9EC 60%,#C6FF3D 95%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  margin-bottom:.25rem;
+}
+.pp-title{
+  font-size:1.75rem;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:.4rem;
+  line-height:1.2;
+}
+.pp-updated{
+  font-size:.72rem;
+  color:var(--dim);
+  font-weight:600;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  margin-bottom:2rem;
+}
+
+.pp-intro{
+  background:rgba(155,47,255,0.1);
+  border:1px solid rgba(155,47,255,0.2);
+  border-radius:16px;
+  padding:1.25rem 1.5rem;
+  font-size:.88rem;
+  color:var(--muted);
+  margin-bottom:2.5rem;
+  line-height:1.65;
+}
+.pp-intro strong{color:var(--text)}
+
+/* Sections */
+.pp-section{margin-bottom:2.25rem}
+.pp-section-num{
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--pink);
+  margin-bottom:.3rem;
+}
+.pp-section h2{
+  font-size:1.05rem;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:.85rem;
+}
+.pp-section p{
+  font-size:.87rem;
+  color:var(--muted);
+  margin-bottom:.75rem;
+  line-height:1.7;
+}
+.pp-section p:last-child{margin-bottom:0}
+.pp-section strong{color:var(--text);font-weight:700}
+
+/* Table */
+.pp-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:.75rem 0 1rem;
+  font-size:.82rem;
+}
+.pp-table th{
+  text-align:left;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--dim);
+  padding:.65rem .85rem;
+  border-bottom:1px solid var(--border);
+}
+.pp-table td{
+  padding:.65rem .85rem;
+  color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  vertical-align:top;
+  line-height:1.5;
+}
+.pp-table td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+.pp-table tr:last-child td{border-bottom:none}
+.pp-table-wrap{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  overflow-x:auto;
+  margin:.75rem 0 1rem;
+}
+
+/* Rights list */
+.rights-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:.6rem;
+  margin:.5rem 0;
+}
+.rights-list li{
+  display:flex;
+  gap:.75rem;
+  font-size:.87rem;
+  color:var(--muted);
+  line-height:1.55;
+}
+.rights-list li::before{
+  content:'✦';
+  color:var(--lime);
+  font-size:.75rem;
+  flex-shrink:0;
+  margin-top:.15rem;
+}
+
+/* Divider */
+.pp-divider{
+  border:none;
+  border-top:1px solid var(--border);
+  margin:2rem 0;
+}
+
+/* Contact box */
+.pp-contact{
+  background:rgba(255,45,155,0.08);
+  border:1px solid rgba(255,45,155,0.18);
+  border-radius:16px;
+  padding:1.25rem 1.5rem;
+  margin-top:2rem;
+}
+.pp-contact h3{
+  font-size:.95rem;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:.5rem;
+}
+.pp-contact p{
+  font-size:.83rem;
+  color:var(--muted);
+  line-height:1.65;
+}
+.pp-contact a{color:var(--pink);text-decoration:none}
+.pp-contact a:hover{text-decoration:underline}
+
+/* Footer */
+.pp-footer{
+  text-align:center;
+  font-size:.68rem;
+  color:var(--dim);
+  margin-top:3rem;
+  padding-top:1.5rem;
+  border-top:1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<header class="pp-header">
+  <a class="pp-back" href="index.html">← Back to GlowBite</a>
+  <span class="pp-header-title">Privacy Policy</span>
+</header>
+
+<div class="pp-wrap">
+  <div class="pp-brand">GlowBite ✦</div>
+  <h1 class="pp-title">Privacy Policy</h1>
+  <div class="pp-updated">Last updated: 3 July 2026</div>
+
+  <div class="pp-intro">
+    <strong>Short version:</strong> GlowBite collects only what it needs to work — your name, email and photo from Google if you sign in. We do not sell your data, share it with advertisers, or track you across other websites. You can delete your account and all your data at any time.
+  </div>
+
+  <!-- 1 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 1</div>
+    <h2>Who we are</h2>
+    <p>GlowBite is a skin nutrition app that helps you discover foods for glowing skin. It is operated by the GlowBite team (<strong>adharalina@gmail.com</strong>).</p>
+    <p>For the purposes of UK and EU data protection law (UK GDPR / EU GDPR), GlowBite is the <strong>data controller</strong> — meaning we decide how and why your personal data is used.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 2</div>
+    <h2>What data we collect</h2>
+    <p>We only collect data that is necessary for the app to function. Here is exactly what we collect and why:</p>
+    <div class="pp-table-wrap">
+      <table class="pp-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Source</th>
+            <th>Why we collect it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Full name</td>
+            <td>Google account</td>
+            <td>To personalise your greeting in the app</td>
+          </tr>
+          <tr>
+            <td>Email address</td>
+            <td>Google account</td>
+            <td>To identify your account and for account recovery</td>
+          </tr>
+          <tr>
+            <td>Profile photo</td>
+            <td>Google account</td>
+            <td>To display your avatar in the app</td>
+          </tr>
+          <tr>
+            <td>Saved foods</td>
+            <td>Your actions in the app</td>
+            <td>To remember your favourite glow foods</td>
+          </tr>
+          <tr>
+            <td>Skin journal entries</td>
+            <td>Your actions in the app</td>
+            <td>To track your skin journey over time</td>
+          </tr>
+          <tr>
+            <td>Reminders</td>
+            <td>Your actions in the app</td>
+            <td>To send you glow check-in notifications</td>
+          </tr>
+          <tr>
+            <td>Glow activity</td>
+            <td>Your actions in the app</td>
+            <td>To calculate your weekly progress chart</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>If you choose to <strong>continue without signing in</strong>, we collect no personal data at all. Your saved foods and journal are stored only on your device and never sent to our servers.</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 3</div>
+    <h2>What we do NOT collect</h2>
+    <ul class="rights-list">
+      <li>Your Google password — we never see it. Google handles authentication entirely.</li>
+      <li>Your location or GPS data</li>
+      <li>Your contacts, camera or microphone</li>
+      <li>Any health or medical information beyond what you choose to write in your own skin journal</li>
+      <li>Browsing history or data from other websites or apps</li>
+      <li>Payment card details — these are handled entirely by Stripe and never touch our servers</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 4</div>
+    <h2>Legal basis for processing (UK &amp; EU GDPR)</h2>
+    <p>We process your personal data under the following legal bases:</p>
+    <div class="pp-table-wrap">
+      <table class="pp-table">
+        <thead>
+          <tr>
+            <th>Processing activity</th>
+            <th>Legal basis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Google sign-in and account creation</td>
+            <td>Contract — necessary to provide the service you signed up for</td>
+          </tr>
+          <tr>
+            <td>Saving your foods, journal and progress</td>
+            <td>Contract — core functionality of the app</td>
+          </tr>
+          <tr>
+            <td>Sending reminders</td>
+            <td>Consent — you explicitly set these up yourself</td>
+          </tr>
+          <tr>
+            <td>Premium subscription billing</td>
+            <td>Contract — necessary to process your payment</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 5</div>
+    <h2>How we store your data</h2>
+    <p>Your account data is stored securely on <strong>Supabase</strong> — a cloud database provider that is SOC 2 certified. All data is encrypted at rest and all connections use HTTPS encryption in transit.</p>
+    <p>Data stored on your device (saved foods, journal, activity) uses your browser's <strong>localStorage</strong>. This data never leaves your device unless you are signed in, in which case it is synced to your secure Supabase account.</p>
+    <p>We do not store your data on any server we personally own or operate. Supabase's infrastructure is hosted on AWS in the region you were closest to when you signed up.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 6</div>
+    <h2>Third parties we use</h2>
+    <div class="pp-table-wrap">
+      <table class="pp-table">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Purpose</th>
+            <th>Data shared</th>
+            <th>Their privacy policy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Google OAuth</td>
+            <td>Sign in with Google</td>
+            <td>Name, email, photo</td>
+            <td>policies.google.com/privacy</td>
+          </tr>
+          <tr>
+            <td>Supabase</td>
+            <td>Database and authentication</td>
+            <td>Account data and app data</td>
+            <td>supabase.com/privacy</td>
+          </tr>
+          <tr>
+            <td>Stripe</td>
+            <td>Payment processing (when applicable)</td>
+            <td>Payment details only</td>
+            <td>stripe.com/privacy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>We do not sell your data to any third party. We do not use your data for advertising. None of these services are permitted to use your data for their own marketing purposes.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 7</div>
+    <h2>How long we keep your data</h2>
+    <p>We keep your data for as long as you have an active GlowBite account. If you delete your account, all your personal data is permanently deleted from our database within <strong>30 days</strong>.</p>
+    <p>Data stored in your browser's localStorage is kept on your device until you clear your browser data or uninstall the app.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 8</div>
+    <h2>Your rights (UK &amp; EU GDPR)</h2>
+    <p>Under UK and EU data protection law, you have the following rights:</p>
+    <ul class="rights-list">
+      <li><strong>Right to access</strong> — you can request a copy of all personal data we hold about you</li>
+      <li><strong>Right to rectification</strong> — you can ask us to correct any inaccurate data</li>
+      <li><strong>Right to erasure</strong> — you can ask us to delete all your data at any time ("right to be forgotten")</li>
+      <li><strong>Right to restrict processing</strong> — you can ask us to stop using your data while keeping it stored</li>
+      <li><strong>Right to data portability</strong> — you can request your data in a machine-readable format</li>
+      <li><strong>Right to object</strong> — you can object to how we use your data</li>
+      <li><strong>Right to withdraw consent</strong> — where we rely on consent (e.g. reminders), you can withdraw it at any time</li>
+    </ul>
+    <p>To exercise any of these rights, email us at <strong>adharalina@gmail.com</strong>. We will respond within <strong>30 days</strong>.</p>
+    <p>You also have the right to lodge a complaint with the <strong>Information Commissioner's Office (ICO)</strong> in the UK at ico.org.uk, or your local data protection authority in the EU.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 9</div>
+    <h2>Cookies and local storage</h2>
+    <p>GlowBite does not use tracking cookies or advertising cookies.</p>
+    <p>We use <strong>localStorage</strong> — a browser feature that stores data on your device — to save your glow foods, journal entries, reminders and settings. This data stays on your device and is not used for tracking or advertising.</p>
+    <p>When you sign in with Google, Supabase sets a session token in localStorage to keep you signed in. This is a functional necessity, not a tracking cookie.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 10</div>
+    <h2>Children's privacy</h2>
+    <p>GlowBite is not directed at children under the age of 13. We do not knowingly collect personal data from children under 13. If you believe a child under 13 has provided us with their data, please contact us at <strong>adharalina@gmail.com</strong> and we will delete it immediately.</p>
+    <p>Users aged 13–17 should have a parent or guardian review this privacy policy before using GlowBite.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="pp-section">
+    <div class="pp-section-num">Section 11</div>
+    <h2>Changes to this policy</h2>
+    <p>We may update this privacy policy from time to time. When we do, we will update the "Last updated" date at the top of this page. If the changes are significant, we will notify you inside the app.</p>
+    <p>Continuing to use GlowBite after a policy update means you accept the updated policy.</p>
+  </div>
+
+  <hr class="pp-divider">
+
+  <div class="pp-contact">
+    <h3>Contact us</h3>
+    <p>If you have any questions about this privacy policy or how we handle your data, please get in touch:</p>
+    <p style="margin-top:.6rem"><strong>Email:</strong> <a href="mailto:adharalina@gmail.com">adharalina@gmail.com</a></p>
+    <p>We aim to respond to all privacy enquiries within 30 days.</p>
+  </div>
+
+  <div class="pp-footer">
+    © 2026 GlowBite. All rights reserved.<br>
+    This privacy policy covers the GlowBite web app at adhalina.github.io/GlowBite
+  </div>
+</div>
+
+</body>
+</html>

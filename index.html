@@ -28,7 +28,7 @@
   --grad-accent:linear-gradient(135deg,#FF6B6B,#7B2FF7);
 }
 html{-webkit-text-size-adjust:100%}
-body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:radial-gradient(ellipse 120% 80% at 15% 0%,#2a1339 0%,#12081a 55%,#0c0512 100%) fixed;background-color:#12081a;min-height:100vh;color:var(--text);overscroll-behavior-y:none;padding-bottom:env(safe-area-inset-bottom);position:relative}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:linear-gradient(180deg,#1B0E28 0%,#150A1F 40%,#0F0817 100%) fixed;background-color:#0F0817;min-height:100vh;color:var(--text);overscroll-behavior-y:none;padding-bottom:env(safe-area-inset-bottom);position:relative}
 
 /* SECTIONS */
 .section{display:none}.section.active{display:block}
@@ -151,9 +151,16 @@ button,input,select{font-size:16px}
 /* FOOD GRID */
 .main-pad{padding:.75rem 1rem 5rem}
 .results-count{font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:.8rem;font-weight:600;letter-spacing:.03em}
-.food-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}
-@media(min-width:600px){.food-grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.food-grid{grid-template-columns:repeat(4,1fr)}}
+.food-grid{display:flex;flex-direction:column;gap:.75rem}
+/* featured food card */
+.food-feat-card{border-radius:26px;background:linear-gradient(155deg,rgba(255,107,107,.16),rgba(123,47,247,.2));border:1.5px solid rgba(255,255,255,.14);padding:1.1rem 1rem;display:flex;flex-direction:column;gap:.85rem;cursor:pointer;transition:transform .15s}
+.food-feat-card:active{transform:scale(.97)}
+.food-feat-emoji{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2.6rem;flex-shrink:0}
+.food-feat-score{width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#E7FF9C,#C6FF3D 55%,#8FCB00);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:1rem;font-weight:800;color:#12081a;flex-shrink:0;box-shadow:0 4px 12px rgba(198,255,61,.3)}
+.food-feat-pills{display:flex;flex-wrap:wrap;gap:.4rem}
+.food-feat-pill{font-size:.72rem;font-weight:700;color:#fff;background:rgba(255,255,255,.12);border-radius:50px;padding:.28rem .75rem}
+.food-feat-desc{font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.6}
+.food-more-label{font-size:.72rem;font-weight:800;color:rgba(255,255,255,.45);letter-spacing:.06em;text-transform:uppercase;margin-top:.25rem}
 
 /* FOOD CARDS */
 .food-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--card-r);overflow:hidden;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;position:relative}
@@ -349,7 +356,7 @@ button,input,select{font-size:16px}
 .progress-wrap{max-width:720px;margin:0 auto;padding:0 1rem 3rem}
 .progress-chart-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:1.2rem 1.1rem 1rem;margin-bottom:1rem}
 .progress-chart-title{font-size:.78rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1rem}
-.bar-chart{display:flex;align-items:flex-end;gap:.5rem;height:90px}
+.bar-chart{display:flex;align-items:flex-end;gap:.5rem;height:120px}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem}
 .bar-track{flex:1;width:100%;background:rgba(255,255,255,.08);border-radius:6px;display:flex;align-items:flex-end;overflow:hidden;min-height:8px}
 .bar-fill{width:100%;border-radius:6px;background:linear-gradient(180deg,#C6FF3D,#8FCB00);transition:height .6s cubic-bezier(.34,1.56,.64,1)}
@@ -365,7 +372,7 @@ button,input,select{font-size:16px}
 .badge-name{font-size:.68rem;font-weight:800;color:#fff;line-height:1.2}
 .badge-desc{font-size:.58rem;color:rgba(255,255,255,.4);line-height:1.3}
 .badge-earned-dot{position:absolute;top:.5rem;right:.5rem;width:8px;height:8px;border-radius:50%;background:#C6FF3D}
-.progress-unlock-card{background:linear-gradient(135deg,rgba(123,47,247,.2),rgba(255,107,107,.12));border:1px solid rgba(123,47,247,.3);border-radius:20px;padding:1.1rem 1.2rem;display:flex;align-items:center;gap:.9rem}
+.progress-unlock-card{background:linear-gradient(120deg,rgba(255,107,107,.18),rgba(123,47,247,.22));border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:1.1rem 1.2rem;display:flex;align-items:center;gap:.85rem}
 .unlock-icon{font-size:1.8rem;flex-shrink:0}
 .unlock-text{flex:1}
 .unlock-title{font-size:.85rem;font-weight:800;color:#fff}
@@ -452,7 +459,7 @@ button,input,select{font-size:16px}
 .patch-note{text-align:center;font-size:.72rem;color:rgba(255,255,255,.4);padding:.5rem 1rem .9rem}
 
 /* SPLASH */
-#splash{position:fixed;inset:0;background:radial-gradient(ellipse 120% 80% at 15% 0%,#2a1339,#12081a 55%,#0c0512);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;transition:opacity .6s,visibility .6s}
+#splash{position:fixed;inset:0;background:linear-gradient(180deg,#1B0E28 0%,#150A1F 40%,#0F0817 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;transition:opacity .6s,visibility .6s}
 #splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .splash-logo{font-size:4rem;animation:splashPop .6s cubic-bezier(.34,1.56,.64,1)}
 @keyframes splashPop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
@@ -517,8 +524,8 @@ button,input,select{font-size:16px}
 .home-picks-see{font-size:.75rem;color:rgba(255,255,255,.4);font-weight:600;cursor:pointer}
 .home-picks-scroll{display:flex;gap:.75rem;overflow-x:auto;padding-bottom:.3rem;scrollbar-width:none}
 .home-picks-scroll::-webkit-scrollbar{display:none}
-.home-pick-item{flex:0 0 108px;display:flex;flex-direction:column;gap:.5rem}
-.home-pick-banner{width:108px;height:84px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0}
+.home-pick-item{flex:0 0 118px;display:flex;flex-direction:column;gap:.5rem;cursor:pointer}
+.home-pick-banner{width:118px;height:90px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;flex-shrink:0}
 .home-pick-name{font-size:.8rem;font-weight:700;color:#fff}
 .home-pick-badge{display:inline-flex;width:fit-content;font-size:.65rem;font-weight:800;color:#12081a;background:#C6FF3D;padding:.18rem .55rem;border-radius:50px}
 
@@ -655,7 +662,7 @@ button,input,select{font-size:16px}
         <div class="home-stat-lbl">foods saved</div>
       </div>
     </div>
-    <button class="home-scan-btn" onclick="switchTab('foods',document.getElementById('tab-foods'))">🥗 Explore Glow Foods ✦</button>
+    <button class="home-scan-btn" onclick="switchTab('foods',document.getElementById('tab-foods'))">Scan a food ✦</button>
     <div>
       <div class="home-picks-hdr">
         <div class="home-picks-title">Glow-boosting picks</div>
@@ -736,7 +743,7 @@ button,input,select{font-size:16px}
   <div class="progress-wrap" style="padding:calc(env(safe-area-inset-top) + 3.8rem) 1rem calc(5.5rem + env(safe-area-inset-bottom))">
     <div style="margin-bottom:1rem">
       <h2 style="font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em">Your Glow Journey</h2>
-      <p style="font-size:.8rem;color:rgba(255,255,255,.45);margin-top:.2rem" id="progressSubtitle">Track your weekly glow score</p>
+      <p style="font-size:.82rem;color:rgba(255,255,255,.45);margin-top:.25rem" id="progressSubtitle">12 day streak · personal best</p>
     </div>
     <div class="progress-chart-card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
@@ -745,14 +752,11 @@ button,input,select{font-size:16px}
       </div>
       <div class="bar-chart" id="weeklyBarChart"></div>
     </div>
-    <div class="progress-badges-title">✦ Badges</div>
+    <div class="progress-badges-title">Badges earned</div>
     <div class="badges-grid" id="badgesGrid"></div>
     <div class="progress-unlock-card" id="unlockCard">
-      <div class="unlock-icon">✦</div>
-      <div class="unlock-text">
-        <div class="unlock-title">Keep going!</div>
-        <div class="unlock-sub" id="unlockSub">Save <span>5 more foods</span> to unlock Glow 100</div>
-      </div>
+      <div style="font-size:1.6rem;flex-shrink:0">✦</div>
+      <div id="unlockSub" style="font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.5;font-weight:500">3 more scans to unlock <span style="color:#C6FF3D;font-weight:700">Glow 100</span> badge</div>
     </div>
   </div>
 </div>
@@ -2648,7 +2652,14 @@ function renderWeeklyChart(){
   const avg=nonZero.length?Math.round(nonZero.reduce((a,b)=>a+b,0)/nonZero.length):0;
   const avgEl=document.getElementById('weekAvgLabel');if(avgEl)avgEl.textContent=avg?`avg ${avg}`:'avg —';
   const subEl=document.getElementById('progressSubtitle');
-  if(subEl){const streak2=JSON.parse(localStorage.getItem('glowJournal')||'[]').length;subEl.textContent=streak2?`${streak2} journal entries logged`:'Start logging to see your journey';}
+  if(subEl){
+    const entries2=JSON.parse(localStorage.getItem('glowJournal')||'[]');
+    const today2=new Date();today2.setHours(0,0,0,0);
+    const dates2=entries2.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
+    const uniq2=[...new Set(dates2)].sort((a,b)=>b-a);
+    let s2=0;for(let i=0;i<uniq2.length;i++){if(uniq2[i]===today2.getTime()-i*86400000)s2++;else break;}
+    subEl.textContent=s2>0?`${s2} day streak · keep it up`:'Start logging to build your streak';
+  }
   el.innerHTML=weekDates.map((ts,i)=>{
     const isToday=ts===todayTs;
     const displayScore=scores[i];
@@ -2674,24 +2685,23 @@ function renderBadges(){
   const hasStreak=streak>=3;
   const hasGlow100=favs.length>=10;
   const badges=[
-    {icon:'🏆',name:'Streak Star',desc:'3-day streak',earned:hasStreak,color:'#FFC857'},
-    {icon:'🥦',name:'Veggie Pro',desc:'Save 5+ foods',earned:hasSavedEnough,color:'#C6FF3D'},
-    {icon:'✨',name:'Glow 100',desc:'Save 10+ foods',earned:hasGlow100,color:'#7B2FF7'},
+    {grad:'linear-gradient(135deg,#FFC857,#FF6B6B)',name:'Streak Star',desc:'3-day streak',earned:hasStreak},
+    {grad:'linear-gradient(135deg,#C6FF3D,#22C55E)',name:'Veggie Pro',desc:'Save 5+ foods',earned:hasSavedEnough},
+    {grad:'linear-gradient(135deg,#7B2FF7,#FF3E9A)',name:'Glow 100',desc:'Save 10+ foods',earned:hasGlow100},
   ];
   const bg=document.getElementById('badgesGrid');
   if(bg)bg.innerHTML=badges.map(b=>`
-    <div class="badge-card ${b.earned?'earned':'locked'}">
+    <div class="badge-card ${b.earned?'earned':'locked'}" ${!b.earned?'style="opacity:.4"':''}>
       ${b.earned?'<div class="badge-earned-dot"></div>':''}
-      <div class="badge-icon">${b.icon}</div>
+      <div style="width:44px;height:44px;border-radius:50%;background:${b.grad};flex-shrink:0"></div>
       <div class="badge-name">${b.name}</div>
-      <div class="badge-desc">${b.desc}</div>
     </div>`).join('');
   const uc=document.getElementById('unlockCard');
   const us=document.getElementById('unlockSub');
   if(hasGlow100&&uc){uc.style.display='none';}
   else if(us){
-    if(!hasSavedEnough){us.innerHTML=`Save <span>${5-favs.length} more foods</span> to earn Veggie Pro`;}
-    else{us.innerHTML=`Save <span>${10-favs.length} more foods</span> to unlock Glow 100`;}
+    if(!hasSavedEnough){us.innerHTML=`${5-favs.length} more foods to earn <span style="color:#C6FF3D;font-weight:700">Veggie Pro</span> badge`;}
+    else{us.innerHTML=`${10-favs.length} more saves to unlock <span style="color:#C6FF3D;font-weight:700">Glow 100</span> badge`;}
   }
 }
 
@@ -2807,30 +2817,39 @@ function renderFoods(){
   document.getElementById('resultsCount').textContent=`Showing ${filtered.length} food${filtered.length!==1?'s':''}`;
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
-  g.innerHTML=filtered.map((f,i)=>{
+  const isFeatMode=!favOnly&&!query;
+  let html='';
+  filtered.forEach((f,i)=>{
     const score=getFoodGlowScore(f.id);
-    const isFeat=i===0&&!favOnly&&!query;
-    return `
-    <div class="food-card${isFeat?' featured':''} card-enter" style="animation-delay:${i*40}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
-      <div class="card-banner" style="background:${f.color}">${f.emoji}
-        <div class="card-glow-score">${score}</div>
-        <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
-      </div>
-      <div class="card-body">
-        <h3 class="card-name">${f.name}</h3>
-        <p class="card-desc">${f.description}</p>
-        <div class="card-tags">
-          <span class="tag tag-cat">${f.category}</span>
-          ${f.isVegetarian?'<span class="tag tag-veg">🌿 Vegetarian</span>':''}
-          ${f.isHalal?'<span class="tag tag-halal">☪️ Halal</span>':''}
+    if(i===0&&isFeatMode){
+      const pills=f.nutrients.slice(0,4).map(n=>`<span class="food-feat-pill">${n.name}</span>`).join('');
+      html+=`<div class="food-feat-card card-enter" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="food-feat-emoji" style="background:${f.color}">${f.emoji}</div>
+          <div style="flex:1;min-width:0">
+            <div class="food-list-name">${f.name}</div>
+            <div class="food-list-sub">${f.skinBenefits[0].title}</div>
+          </div>
+          <div class="food-feat-score">${score}</div>
         </div>
+        <div class="food-feat-pills">${pills}</div>
+        <div class="food-feat-desc">${f.description}</div>
       </div>
-      <div class="card-footer">
-        <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
-        <span class="card-cta">View →</span>
-      </div>
-    </div>`;
-  }).join('');
+      ${filtered.length>1?'<div class="food-more-label">More foods</div>':''}`;
+    } else {
+      const sub=f.skinBenefits[0].title+(f.isVegetarian?' · 🌿':'')+(f.isHalal?' · ☪️':'');
+      html+=`<div class="food-list-card card-enter" style="animation-delay:${i*30}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0">
+        <div class="food-list-emoji" style="background:${f.color}">${f.emoji}</div>
+        <div class="food-list-info">
+          <div class="food-list-name">${f.name}</div>
+          <div class="food-list-sub">${sub}</div>
+        </div>
+        <div class="food-list-score">${score}</div>
+        <button class="heart-btn${favourites.has(f.id)?' faved':''}" style="position:static;margin-left:.25rem" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
+      </div>`;
+    }
+  });
+  g.innerHTML=html;
 }
 
 /* ══════════════════════════════════════

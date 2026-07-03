@@ -479,6 +479,41 @@ button,input,select{font-size:16px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .card-enter{opacity:0;transform:translateY(20px);animation:cardEnter .35s ease forwards}
 @keyframes cardEnter{to{opacity:1;transform:translateY(0)}}
+
+/* ─── BOTTOM TABS ─── */
+.bottom-tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(9,3,18,.94);border-top:1px solid rgba(255,255,255,.07);padding:.42rem 0 calc(.42rem + env(safe-area-inset-bottom,0px));z-index:200;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
+.btab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.5rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:.2rem 0;font-family:inherit;}
+.btab.active{color:#FF2D9B;}
+.btab-icon{font-size:1.2rem;line-height:1;}
+.btab.active .btab-icon{filter:drop-shadow(0 0 6px rgba(255,45,155,.65));}
+
+/* ─── HOME SECTION ─── */
+.home-top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + .85rem) 1.1rem .6rem;}
+.home-brand-txt{font-size:1.1rem;font-weight:900;background:linear-gradient(100deg,#fff 20%,#FFB3DA 55%,#C8FF3D 90%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.01em;}
+.home-ava{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#FF2D9B,#9B2FFF);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:#fff;}
+.home-scroll{padding:0 1rem 6rem;}
+.home-date-lbl{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:.15rem;}
+.home-greeting{font-size:1.55rem;font-weight:900;letter-spacing:-.02em;background:linear-gradient(90deg,#fff,#FFB3DA);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:.75rem;}
+.explore-glow-btn{width:100%;border:none;border-radius:16px;padding:.85rem;background:linear-gradient(90deg,#FF2D9B,#9B2FFF);color:#fff;font-weight:900;font-size:.9rem;display:flex;align-items:center;justify-content:center;gap:.4rem;margin-bottom:.8rem;box-shadow:0 8px 24px rgba(255,45,155,.4);cursor:pointer;position:relative;overflow:hidden;font-family:inherit;}
+.explore-glow-btn::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:shimmer 2.5s infinite;}
+.home-tip-lbl{font-size:.63rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin:.75rem 0 .4rem;}
+
+/* ─── RECIPES SUB-TABS ─── */
+.recipe-tabs{display:flex;gap:.5rem;margin-bottom:.85rem;padding:0 1rem;}
+.rtab-btn{flex:1;padding:.65rem;border:1.5px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.45);font-weight:800;font-size:.82rem;cursor:pointer;transition:all .2s;font-family:inherit;}
+.rtab-btn.active{background:linear-gradient(120deg,rgba(255,45,155,.18),rgba(155,47,255,.18));border-color:rgba(255,45,155,.4);color:#fff;}
+.rpanel{display:none;}.rpanel.active{display:block;}
+
+/* ─── MORE SECTION ─── */
+.more-nav-list{padding:0 1rem;display:flex;flex-direction:column;gap:.6rem;margin-bottom:.9rem;}
+.more-nav-item{display:flex;align-items:center;gap:.85rem;padding:1rem 1.2rem;border-radius:18px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);cursor:pointer;transition:background .18s,border-color .18s;width:100%;text-align:left;font-family:inherit;}
+.more-nav-item:hover,.more-nav-item.active{background:rgba(255,45,155,.08);border-color:rgba(255,45,155,.3);}
+.mni-icon{font-size:1.5rem;flex-shrink:0;}
+.mni-text{flex:1;}
+.mni-title{font-size:.9rem;font-weight:800;color:#fff;}
+.mni-sub{font-size:.7rem;color:rgba(255,255,255,.45);margin-top:.1rem;}
+.mni-arrow{font-size:.85rem;color:rgba(255,255,255,.3);}
+.msub{display:none;}.msub.active{display:block;}
 </style>
 </head>
 <body>
@@ -508,38 +543,53 @@ button,input,select{font-size:16px}
   <button class="install-dismiss" onclick="dismissInstallBanner()">✕</button>
 </div>
 
-<header class="header">
-  <button class="menu-dot-btn" onclick="openSidebar()" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
-  <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fsBtn" title="Full screen">⛶</button>
-  <h1><em class="sparkle">Glow</em>Bite ✦</h1>
-  <p>Eat your way to glowing skin</p>
-</header>
-
-<!-- SIDEBAR OVERLAY -->
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
-<!-- LEFT SIDEBAR NAV -->
-<nav class="main-nav" id="mainNav">
-  <div class="sidebar-brand">
-    <span class="sidebar-brand-icon">✨</span>
-    <div>
-      <div class="sidebar-brand-name">GlowBite</div>
-      <div class="sidebar-brand-sub">Foods for glowing skin</div>
-    </div>
+<!-- HOME -->
+<div class="section active" id="sec-home">
+  <div class="home-top">
+    <div class="home-brand-txt">GlowBite ✦</div>
+    <div class="home-ava">G</div>
   </div>
-  <button class="nav-btn active" onclick="switchSection('foods',this)"><span class="nb-icon">🥗</span>Foods</button>
-  <button class="nav-btn" onclick="switchSection('progress',this)"><span class="nb-icon">📈</span>Progress</button>
-  <button class="nav-btn" onclick="switchSection('period',this)"><span class="nb-icon">🌙</span>Period Guide</button>
-  <button class="nav-btn" onclick="switchSection('masks',this)"><span class="nb-icon">🧖</span>Face Masks</button>
-  <button class="nav-btn" onclick="switchSection('meals',this)"><span class="nb-icon">🍽️</span>Meal Ideas</button>
-  <button class="nav-btn" onclick="switchSection('reminders',this)"><span class="nb-icon">⏰</span>Reminders</button>
-  <button class="nav-btn" onclick="switchSection('journal',this)"><span class="nb-icon">📓</span>Skin Journal</button>
-</nav>
+  <div class="home-scroll">
+    <div class="home-date-lbl" id="homeDate">Friday, July 4</div>
+    <div class="home-greeting">Hey, you ✦</div>
+    <div class="glow-score-wrap" style="padding:0 0 .75rem">
+      <div class="glow-score-card">
+        <div class="glow-score-inner">
+          <div class="glow-dial">
+            <div class="glow-dial-inner">
+              <div class="glow-dial-num" id="glowDialNum">82</div>
+              <div class="glow-dial-label">GLOW SCORE</div>
+            </div>
+          </div>
+          <div class="glow-score-text">
+            <div class="glow-score-pts" id="glowScorePts">✦ Glowing skin ahead</div>
+            <div class="glow-score-desc">Save your favourite glow foods and build a skin-nourishing routine.</div>
+          </div>
+        </div>
+      </div>
+      <div class="glow-streak-row">
+        <div class="glow-streak-card">
+          <div class="glow-streak-num" style="color:#FFC857" id="streakNum">🔥 0</div>
+          <div class="glow-streak-lbl">day streak</div>
+        </div>
+        <div class="glow-streak-card">
+          <div class="glow-streak-num" style="color:#FF2D9B" id="savedNum">0</div>
+          <div class="glow-streak-lbl">foods saved</div>
+        </div>
+      </div>
+    </div>
+    <button class="explore-glow-btn" onclick="switchMainTab('foods',document.querySelector('.btab[data-tab=foods]'))">🥗 Explore Glow Foods ✦</button>
+    <div class="glow-picks-section" style="padding:.25rem 0 .25rem 0">
+      <div class="glow-picks-title">✦ Glow-boosting picks</div>
+      <div class="glow-picks-scroll" id="glowPicksScroll"></div>
+    </div>
+    <div class="home-tip-lbl">✦ Daily Glow Tip</div>
+    <div id="glowTipWrap"></div>
+  </div>
+</div>
 
 <!-- FOODS -->
-<div class="section active" id="sec-foods">
+<div class="section" id="sec-foods">
   <div class="foods-controls">
     <div class="ctrl-inner">
       <div class="search-bar">
@@ -562,38 +612,7 @@ button,input,select{font-size:16px}
       </div>
     </div>
   </div>
-  <div class="glow-score-wrap">
-    <div class="glow-score-card">
-      <div class="glow-score-inner">
-        <div class="glow-dial">
-          <div class="glow-dial-inner">
-            <div class="glow-dial-num" id="glowDialNum">82</div>
-            <div class="glow-dial-label">GLOW SCORE</div>
-          </div>
-        </div>
-        <div class="glow-score-text">
-          <div class="glow-score-pts">↑ Eat well, glow more</div>
-          <div class="glow-score-desc">Save your favourite glow foods and build a skin-nourishing routine.</div>
-        </div>
-      </div>
-    </div>
-    <div class="glow-streak-row">
-      <div class="glow-streak-card">
-        <div class="glow-streak-num" style="color:#FFC857" id="streakNum">🔥 0</div>
-        <div class="glow-streak-lbl">day streak</div>
-      </div>
-      <div class="glow-streak-card">
-        <div class="glow-streak-num" style="color:#FF6B6B" id="savedNum">0</div>
-        <div class="glow-streak-lbl">foods saved</div>
-      </div>
-    </div>
-  </div>
-  <div class="glow-picks-section">
-    <div class="glow-picks-title">✦ Glow-boosting picks</div>
-    <div class="glow-picks-scroll" id="glowPicksScroll"></div>
-  </div>
   <div class="main-pad">
-    <div id="glowTipWrap"></div>
     <p class="results-count" id="resultsCount"></p>
     <div class="food-grid" id="foodGrid"></div>
   </div>
@@ -622,82 +641,106 @@ button,input,select{font-size:16px}
   </div>
 </div>
 
-<!-- PERIOD GUIDE -->
-<div class="section" id="sec-period">
-  <div class="period-wrap">
-    <div class="sec-hero">
-      <h2>🌙 Period Guide</h2>
-      <p>Foods to support your skin &amp; health at every phase of your cycle</p>
+<!-- RECIPES -->
+<div class="section" id="sec-recipes">
+  <div class="sec-hero">
+    <h2>🍽️ Recipes</h2>
+    <p>DIY face masks and skin-boosting meal ideas</p>
+  </div>
+  <div class="recipe-tabs">
+    <button class="rtab-btn active" onclick="switchRecipePanel('masks',this)">🧖 Face Masks</button>
+    <button class="rtab-btn" onclick="switchRecipePanel('meals',this)">🍽️ Meal Ideas</button>
+  </div>
+  <div class="rpanel active" id="rpanel-masks">
+    <div class="masks-wrap" style="padding-top:0">
+      <div class="stype-row" id="stypeRow"></div>
+      <div class="mask-grid" id="maskGrid"></div>
     </div>
-    <div class="phase-grid" id="phaseGrid"></div>
-    <div id="phaseDetail"></div>
+  </div>
+  <div class="rpanel" id="rpanel-meals">
+    <div class="meals-wrap" style="padding-top:0">
+      <div class="concern-row" id="concernRow"></div>
+      <div class="meal-grid" id="mealGrid"></div>
+    </div>
   </div>
 </div>
 
-<!-- FACE MASKS -->
-<div class="section" id="sec-masks">
-  <div class="masks-wrap">
-    <div class="sec-hero">
-      <h2>🧖 DIY Face Masks</h2>
-      <p>Natural, food-based masks you can make at home for glowing skin</p>
-    </div>
-    <div class="stype-row" id="stypeRow"></div>
-    <div class="mask-grid" id="maskGrid"></div>
+<!-- MORE -->
+<div class="section" id="sec-more">
+  <div class="sec-hero">
+    <h2>✦ More</h2>
+    <p>Period guide, reminders and skin journal</p>
   </div>
-</div>
-
-<!-- MEALS -->
-<div class="section" id="sec-meals">
-  <div class="meals-wrap">
-    <div class="sec-hero">
-      <h2>🍽️ Meal Ideas</h2>
-      <p>Skin-boosting recipes built around the most powerful glow foods</p>
-    </div>
-    <div class="concern-row" id="concernRow"></div>
-    <div class="meal-grid" id="mealGrid"></div>
+  <div class="more-nav-list">
+    <button class="more-nav-item" onclick="switchMoreSub('period',this)">
+      <span class="mni-icon">🌙</span>
+      <div class="mni-text"><div class="mni-title">Period Guide</div><div class="mni-sub">Foods for every cycle phase</div></div>
+      <span class="mni-arrow">›</span>
+    </button>
+    <button class="more-nav-item" onclick="switchMoreSub('reminders',this)">
+      <span class="mni-icon">⏰</span>
+      <div class="mni-text"><div class="mni-title">Glow Reminders</div><div class="mni-sub">Daily skincare &amp; eating reminders</div></div>
+      <span class="mni-arrow">›</span>
+    </button>
+    <button class="more-nav-item" onclick="switchMoreSub('journal',this)">
+      <span class="mni-icon">📓</span>
+      <div class="mni-text"><div class="mni-title">Skin Journal</div><div class="mni-sub">Track your skin's journey</div></div>
+      <span class="mni-arrow">›</span>
+    </button>
   </div>
-</div>
 
-<!-- REMINDERS -->
-<div class="section" id="sec-reminders">
-  <div class="reminders-wrap">
-    <div class="sec-hero">
-      <h2>⏰ Glow Reminders</h2>
-      <p>Set daily reminders to eat, hydrate or apply your skincare ritual</p>
-    </div>
-    <div class="rem-form">
-      <div class="rem-field" style="flex:2">
-        <label>Reminder</label>
-        <input type="text" id="remText" placeholder="e.g. Drink water, Apply face mask…" autocomplete="off">
+  <!-- PERIOD SUB-PANEL -->
+  <div class="msub" id="msub-period">
+    <div class="period-wrap">
+      <div class="sec-hero" style="padding-top:.5rem">
+        <h2>🌙 Period Guide</h2>
+        <p>Foods to support your skin &amp; health at every phase of your cycle</p>
       </div>
-      <div class="rem-field" style="flex:0 0 110px">
-        <label>Time</label>
-        <input type="time" id="remTime">
-      </div>
-      <div class="rem-field" style="flex:0 0 120px">
-        <label>Repeat</label>
-        <select id="remRepeat">
-          <option value="daily">Daily</option>
-          <option value="once">Once</option>
-        </select>
-      </div>
-      <button class="rem-add-btn" onclick="addReminder()">+ Add</button>
+      <div class="phase-grid" id="phaseGrid"></div>
+      <div id="phaseDetail"></div>
     </div>
-    <p class="rem-notify-note" id="remNotifyNote"></p>
-    <div class="rem-list" id="remList"></div>
   </div>
-</div>
 
-
-<!-- SKIN JOURNAL -->
-<div class="section" id="sec-journal">
-  <div class="journal-wrap">
-    <div class="sec-hero">
-      <h2>📓 Skin Journal</h2>
-      <p>Track your skin's journey — daily mood, notes &amp; photos</p>
+  <!-- REMINDERS SUB-PANEL -->
+  <div class="msub" id="msub-reminders">
+    <div class="reminders-wrap">
+      <div class="sec-hero" style="padding-top:.5rem">
+        <h2>⏰ Glow Reminders</h2>
+        <p>Set daily reminders to eat, hydrate or apply your skincare ritual</p>
+      </div>
+      <div class="rem-form">
+        <div class="rem-field" style="flex:2">
+          <label>Reminder</label>
+          <input type="text" id="remText" placeholder="e.g. Drink water, Apply face mask…" autocomplete="off">
+        </div>
+        <div class="rem-field" style="flex:0 0 110px">
+          <label>Time</label>
+          <input type="time" id="remTime">
+        </div>
+        <div class="rem-field" style="flex:0 0 120px">
+          <label>Repeat</label>
+          <select id="remRepeat">
+            <option value="daily">Daily</option>
+            <option value="once">Once</option>
+          </select>
+        </div>
+        <button class="rem-add-btn" onclick="addReminder()">+ Add</button>
+      </div>
+      <p class="rem-notify-note" id="remNotifyNote"></p>
+      <div class="rem-list" id="remList"></div>
     </div>
-    <button class="journal-add-btn" onclick="openJournalModal()">✏️ Add Today's Entry</button>
-    <div class="journal-entries" id="journalEntries"></div>
+  </div>
+
+  <!-- JOURNAL SUB-PANEL -->
+  <div class="msub" id="msub-journal">
+    <div class="journal-wrap">
+      <div class="sec-hero" style="padding-top:.5rem">
+        <h2>📓 Skin Journal</h2>
+        <p>Track your skin's journey — daily mood, notes &amp; photos</p>
+      </div>
+      <button class="journal-add-btn" onclick="openJournalModal()">✏️ Add Today's Entry</button>
+      <div class="journal-entries" id="journalEntries"></div>
+    </div>
   </div>
 </div>
 
@@ -2296,24 +2339,64 @@ let vegOnly=false,halalOnly=false,query='',activeSkinType='all',selectedPhase=nu
 /* ══════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════ */
-function openSidebar(){
-  document.getElementById('mainNav').classList.add('open');
-  document.getElementById('sidebarOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
+function openSidebar(){}
+function closeSidebar(){}
+
+function switchMainTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='progress')renderProgress();
+  window.scrollTo(0,0);
 }
-function closeSidebar(){
-  document.getElementById('mainNav').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('open');
-  document.body.style.overflow='';
+function switchSection(id,btn){switchMainTab(id,btn);}
+
+function switchRecipePanel(id,btn){
+  document.querySelectorAll('.rpanel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.rtab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('rpanel-'+id).classList.add('active');
+  btn.classList.add('active');
 }
 
-function switchSection(id,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');
-  btn.classList.add('active');
-  closeSidebar();
-  if(id==='progress')renderProgress();
+function switchMoreSub(id,btn){
+  const wasActive=btn.classList.contains('active');
+  document.querySelectorAll('.msub').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.more-nav-item').forEach(b=>b.classList.remove('active'));
+  if(!wasActive){
+    document.getElementById('msub-'+id).classList.add('active');
+    btn.classList.add('active');
+    if(id==='reminders'){renderReminders();updateNotifyNote();}
+    if(id==='period'&&!document.getElementById('phaseGrid').children.length)renderPhaseButtons();
+    if(id==='journal')renderJournalEntries();
+  }
+}
+
+function renderHomeDate(){
+  const el=document.getElementById('homeDate');
+  if(!el)return;
+  const d=new Date();
+  el.textContent=d.toLocaleDateString('en-GB',{weekday:'long',month:'long',day:'numeric'});
+}
+
+function updateHomeDashboard(){
+  const favs=JSON.parse(localStorage.getItem('glowbiteFavs')||'[]');
+  const entries=JSON.parse(localStorage.getItem('glowbiteJournal')||'[]');
+  const today=new Date();today.setHours(0,0,0,0);
+  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
+  const unique=[...new Set(dates)].sort((a,b)=>b-a);
+  let streak=0;
+  for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
+  const sn=document.getElementById('streakNum');if(sn)sn.textContent='🔥 '+streak;
+  const svn=document.getElementById('savedNum');if(svn)svn.textContent=favs.length;
+  const score=Math.min(100,60+favs.length*3+streak*2);
+  const dn=document.getElementById('glowDialNum');if(dn)dn.textContent=score;
+  const pts=document.getElementById('glowScorePts');
+  if(pts){
+    if(score>=85)pts.textContent='✦ You\'re glowing!';
+    else if(score>=70)pts.textContent='✦ Glowing skin ahead';
+    else pts.textContent='✦ Start saving glow foods';
+  }
 }
 
 /* GLOW SCORES lookup */
@@ -2497,6 +2580,7 @@ function toggleFav(id,btn){
     btn.textContent='❤️';btn.classList.add('faved');
   }
   saveFavs();
+  updateHomeDashboard();
   if(favOnly)renderFoods();
 }
 
@@ -2840,21 +2924,22 @@ document.getElementById('halalToggle').addEventListener('change',e=>{halalOnly=e
 document.getElementById('foodOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('foodOverlay'))closeFoodModal();});
 document.getElementById('maskOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('maskOverlay'))closeMaskModal();});
 document.getElementById('mealOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('mealOverlay'))closeMealModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();closeSidebar();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();closeMaskModal();closeMealModal();}});
+
+function renderJournalEntries(){renderJournal();}
 
 /* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
+renderHomeDate();
+updateHomeDashboard();
 renderGlowTip();
 renderFoods();
 renderGlowPicks();
-renderPhaseButtons();
 renderSkinTypeFilter();
 renderMasks();
 renderConcernFilter();
 renderMeals();
-renderReminders();
-updateNotifyNote();
 
 /* ══════════════════════════════════════
    SPLASH SCREEN
@@ -3212,5 +3297,24 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
 }
 </script>
+
+<!-- BOTTOM TABS -->
+<nav class="bottom-tabs" id="bottomTabs">
+  <button class="btab active" data-tab="home" onclick="switchMainTab('home',this)">
+    <span class="btab-icon">🏠</span><span>Home</span>
+  </button>
+  <button class="btab" data-tab="foods" onclick="switchMainTab('foods',this)">
+    <span class="btab-icon">🥗</span><span>Foods</span>
+  </button>
+  <button class="btab" data-tab="progress" onclick="switchMainTab('progress',this)">
+    <span class="btab-icon">📈</span><span>Progress</span>
+  </button>
+  <button class="btab" data-tab="recipes" onclick="switchMainTab('recipes',this)">
+    <span class="btab-icon">🧖</span><span>Recipes</span>
+  </button>
+  <button class="btab" data-tab="more" onclick="switchMainTab('more',this)">
+    <span class="btab-icon">⋯</span><span>More</span>
+  </button>
+</nav>
 </body>
 </html>

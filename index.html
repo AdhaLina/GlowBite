@@ -92,6 +92,7 @@ button,input,select{font-size:16px}
 .main-nav.open .nav-btn:nth-child(5){animation-delay:.16s}
 .main-nav.open .nav-btn:nth-child(6){animation-delay:.20s}
 .main-nav.open .nav-btn:nth-child(7){animation-delay:.24s}
+.main-nav.open .nav-btn:nth-child(8){animation-delay:.28s}
 .nav-btn .nb-icon{font-size:1.3rem;flex-shrink:0}
 .nav-btn:hover{background:rgba(255,255,255,.06);color:#fff}
 .nav-btn.active{color:#FF3E9A;background:rgba(255,62,154,.1);border-left-color:#FF3E9A}
@@ -136,6 +137,17 @@ button,input,select{font-size:16px}
 .glow-streak-num{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:22px;font-weight:800;line-height:1}
 .glow-streak-lbl{font-size:11px;color:rgba(255,255,255,.5);font-weight:600}
 
+/* GLOW PICKS CAROUSEL */
+.glow-picks-section{padding:.25rem 0 .25rem 1rem}
+.glow-picks-title{font-size:.8rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.65rem;padding-right:1rem}
+.glow-picks-scroll{display:flex;gap:.65rem;overflow-x:auto;padding-bottom:.5rem;padding-right:1rem;scrollbar-width:none}
+.glow-picks-scroll::-webkit-scrollbar{display:none}
+.glow-pick{flex:0 0 88px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:.75rem .5rem .6rem;display:flex;flex-direction:column;align-items:center;gap:.35rem;cursor:pointer;transition:transform .2s}
+.glow-pick:active{transform:scale(.93)}
+.glow-pick-emoji{font-size:1.8rem;line-height:1}
+.glow-pick-name{font-size:.63rem;font-weight:700;color:#fff;text-align:center;line-height:1.2}
+.glow-pick-badge{font-size:.6rem;font-weight:800;color:#12081a;background:#C6FF3D;border-radius:50px;padding:.12rem .42rem;letter-spacing:.01em;margin-top:.1rem}
+
 /* FOOD GRID */
 .main-pad{padding:.75rem 1rem 5rem}
 .results-count{font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:.8rem;font-weight:600;letter-spacing:.03em}
@@ -166,6 +178,21 @@ button,input,select{font-size:16px}
 .card-footer{padding:.5rem .8rem;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center}
 .card-hint{font-size:.67rem;color:rgba(255,255,255,.4)}
 .card-cta{font-size:.7rem;font-weight:800;color:#C6FF3D;letter-spacing:.02em}
+/* GLOW SCORE BADGE on card */
+.card-glow-score{position:absolute;top:.5rem;left:.5rem;z-index:2;width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#E7FF9C,#C6FF3D 55%,#8FCB00);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;color:#12081a;line-height:1;box-shadow:0 2px 8px rgba(198,255,61,.4)}
+/* FEATURED first card */
+.food-card.featured{border:1.5px solid rgba(198,255,61,.35);background:linear-gradient(155deg,rgba(255,107,107,.10),rgba(123,47,247,.15));grid-column:1/-1}
+.food-card.featured .card-banner{height:130px}
+/* INGREDIENT PILLS on mask/meal cards */
+.ingr-pills{display:flex;flex-wrap:wrap;gap:.35rem;padding:.5rem .8rem .6rem;border-top:1px solid rgba(255,255,255,.06)}
+.ingr-pill{font-size:.6rem;font-weight:600;color:rgba(255,255,255,.8);background:rgba(255,255,255,.1);border-radius:50px;padding:.2rem .55rem}
+/* WHY IT GLOWS rows in modal */
+.why-glow-row{display:flex;align-items:center;gap:12px;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.why-glow-row:last-child{border-bottom:none}
+.why-glow-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.why-glow-name{font-size:.82rem;font-weight:700;color:#fff;flex:1}
+.why-glow-pts{font-size:.78rem;font-weight:800;color:#C6FF3D}
+.why-glow-list{background:rgba(255,255,255,.04);border-radius:16px;padding:.4rem .9rem;margin:.6rem 0 1rem}
 
 /* FLIP CARD */
 .food-card-wrap{perspective:1000px;border-radius:var(--card-r)}
@@ -317,6 +344,33 @@ button,input,select{font-size:16px}
 .jc-skin-row{display:flex;gap:.35rem;flex-wrap:wrap}
 .jc-skin-tag{padding:.16rem .52rem;border-radius:50px;font-size:.68rem;font-weight:700;background:rgba(255,62,154,.12);color:#FF3E9A}
 .jc-photo{width:100%;max-height:200px;object-fit:cover;display:block;border-radius:0 0 18px 18px;cursor:pointer}
+
+/* PROGRESS SECTION */
+.progress-wrap{max-width:720px;margin:0 auto;padding:0 1rem 3rem}
+.progress-chart-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:1.2rem 1.1rem 1rem;margin-bottom:1rem}
+.progress-chart-title{font-size:.78rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1rem}
+.bar-chart{display:flex;align-items:flex-end;gap:.5rem;height:90px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.bar-track{flex:1;width:100%;background:rgba(255,255,255,.08);border-radius:6px;display:flex;align-items:flex-end;overflow:hidden;min-height:8px}
+.bar-fill{width:100%;border-radius:6px;background:linear-gradient(180deg,#C6FF3D,#8FCB00);transition:height .6s cubic-bezier(.34,1.56,.64,1)}
+.bar-fill.today{background:linear-gradient(180deg,#FF6B6B,#FF3E9A)}
+.bar-day{font-size:.65rem;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.03em}
+.bar-score{font-size:.6rem;font-weight:800;color:rgba(255,255,255,.55)}
+.progress-badges-title{font-size:.78rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase;margin:1.2rem 0 .75rem}
+.badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
+.badge-card{border-radius:18px;padding:1rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.45rem;text-align:center;position:relative;overflow:hidden}
+.badge-card.earned{border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07)}
+.badge-card.locked{border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);opacity:.6}
+.badge-icon{font-size:2rem;line-height:1}
+.badge-name{font-size:.68rem;font-weight:800;color:#fff;line-height:1.2}
+.badge-desc{font-size:.58rem;color:rgba(255,255,255,.4);line-height:1.3}
+.badge-earned-dot{position:absolute;top:.5rem;right:.5rem;width:8px;height:8px;border-radius:50%;background:#C6FF3D}
+.progress-unlock-card{background:linear-gradient(135deg,rgba(123,47,247,.2),rgba(255,107,107,.12));border:1px solid rgba(123,47,247,.3);border-radius:20px;padding:1.1rem 1.2rem;display:flex;align-items:center;gap:.9rem}
+.unlock-icon{font-size:1.8rem;flex-shrink:0}
+.unlock-text{flex:1}
+.unlock-title{font-size:.85rem;font-weight:800;color:#fff}
+.unlock-sub{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:.2rem}
+.unlock-sub span{color:#C6FF3D;font-weight:700}
 
 /* JOURNAL MODAL */
 .jmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;display:flex;align-items:flex-end;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
@@ -471,6 +525,7 @@ button,input,select{font-size:16px}
     </div>
   </div>
   <button class="nav-btn active" onclick="switchSection('foods',this)"><span class="nb-icon">🥗</span>Foods</button>
+  <button class="nav-btn" onclick="switchSection('progress',this)"><span class="nb-icon">📈</span>Progress</button>
   <button class="nav-btn" onclick="switchSection('period',this)"><span class="nb-icon">🌙</span>Period Guide</button>
   <button class="nav-btn" onclick="switchSection('masks',this)"><span class="nb-icon">🧖</span>Face Masks</button>
   <button class="nav-btn" onclick="switchSection('meals',this)"><span class="nb-icon">🍽️</span>Meal Ideas</button>
@@ -528,10 +583,37 @@ button,input,select{font-size:16px}
       </div>
     </div>
   </div>
+  <div class="glow-picks-section">
+    <div class="glow-picks-title">✦ Glow-boosting picks</div>
+    <div class="glow-picks-scroll" id="glowPicksScroll"></div>
+  </div>
   <div class="main-pad">
     <div id="glowTipWrap"></div>
     <p class="results-count" id="resultsCount"></p>
     <div class="food-grid" id="foodGrid"></div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="section" id="sec-progress">
+  <div class="progress-wrap">
+    <div class="sec-hero">
+      <h2>📈 Your Progress</h2>
+      <p>Track your glow score, streaks and unlock badges</p>
+    </div>
+    <div class="progress-chart-card">
+      <div class="progress-chart-title">Weekly Glow Score</div>
+      <div class="bar-chart" id="weeklyBarChart"></div>
+    </div>
+    <div class="progress-badges-title">✦ Badges</div>
+    <div class="badges-grid" id="badgesGrid"></div>
+    <div class="progress-unlock-card" id="unlockCard">
+      <div class="unlock-icon">🔒</div>
+      <div class="unlock-text">
+        <div class="unlock-title">Keep going!</div>
+        <div class="unlock-sub" id="unlockSub">Save <span>5 more foods</span> to unlock Glow 100</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2226,6 +2308,93 @@ function switchSection(id,btn){
   document.getElementById('sec-'+id).classList.add('active');
   btn.classList.add('active');
   closeSidebar();
+  if(id==='progress')renderProgress();
+}
+
+/* GLOW SCORES lookup */
+const glowScores={1:95,2:92,3:88,4:82,5:90,6:79,7:78,8:86,9:74,10:80,11:78,12:87,13:83,14:81,15:86,16:75,17:71,18:82,19:88,20:84,21:80,22:74,23:71,24:73,25:79,26:85,27:70,28:82,29:78,30:72,31:66,32:70,33:86,34:74,35:77,36:90,37:68,38:71,39:67,40:66,41:83,42:81,43:78,44:76,45:75,46:73,47:69,48:68,49:72};
+function getFoodGlowScore(id){return glowScores[id]||70;}
+
+/* GLOW PICKS CAROUSEL */
+function renderGlowPicks(){
+  const topFoods=[...foods].sort((a,b)=>getFoodGlowScore(b.id)-getFoodGlowScore(a.id)).slice(0,12);
+  const el=document.getElementById('glowPicksScroll');
+  if(!el)return;
+  el.innerHTML=topFoods.map(f=>`
+    <div class="glow-pick" onclick="openFoodModal(${f.id})">
+      <div class="glow-pick-emoji">${f.emoji}</div>
+      <div class="glow-pick-name">${f.name}</div>
+      <div class="glow-pick-badge">+${getFoodGlowScore(f.id)} glow</div>
+    </div>`).join('');
+}
+
+/* PROGRESS SECTION */
+function renderProgress(){
+  renderWeeklyChart();
+  renderBadges();
+}
+
+function renderWeeklyChart(){
+  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
+  const today=new Date();today.setHours(0,0,0,0);
+  const days=['M','T','W','T','F','S','S'];
+  const todayDow=today.getDay();
+  const mondayOffset=(todayDow===0?-6:1-todayDow);
+  const weekDates=days.map((_,i)=>{const d=new Date(today);d.setDate(today.getDate()+mondayOffset+i);d.setHours(0,0,0,0);return d.getTime();});
+  const scoreByDay={};
+  entries.forEach(e=>{
+    const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);
+    const t=d.getTime();
+    if(!scoreByDay[t])scoreByDay[t]=0;
+    scoreByDay[t]+=10;
+  });
+  const todayTs=today.getTime();
+  const el=document.getElementById('weeklyBarChart');
+  if(!el)return;
+  el.innerHTML=weekDates.map((ts,i)=>{
+    const rawScore=Math.min(100,(scoreByDay[ts]||0));
+    const isToday=ts===todayTs;
+    const displayScore=isToday?(rawScore||Math.min(99,60+(JSON.parse(localStorage.getItem('glowFavs')||'[]')).length*3)):rawScore;
+    const heightPct=Math.max(6,displayScore);
+    return `<div class="bar-col">
+      <div class="bar-score">${displayScore||''}</div>
+      <div class="bar-track"><div class="bar-fill${isToday?' today':''}" style="height:${heightPct}%"></div></div>
+      <div class="bar-day">${days[i]}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderBadges(){
+  const favs=JSON.parse(localStorage.getItem('glowFavs')||'[]');
+  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
+  const today=new Date();today.setHours(0,0,0,0);
+  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
+  const unique=[...new Set(dates)].sort((a,b)=>b-a);
+  let streak=0;
+  for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
+  const hasSavedEnough=favs.length>=5;
+  const hasStreak=streak>=3;
+  const hasGlow100=favs.length>=10;
+  const badges=[
+    {icon:'🏆',name:'Streak Star',desc:'3-day streak',earned:hasStreak,color:'#FFC857'},
+    {icon:'🥦',name:'Veggie Pro',desc:'Save 5+ foods',earned:hasSavedEnough,color:'#C6FF3D'},
+    {icon:'✨',name:'Glow 100',desc:'Save 10+ foods',earned:hasGlow100,color:'#7B2FF7'},
+  ];
+  const bg=document.getElementById('badgesGrid');
+  if(bg)bg.innerHTML=badges.map(b=>`
+    <div class="badge-card ${b.earned?'earned':'locked'}">
+      ${b.earned?'<div class="badge-earned-dot"></div>':''}
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+    </div>`).join('');
+  const uc=document.getElementById('unlockCard');
+  const us=document.getElementById('unlockSub');
+  if(hasGlow100&&uc){uc.style.display='none';}
+  else if(us){
+    if(!hasSavedEnough){us.innerHTML=`Save <span>${5-favs.length} more foods</span> to earn Veggie Pro`;}
+    else{us.innerHTML=`Save <span>${10-favs.length} more foods</span> to unlock Glow 100`;}
+  }
 }
 
 /* ══════════════════════════════════════
@@ -2340,9 +2509,13 @@ function renderFoods(){
   document.getElementById('resultsCount').textContent=`Showing ${filtered.length} food${filtered.length!==1?'s':''}`;
   const g=document.getElementById('foodGrid');
   if(!filtered.length){g.innerHTML=`<div class="no-results"><div class="nre">🔍</div><h3>No foods found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
-  g.innerHTML=filtered.map((f,i)=>`
-    <div class="food-card card-enter" style="animation-delay:${i*40}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
+  g.innerHTML=filtered.map((f,i)=>{
+    const score=getFoodGlowScore(f.id);
+    const isFeat=i===0&&!favOnly&&!query;
+    return `
+    <div class="food-card${isFeat?' featured':''} card-enter" style="animation-delay:${i*40}ms" onclick="tapCard(this);openFoodModal(${f.id})" tabindex="0" onkeydown="if(event.key==='Enter')openFoodModal(${f.id})">
       <div class="card-banner" style="background:${f.color}">${f.emoji}
+        <div class="card-glow-score">${score}</div>
         <button class="heart-btn${favourites.has(f.id)?' faved':''}" onclick="event.stopPropagation();toggleFav(${f.id},this)">${favourites.has(f.id)?'❤️':'🤍'}</button>
       </div>
       <div class="card-body">
@@ -2358,7 +2531,8 @@ function renderFoods(){
         <span class="card-hint">✨ ${f.skinBenefits[0].title}</span>
         <span class="card-cta">View →</span>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 /* ══════════════════════════════════════
@@ -2373,7 +2547,9 @@ function openFoodModal(id){
     `<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">${f.category}</span>`+
     (f.isVegetarian?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">🌿 Vegetarian</span>`:'')+
     (f.isHalal?`<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">☪️ Halal</span>`:'');
-  document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  const iconBgs=['linear-gradient(135deg,#FF6B6B,#FF3E9A)','linear-gradient(135deg,#FFC857,#f7971e)','linear-gradient(135deg,#C6FF3D,#8FCB00)','linear-gradient(135deg,#7B2FF7,#FF3E9A)','linear-gradient(135deg,#00E5CC,#7B2FF7)'];
+  const whyGlowRows=f.nutrients.slice(0,5).map((n,i)=>`<div class="why-glow-row"><div class="why-glow-icon" style="background:${iconBgs[i%iconBgs.length]}">✦</div><div class="why-glow-name">${n.name}</div><div class="why-glow-pts">+${Math.round(getFoodGlowScore(f.id)*0.12*(i===0?1:.75**i))} glow</div></div>`).join('');
+  document.getElementById('tab-ov').innerHTML=`<p class="m-desc">${f.description}</p><p class="sh">✦ Why it glows</p><div class="why-glow-list">${whyGlowRows}</div><p class="sh">🍽️ Benefits of eating</p><ul class="blist">${f.benefits.map(b=>`<li>${b}</li>`).join('')}</ul>`;
   document.getElementById('tab-nu').innerHTML=f.nutrients.map(n=>`<div class="ncard"><div class="ntop"><span class="nname">${n.name}</span><span class="namount">${n.amount} / 100g</span></div><p class="nskin">🔬 ${n.skinBenefit}</p></div>`).join('');
   document.getElementById('tab-sk').innerHTML=f.skinBenefits.map(s=>`<div class="scard"><span class="sicon">${s.icon}</span><div><p class="stitle">${s.title}</p><p class="sdesc">${s.desc}</p></div></div>`).join('');
   switchTab('ov',document.querySelector('#foodOverlay .tab-btn'));
@@ -2466,6 +2642,7 @@ function renderMasks(){
           <span class="badge-time">⏱ ${m.time}</span>
         </div>
       </div>
+      <div class="ingr-pills">${m.ingredients.slice(0,4).map(i=>`<span class="ingr-pill">${i.emoji} ${i.item}</span>`).join('')}</div>
       <div class="mask-footer">
         <span class="mask-hint">🧴 ${m.ingredients.length} ingredients</span>
         <span class="mask-cta">See recipe →</span>
@@ -2535,6 +2712,7 @@ function renderMeals(){
           ${m.concerns.map(c=>{const cl=concernLabels.find(l=>l.val===c);return cl?`<span class="badge-concern">${cl.label}</span>`:''}).join('')}
         </div>
       </div>
+      <div class="ingr-pills">${m.ingredients.slice(0,4).map(i=>`<span class="ingr-pill">${i.emoji} ${i.item}</span>`).join('')}</div>
       <div class="meal-footer">
         <span class="meal-hint">🍴 ${m.ingredients.length} ingredients</span>
         <span class="meal-cta">See recipe →</span>
@@ -2661,6 +2839,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeFoodModal();cl
 ══════════════════════════════════════ */
 renderGlowTip();
 renderFoods();
+renderGlowPicks();
 renderPhaseButtons();
 renderSkinTypeFilter();
 renderMasks();

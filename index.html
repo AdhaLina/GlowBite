@@ -3842,6 +3842,11 @@ async function cloudPull(){
       const changed=applySyncData(remote.data||{});
       localStorage.setItem('glowbiteSyncAt',String(remoteAt));
       setSyncStatus('☁️ synced');
+      // if the merge produced more than the cloud has (e.g. unioned favourites),
+      // send the combined result back up so all devices converge
+      if(JSON.stringify(collectSyncData())!==JSON.stringify(remote.data||{})){
+        await cloudPush();
+      }
       if(changed&&!sessionStorage.getItem('glowSyncReloaded')){
         sessionStorage.setItem('glowSyncReloaded','1');
         location.reload();

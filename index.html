@@ -3653,15 +3653,41 @@ function showLogin(){
 }
 
 async function initAuth(){
-  // Failsafe: always show login within 3 seconds no matter what
-  const fallback=setTimeout(showLogin, 3000);
+  // Tokens returned in the URL hash after the Google→Supabase redirect?
+  const hashParams=new URLSearchParams((location.hash||'').replace(/^#/,''));
+  const hasTokens=hashParams.get('access_token')&&hashParams.get('refresh_token');
+  const authErr=hashParams.get('error_description')||hashParams.get('error');
 
+  // Failsafe: always show login eventually no matter what
+  const fallback=setTimeout(showLogin, hasTokens?8000:3000);
+
+  if(authErr){
+    history.replaceState(null,'',location.pathname+location.search);
+    const loadEl=document.getElementById('loginLoading');
+    if(loadEl){loadEl.textContent='Sign-in failed: '+decodeURIComponent(authErr.replace(/\+/g,' '));loadEl.style.display='block';}
+  }
   if(!supabase){
     clearTimeout(fallback);
     showLogin();
     return;
   }
   try{
+    if(hasTokens){
+      // Explicitly install the session from the redirect — don't rely on
+      // the library's auto-detection, which races the async CDN load
+      const{data,error}=await supabase.auth.setSession({
+        access_token:hashParams.get('access_token'),
+        refresh_token:hashParams.get('refresh_token')
+      });
+      history.replaceState(null,'',location.pathname+location.search);
+      if(!error&&data?.session){
+        clearTimeout(fallback);
+        currentUser=data.session.user;
+        onSignedIn(data.session.user);
+        supabase.auth.onAuthStateChange((_e,s)=>{if(s){currentUser=s.user;onSignedIn(s.user);}});
+        return;
+      }
+    }
     const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),2800));
     const authCheck=supabase.auth.getSession();
     const{data:{session}}=await Promise.race([authCheck,timeout]);
@@ -3687,7 +3713,7 @@ function signInWithGoogle(){
   loadEl.textContent='Signing you in…';
   loadEl.style.display='block';
   // Direct OAuth redirect — no library needed
-  const redirectTo=encodeURIComponent('https://adhalina.github.io/GlowBite');
+  const redirectTo=encodeURIComponent(location.origin+location.pathname.replace(/index\.html$/,''));
   window.location.href='https://'+SUPA_URL.split('//')[1]+'/auth/v1/authorize?provider=google&redirect_to='+redirectTo;
 }
 

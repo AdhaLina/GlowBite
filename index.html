@@ -14,7 +14,6 @@
 <meta name="msapplication-TileColor" content="#C44DFF">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <title>GlowBite — Foods for Glowing Skin</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -3637,16 +3636,7 @@ function renderGsResults(){
 const SUPA_URL='https://gbiinonyapnsnjcesedn.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdiaWlub255YXBuc25qY2VzZWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTE0OTksImV4cCI6MjA5ODY2NzQ5OX0.Ma1lvSCsI4vbqRGJrZFoWh0Xz8gvDcWtthlLvWCWqnQ';
 
-let supabase=null;
 let currentUser=null;
-
-function tryInitSupabase(){
-  try{
-    if(window.supabase){
-      supabase=window.supabase.createClient(SUPA_URL,SUPA_KEY);
-    }
-  }catch(e){console.warn('Supabase init failed',e);}
-}
 
 function showLogin(){
   document.getElementById('loginScreen').classList.remove('hidden');
@@ -3657,70 +3647,29 @@ function authDiag(msg){
   if(loadEl){loadEl.textContent='⚠️ '+msg;loadEl.style.display='block';}
 }
 
-async function initAuth(){
-  // Tokens returned in the URL hash after the Google→Supabase redirect?
-  const hashParams=new URLSearchParams((location.hash||'').replace(/^#/,''));
-  const hasTokens=hashParams.get('access_token')&&hashParams.get('refresh_token');
-  const authErr=hashParams.get('error_description')||hashParams.get('error');
+function saveSession(s){
+  localStorage.setItem('glowbiteSession',JSON.stringify({
+    access_token:s.access_token,
+    refresh_token:s.refresh_token,
+    expires_at:Date.now()+(((+s.expires_in)||3600)-60)*1000
+  }));
+}
+function loadSession(){try{return JSON.parse(localStorage.getItem('glowbiteSession'));}catch(e){return null;}}
+function clearSession(){localStorage.removeItem('glowbiteSession');}
 
-  // Failsafe: always show login eventually no matter what
-  const fallback=setTimeout(showLogin, hasTokens?8000:3000);
-
-  if(authErr){
-    history.replaceState(null,'',location.pathname+location.search);
-    const loadEl=document.getElementById('loginLoading');
-    if(loadEl){loadEl.textContent='Sign-in failed: '+decodeURIComponent(authErr.replace(/\+/g,' '));loadEl.style.display='block';}
-  }
-  if(!supabase){
-    clearTimeout(fallback);
-    showLogin();
-    return;
-  }
-  try{
-    if(hasTokens){
-      // Explicitly install the session from the redirect — don't rely on
-      // the library's auto-detection, which races the async CDN load
-      const{data,error}=await supabase.auth.setSession({
-        access_token:hashParams.get('access_token'),
-        refresh_token:hashParams.get('refresh_token')
-      });
-      history.replaceState(null,'',location.pathname+location.search);
-      if(!error&&data?.session){
-        clearTimeout(fallback);
-        localStorage.removeItem('glowbiteAuthAttempt');
-        currentUser=data.session.user;
-        onSignedIn(data.session.user);
-        supabase.auth.onAuthStateChange((_e,s)=>{if(s){currentUser=s.user;onSignedIn(s.user);}});
-        return;
-      }
-      authDiag('Tokens received but the session could not be saved'+(error?': '+error.message:'')+'.');
-    }else{
-      // Came back from a sign-in attempt with neither tokens nor an error —
-      // Supabase redirected without a session (config problem on its side)
-      const attempt=+localStorage.getItem('glowbiteAuthAttempt')||0;
-      if(!authErr&&attempt&&Date.now()-attempt<10*60*1000){
-        localStorage.removeItem('glowbiteAuthAttempt');
-        authDiag('Google accepted the sign-in, but no session came back from Supabase. Check that the Google provider in Supabase has the correct Client ID and Client Secret.');
-      }
-    }
-    const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),2800));
-    const authCheck=supabase.auth.getSession();
-    const{data:{session}}=await Promise.race([authCheck,timeout]);
-    clearTimeout(fallback);
-    if(session){
-      currentUser=session.user;
-      onSignedIn(session.user);
-    }else{
-      showLogin();
-    }
-    supabase.auth.onAuthStateChange((_event,session)=>{
-      if(session){currentUser=session.user;onSignedIn(session.user);}
-    });
-  }catch(e){
-    clearTimeout(fallback);
-    console.warn('Auth check failed',e);
-    showLogin();
-  }
+async function supaFetchUser(tok){
+  const r=await fetch(SUPA_URL+'/auth/v1/user',{headers:{apikey:SUPA_KEY,Authorization:'Bearer '+tok}});
+  if(!r.ok)throw new Error('verify failed ('+r.status+')');
+  return await r.json();
+}
+async function supaRefresh(rt){
+  const r=await fetch(SUPA_URL+'/auth/v1/token?grant_type=refresh_token',{
+    method:'POST',
+    headers:{apikey:SUPA_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({refresh_token:rt})
+  });
+  if(!r.ok)throw new Error('refresh failed ('+r.status+')');
+  return await r.json();
 }
 
 function signInWithGoogle(){
@@ -3728,9 +3677,75 @@ function signInWithGoogle(){
   loadEl.textContent='Signing you in…';
   loadEl.style.display='block';
   localStorage.setItem('glowbiteAuthAttempt',String(Date.now()));
-  // Direct OAuth redirect — no library needed
   const redirectTo=encodeURIComponent(location.origin+location.pathname.replace(/index\.html$/,''));
-  window.location.href='https://'+SUPA_URL.split('//')[1]+'/auth/v1/authorize?provider=google&redirect_to='+redirectTo;
+  window.location.href=SUPA_URL+'/auth/v1/authorize?provider=google&redirect_to='+redirectTo;
+}
+
+async function initAuth(){
+  // Never leave the user staring at nothing
+  const fallback=setTimeout(showLogin,6000);
+  const done=()=>clearTimeout(fallback);
+
+  const h=new URLSearchParams((location.hash||'').replace(/^#/,''));
+  const at=h.get('access_token'),rt=h.get('refresh_token'),xin=h.get('expires_in');
+  const authErr=h.get('error_description')||h.get('error');
+  if(at||authErr)history.replaceState(null,'',location.pathname+location.search);
+
+  if(authErr){
+    done();
+    authDiag('Sign-in failed: '+decodeURIComponent(authErr.replace(/\+/g,' ')));
+    showLogin();
+    return;
+  }
+
+  if(at&&rt){
+    // Fresh tokens from the Google→Supabase redirect: store first so nothing is lost,
+    // then verify with Supabase directly — no library involved
+    saveSession({access_token:at,refresh_token:rt,expires_in:xin});
+    try{
+      const user=await supaFetchUser(at);
+      done();
+      localStorage.removeItem('glowbiteAuthAttempt');
+      currentUser=user;
+      onSignedIn(user);
+      return;
+    }catch(e){
+      done();
+      clearSession();
+      authDiag('Google sign-in worked but the session could not be verified: '+e.message+'. Please try again.');
+      showLogin();
+      return;
+    }
+  }
+
+  // Came back from a sign-in attempt with neither tokens nor an error
+  const attempt=+localStorage.getItem('glowbiteAuthAttempt')||0;
+  if(attempt&&Date.now()-attempt<10*60*1000){
+    localStorage.removeItem('glowbiteAuthAttempt');
+    authDiag('Google accepted the sign-in, but no session came back from Supabase. Please try again.');
+  }
+
+  // Existing saved session?
+  const s=loadSession();
+  if(s&&s.refresh_token){
+    try{
+      let tok=s.access_token;
+      if(Date.now()>=(s.expires_at||0)){
+        const n=await supaRefresh(s.refresh_token);
+        saveSession(n);
+        tok=n.access_token;
+      }
+      const user=await supaFetchUser(tok);
+      done();
+      currentUser=user;
+      onSignedIn(user);
+      return;
+    }catch(e){
+      clearSession();
+    }
+  }
+  done();
+  showLogin();
 }
 
 function onSignedIn(user){
@@ -3747,7 +3762,6 @@ function onSignedIn(user){
       av.textContent=(firstName||'G')[0].toUpperCase();
     }
   }
-  // Show account info in More
   const accountBtn=document.getElementById('accountBtn');
   if(accountBtn){
     accountBtn.style.display='flex';
@@ -3771,32 +3785,17 @@ function showAccountInfo(){
 }
 
 function signOut(){
-  if(!supabase)return;
-  supabase.auth.signOut().then(()=>{
-    currentUser=null;
-    localStorage.removeItem('glowbiteName');
-    document.getElementById('loginScreen').classList.remove('hidden');
-  });
+  const s=loadSession();
+  if(s&&s.access_token){
+    fetch(SUPA_URL+'/auth/v1/logout',{method:'POST',headers:{apikey:SUPA_KEY,Authorization:'Bearer '+s.access_token}}).catch(()=>{});
+  }
+  clearSession();
+  currentUser=null;
+  localStorage.removeItem('glowbiteName');
+  document.getElementById('loginScreen').classList.remove('hidden');
 }
 
-// Wait for async Supabase CDN script, then init auth
-(function waitForSupabase(){
-  tryInitSupabase();
-  if(supabase){
-    initAuth();
-  }else{
-    // CDN still loading — poll briefly, then give up and show login
-    let attempts=0;
-    const poll=setInterval(()=>{
-      tryInitSupabase();
-      attempts++;
-      if(supabase||attempts>=10){
-        clearInterval(poll);
-        initAuth();
-      }
-    },300);
-  }
-})();
+initAuth();
 
 /* ══════════════════════════════════════
    INIT

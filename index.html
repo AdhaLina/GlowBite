@@ -3652,6 +3652,11 @@ function showLogin(){
   document.getElementById('loginScreen').classList.remove('hidden');
 }
 
+function authDiag(msg){
+  const loadEl=document.getElementById('loginLoading');
+  if(loadEl){loadEl.textContent='⚠️ '+msg;loadEl.style.display='block';}
+}
+
 async function initAuth(){
   // Tokens returned in the URL hash after the Google→Supabase redirect?
   const hashParams=new URLSearchParams((location.hash||'').replace(/^#/,''));
@@ -3682,10 +3687,20 @@ async function initAuth(){
       history.replaceState(null,'',location.pathname+location.search);
       if(!error&&data?.session){
         clearTimeout(fallback);
+        localStorage.removeItem('glowbiteAuthAttempt');
         currentUser=data.session.user;
         onSignedIn(data.session.user);
         supabase.auth.onAuthStateChange((_e,s)=>{if(s){currentUser=s.user;onSignedIn(s.user);}});
         return;
+      }
+      authDiag('Tokens received but the session could not be saved'+(error?': '+error.message:'')+'.');
+    }else{
+      // Came back from a sign-in attempt with neither tokens nor an error —
+      // Supabase redirected without a session (config problem on its side)
+      const attempt=+localStorage.getItem('glowbiteAuthAttempt')||0;
+      if(!authErr&&attempt&&Date.now()-attempt<10*60*1000){
+        localStorage.removeItem('glowbiteAuthAttempt');
+        authDiag('Google accepted the sign-in, but no session came back from Supabase. Check that the Google provider in Supabase has the correct Client ID and Client Secret.');
       }
     }
     const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),2800));
@@ -3712,6 +3727,7 @@ function signInWithGoogle(){
   const loadEl=document.getElementById('loginLoading');
   loadEl.textContent='Signing you in…';
   loadEl.style.display='block';
+  localStorage.setItem('glowbiteAuthAttempt',String(Date.now()));
   // Direct OAuth redirect — no library needed
   const redirectTo=encodeURIComponent(location.origin+location.pathname.replace(/index\.html$/,''));
   window.location.href='https://'+SUPA_URL.split('//')[1]+'/auth/v1/authorize?provider=google&redirect_to='+redirectTo;

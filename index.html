@@ -591,6 +591,16 @@ button,input,select{font-size:16px}
 .gs-box.scanning .gs-laser{opacity:1;animation:gsSweep 1.4s ease-in-out infinite}
 @keyframes gsSweep{0%{top:10%}50%{top:86%}100%{top:10%}}
 .gs-scan-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:.6rem;padding:.95rem;border-radius:18px;border:none;cursor:pointer;font-size:.92rem;font-weight:800;font-family:inherit;background:linear-gradient(100deg,#FF2D9B,#9B2FFF);color:#fff;box-shadow:0 8px 32px rgba(255,45,155,.35);transition:transform .15s;margin-bottom:1.2rem}
+.gs-cam-wrap{position:relative;border-radius:18px;overflow:hidden;background:#120a1e;aspect-ratio:4/3;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center}
+.gs-video{width:100%;height:100%;object-fit:cover;display:block;background:#0c0512}
+.gs-cam-wrap .gs-frame{position:absolute;inset:14px;pointer-events:none}
+.gs-cam-hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:.78rem;color:rgba(255,255,255,.75);font-weight:600;text-shadow:0 1px 6px rgba(0,0,0,.7);z-index:3}
+.gs-cam-wrap.scanning .gs-laser{opacity:1;animation:gsSweep 1.4s ease-in-out infinite}
+.gs-cam-note{font-size:.78rem;line-height:1.5;text-align:center;margin:-.3rem 0 1rem;min-height:1em}
+.gs-cam-note.err{color:#FF8A8A}.gs-cam-note.ok{color:#C8FF3D}.gs-cam-note.muted{color:rgba(255,255,255,.5)}
+.gs-manual{margin:.2rem 0 1rem}
+.gs-manual summary{font-size:.8rem;color:rgba(255,255,255,.5);cursor:pointer;font-weight:600;padding:.3rem 0}
+.gs-btn-row{display:flex;gap:.6rem}
 .gs-scan-btn:active{transform:scale(.97)}
 .gs-scan-btn:disabled{opacity:.55}
 .gs-results{display:none}
@@ -900,14 +910,25 @@ button,input,select{font-size:16px}
         </div>
 
         <div class="gs-expand" id="gsExpand">
-          <div class="gs-picker" id="gsPicker"></div>
-
-          <div class="gs-box" id="gsBox">
+          <!-- REAL AI CAMERA -->
+          <div class="gs-cam-wrap" id="gsCamWrap">
+            <video id="gsVideo" class="gs-video" playsinline muted></video>
+            <canvas id="gsCanvas" style="display:none"></canvas>
             <div class="gs-frame"><span class="fc1"></span><span class="fc2"></span><span class="fc3"></span><span class="fc4"></span></div>
-            <div class="gs-laser"></div>
+            <div class="gs-laser" id="gsLaser"></div>
+            <div class="gs-cam-hint" id="gsCamHint">point at your food & tap scan 📸</div>
           </div>
+          <div class="gs-btn-row">
+            <button class="gs-scan-btn" id="gsSnapBtn" onclick="gsCaptureScan()">📸 Scan my food</button>
+          </div>
+          <p class="gs-cam-note" id="gsCamNote"></p>
 
-          <button class="gs-scan-btn" id="gsScanBtn" onclick="runGlowScan()">✨ Scan Ingredients</button>
+          <!-- manual picker fallback -->
+          <details class="gs-manual">
+            <summary>no camera? pick ingredients instead</summary>
+            <div class="gs-picker" id="gsPicker"></div>
+            <button class="gs-scan-btn" id="gsScanBtn" onclick="runGlowScan()">✨ Match meals</button>
+          </details>
         </div>
       </div>
 
@@ -4187,13 +4208,136 @@ function shareGlowBite(){
   }
 }
 
+/* Glow Scan edge-function endpoint (Supabase). Deploy the glow-scan
+   function and set the ANTHROPIC_API_KEY secret for this to work. */
+const GLOW_SCAN_URL=SUPA_URL+'/functions/v1/glow-scan';
+let gsStream=null;
+
 function gsToggleScanner(){
   const ex=document.getElementById('gsExpand');
   const btn=document.getElementById('gsOpenBtn');
   ex.classList.toggle('open');
-  btn.innerHTML=ex.classList.contains('open')
+  const open=ex.classList.contains('open');
+  btn.innerHTML=open
     ?'<span class="gs-cam">📷</span> close camera'
     :'<span class="gs-cam">📷</span> open camera';
+  if(open)gsStartCamera(); else gsStopCamera();
+}
+
+async function gsStartCamera(){
+  const v=document.getElementById('gsVideo');
+  const note=document.getElementById('gsCamNote');
+  const hint=document.getElementById('gsCamHint');
+  try{
+    gsStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+    v.srcObject=gsStream;await v.play();
+    note.textContent='';note.className='gs-cam-note';
+    if(hint)hint.style.display='block';
+  }catch(e){
+    if(hint)hint.style.display='none';
+    note.className='gs-cam-note muted';
+    note.textContent='Camera unavailable here — you can still pick ingredients below, or allow camera access and reopen.';
+  }
+}
+function gsStopCamera(){
+  if(gsStream){gsStream.getTracks().forEach(t=>t.stop());gsStream=null;}
+  const v=document.getElementById('gsVideo');if(v)v.srcObject=null;
+}
+
+async function gsCaptureScan(){
+  if(gsScanning)return;
+  const v=document.getElementById('gsVideo');
+  const note=document.getElementById('gsCamNote');
+  const wrap=document.getElementById('gsCamWrap');
+  const btn=document.getElementById('gsSnapBtn');
+  if(!gsStream||!v.videoWidth){
+    note.className='gs-cam-note muted';
+    note.textContent='Open the camera first (or use the ingredient picker below).';
+    return;
+  }
+  gsScanning=true;
+  wrap.classList.add('scanning');
+  btn.disabled=true;btn.textContent='Scanning…';
+  note.className='gs-cam-note muted';note.textContent='✨ Reading your food…';
+  // capture a frame → jpeg base64
+  const c=document.getElementById('gsCanvas');
+  const w=Math.min(768,v.videoWidth),h=Math.round(v.videoHeight*(w/v.videoWidth));
+  c.width=w;c.height=h;
+  c.getContext('2d').drawImage(v,0,0,w,h);
+  const b64=c.toDataURL('image/jpeg',0.8).split(',')[1];
+  const knownNames=foods.map(f=>f.name);
+  try{
+    const r=await fetch(GLOW_SCAN_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json',apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY},
+      body:JSON.stringify({image:b64,mediaType:'image/jpeg',foods:knownNames})});
+    const data=await r.json();
+    wrap.classList.remove('scanning');
+    btn.disabled=false;btn.textContent='📸 Scan again';
+    gsScanning=false;
+    if(!r.ok){
+      note.className='gs-cam-note err';
+      note.textContent=data.error==='server not configured: missing ANTHROPIC_API_KEY'
+        ?'Scanner not set up yet — the app owner needs to add the Anthropic key.'
+        :('Scan failed ('+(data.status||r.status)+'). Please try again.');
+      return;
+    }
+    const fArr=data.foods||[],mArr=data.meals||[];
+    if(!fArr.length&&!mArr.length){
+      note.className='gs-cam-note muted';
+      note.textContent='Hmm, no food spotted — get the food in frame and try again 🍓';
+      return;
+    }
+    note.className='gs-cam-note ok';
+    note.textContent='Found '+fArr.length+' food'+(fArr.length===1?'':'s')+' ✦';
+    renderScanResults(fArr,mArr);
+    logDailyActivity();gsLogScan();updateHomeDashboard();
+    if(typeof renderWeeklyChart==='function')renderWeeklyChart();
+  }catch(e){
+    wrap.classList.remove('scanning');
+    btn.disabled=false;btn.textContent='📸 Scan my food';
+    gsScanning=false;
+    note.className='gs-cam-note err';
+    note.textContent='No connection — please try again.';
+  }
+}
+
+function renderScanResults(fArr,mArr){
+  const el=document.getElementById('gsResults');
+  const fdMap={};foods.forEach(f=>fdMap[f.name.toLowerCase()]=f);
+  const chips=fArr.map(f=>{
+    const known=fdMap[(f.name||'').toLowerCase()];
+    if(known)return `<button class="scan-food-chip known" onclick="openFoodModal(${known.id})">${known.emoji} ${known.name} <b>+${getFoodGlowScore(known.id)}</b></button>`;
+    return `<span class="scan-food-chip">🍽️ ${f.name}</span>`;
+  }).join('');
+  const meals=mArr.map((m,i)=>`
+    <div class="scan-meal">
+      <button class="scan-meal-head" onclick="this.parentNode.classList.toggle('open')">
+        <span class="scan-meal-emoji">${m.emoji||'🥗'}</span>
+        <span class="scan-meal-info"><b>${m.name||'Glow meal'}</b><small>${m.time||''} · tap for recipe</small></span>
+        <span class="scan-meal-arrow">›</span>
+      </button>
+      <div class="scan-meal-body">
+        ${m.skinBenefit?`<p class="scan-meal-benefit">✨ ${m.skinBenefit}</p>`:''}
+        ${Array.isArray(m.ingredients)?`<div class="scan-meal-sub">Ingredients</div><ul class="scan-meal-ings">${m.ingredients.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+        ${Array.isArray(m.steps)?`<div class="scan-meal-sub">Steps</div><ol class="scan-meal-steps">${m.steps.map(x=>`<li>${x}</li>`).join('')}</ol>`:''}
+      </div>
+    </div>`).join('');
+  el.innerHTML=`
+    <div class="scan-res-head">✦ what's in your frame</div>
+    <div class="scan-food-row">${chips||'<span class="scan-food-chip">no known foods</span>'}</div>
+    ${meals?`<div class="scan-res-head" style="margin-top:1rem">🍳 AI glow meals for you</div>${meals}`:''}
+    <button class="gs-rescan" onclick="gsRescan()">↺ scan something else</button>`;
+  el.classList.add('show');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'nearest'}),250);
+}
+
+function gsRescan(){
+  const el=document.getElementById('gsResults');
+  el.classList.remove('show');el.innerHTML='';
+  const note=document.getElementById('gsCamNote');if(note){note.textContent='';note.className='gs-cam-note';}
+  const btn=document.getElementById('gsSnapBtn');if(btn)btn.textContent='📸 Scan my food';
+  document.querySelector('.gs-hero-inline')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function gsLogScan(){

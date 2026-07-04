@@ -2708,7 +2708,7 @@ function editGreetingName(){
 
 function saveGreetingName(){
   const val=document.getElementById('nameInput').value.trim();
-  if(val)localStorage.setItem('glowbiteName',val);
+  if(val){localStorage.setItem('glowbiteName',val);scheduleCloudPush();}
   else localStorage.removeItem('glowbiteName');
   renderGreeting();
   closeNameModal();
@@ -2908,7 +2908,7 @@ function flipCard(e,id){
 let favourites=new Set(JSON.parse(localStorage.getItem('glowbiteFavs')||'[]'));
 let favOnly=false;
 
-function saveFavs(){localStorage.setItem('glowbiteFavs',JSON.stringify([...favourites]));}
+function saveFavs(){localStorage.setItem('glowbiteFavs',JSON.stringify([...favourites]));scheduleCloudPush();}
 
 function logDailyActivity(){
   const data=JSON.parse(localStorage.getItem('glowActivity')||'{}');
@@ -3191,7 +3191,7 @@ if(localStorage.getItem('glowbiteReminders')===null){
 }
 const remFiredToday={};
 
-function saveReminders(){localStorage.setItem('glowbiteReminders',JSON.stringify(reminders));}
+function saveReminders(){localStorage.setItem('glowbiteReminders',JSON.stringify(reminders));scheduleCloudPush();}
 
 function addReminder(){
   const text=document.getElementById('remText').value.trim();
@@ -3782,6 +3782,101 @@ async function initAuth(){
   showLogin();
 }
 
+/* ══════════════════════════════════════
+   CLOUD SYNC (Supabase glow_data table)
+══════════════════════════════════════ */
+const SYNC_KEYS=['glowbiteFavs','glowbiteJournal','glowbiteReminders','glowbiteName'];
+let syncPushTimer=null;
+
+async function getValidToken(){
+  const s=loadSession();
+  if(!s||!s.refresh_token)return null;
+  if(Date.now()<(s.expires_at||0))return s.access_token;
+  try{const n=await supaRefresh(s.refresh_token);saveSession(n);return n.access_token;}
+  catch(e){return null;}
+}
+
+function setSyncStatus(txt){
+  const e=document.getElementById('accountEmail');
+  if(e&&currentUser)e.textContent=(currentUser.email||'')+' · '+txt;
+}
+
+function collectSyncData(){
+  const d={};
+  SYNC_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!=null)d[k]=v;});
+  return d;
+}
+
+function applySyncData(d){
+  let changed=false;
+  SYNC_KEYS.forEach(k=>{
+    if(d[k]!=null&&d[k]!==localStorage.getItem(k)){
+      if(k==='glowbiteFavs'){
+        // union so favourites saved on this device are never lost
+        try{
+          const merged=[...new Set([...JSON.parse(d[k]||'[]'),...JSON.parse(localStorage.getItem(k)||'[]')])];
+          const val=JSON.stringify(merged);
+          if(val!==localStorage.getItem(k)){localStorage.setItem(k,val);changed=true;}
+        }catch(e){}
+      }else{
+        localStorage.setItem(k,d[k]);changed=true;
+      }
+    }
+  });
+  return changed;
+}
+
+async function cloudPull(){
+  if(!currentUser)return;
+  const tok=await getValidToken();if(!tok)return;
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/glow_data?select=data,updated_at',{
+      headers:{apikey:SUPA_KEY,Authorization:'Bearer '+tok}});
+    if(!r.ok)return;
+    const rows=await r.json();
+    if(!rows.length){await cloudPush();return;}
+    const remote=rows[0];
+    const remoteAt=Date.parse(remote.updated_at)||0;
+    const localAt=+localStorage.getItem('glowbiteSyncAt')||0;
+    if(remoteAt>localAt){
+      const changed=applySyncData(remote.data||{});
+      localStorage.setItem('glowbiteSyncAt',String(remoteAt));
+      setSyncStatus('☁️ synced');
+      if(changed&&!sessionStorage.getItem('glowSyncReloaded')){
+        sessionStorage.setItem('glowSyncReloaded','1');
+        location.reload();
+      }
+    }else{
+      setSyncStatus('☁️ synced');
+    }
+  }catch(e){}
+}
+
+async function cloudPush(){
+  if(!currentUser)return;
+  const tok=await getValidToken();if(!tok)return;
+  try{
+    setSyncStatus('☁️ syncing…');
+    const now=new Date().toISOString();
+    const r=await fetch(SUPA_URL+'/rest/v1/glow_data?on_conflict=user_id',{
+      method:'POST',
+      headers:{apikey:SUPA_KEY,Authorization:'Bearer '+tok,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},
+      body:JSON.stringify({user_id:currentUser.id,data:collectSyncData(),updated_at:now})});
+    if(r.ok){
+      localStorage.setItem('glowbiteSyncAt',String(Date.parse(now)));
+      setSyncStatus('☁️ synced');
+    }else{
+      setSyncStatus('☁️ sync failed — will retry');
+    }
+  }catch(e){setSyncStatus('☁️ offline — will retry');}
+}
+
+function scheduleCloudPush(){
+  if(!currentUser)return;
+  clearTimeout(syncPushTimer);
+  syncPushTimer=setTimeout(cloudPush,2500);
+}
+
 function onSignedIn(user){
   document.getElementById('loginScreen').classList.add('hidden');
   const name=user.user_metadata?.full_name||user.email||'';
@@ -3806,6 +3901,7 @@ function onSignedIn(user){
   }
   renderGreeting();
   updateHomeDashboard();
+  cloudPull();
 }
 
 function continueAsGuest(){
@@ -4014,7 +4110,7 @@ function saveJournalEntry(){
     journalEntries.unshift({id:Date.now(), date:dateStr, time:timeStr, rating, tags, notes, photo:journalPhotoB64});
   }
 
-  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));
+  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));scheduleCloudPush();
   closeJournalModal();
   renderJournal();
   vibe([30,20,60]);
@@ -4023,7 +4119,7 @@ function saveJournalEntry(){
 function deleteJournalEntry(id){
   if(!confirm('Delete this journal entry?')) return;
   journalEntries = journalEntries.filter(e=>e.id!==id);
-  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));
+  localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));scheduleCloudPush();
   renderJournal();
   vibe([20,10,20,10,40]);
 }

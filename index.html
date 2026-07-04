@@ -754,6 +754,55 @@ button,input,select{font-size:16px}
   <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
 </div>
 
+<!-- FIRST-TIME WELCOME OVERLAY -->
+<style>
+#gwWelcome{position:fixed;inset:0;z-index:10000;display:none;overflow:hidden;
+  background:radial-gradient(ellipse 120% 80% at 15% 0%,#2a1339,#12081a 55%,#0c0512)}
+#gwWelcome.show{display:flex;align-items:center;justify-content:center}
+#gwWelcome.gw-out{animation:gwOut .5s ease forwards}
+@keyframes gwOut{to{opacity:0;visibility:hidden}}
+.gw-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.4}
+.gw-b1{width:300px;height:300px;background:#FF2D9B;top:-60px;right:-40px;animation:gwDrift 9s ease-in-out infinite}
+.gw-b2{width:260px;height:260px;background:#9B2FFF;bottom:120px;left:-70px;animation:gwDrift 11s ease-in-out infinite reverse}
+.gw-b3{width:200px;height:200px;background:#C8FF3D;bottom:-40px;right:60px;opacity:.22;animation:gwDrift 13s ease-in-out infinite}
+@keyframes gwDrift{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,40px)}}
+.gw-wel{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;z-index:3}
+.gw-emojis{display:flex;gap:.35rem;font-size:2.6rem;margin-bottom:.6rem}
+.gw-emojis span{display:inline-block;opacity:0;transform:translateY(30px) scale(0);animation:gwBoing .6s cubic-bezier(.34,1.8,.5,1) forwards}
+.gw-emojis span:nth-child(1){animation-delay:.2s}.gw-emojis span:nth-child(2){animation-delay:.35s}
+.gw-emojis span:nth-child(3){animation-delay:.5s}.gw-emojis span:nth-child(4){animation-delay:.65s}.gw-emojis span:nth-child(5){animation-delay:.8s}
+@keyframes gwBoing{to{opacity:1;transform:translateY(0) scale(1)}}
+.gw-wiggle{animation:gwBoing .6s cubic-bezier(.34,1.8,.5,1) forwards, gwWig 2s ease-in-out 1s infinite}
+@keyframes gwWig{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.gw-kt{font-family:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;letter-spacing:-.04em;line-height:.92;text-transform:uppercase}
+.gw-k1{font-size:1.9rem;color:#fff;opacity:0;transform:translateX(-40px);animation:gwSlL .5s cubic-bezier(.2,.9,.3,1) 1s forwards}
+.gw-k2{font-size:clamp(3.2rem,15vw,4.6rem);background:linear-gradient(100deg,#fff 30%,#FFD9EC 60%,#C6FF3D 95%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:scale(.5) rotate(-6deg);animation:gwPop .6s cubic-bezier(.34,1.8,.5,1) 1.3s forwards;filter:drop-shadow(0 0 32px rgba(255,45,155,.4))}
+.gw-k3{font-size:1.9rem;color:#fff;opacity:0;transform:translateX(40px);animation:gwSlR .5s cubic-bezier(.2,.9,.3,1) 1.7s forwards}
+@keyframes gwSlL{to{opacity:1;transform:translateX(0)}}
+@keyframes gwSlR{to{opacity:1;transform:translateX(0)}}
+@keyframes gwPop{to{opacity:1;transform:scale(1) rotate(0)}}
+.gw-tag{font-size:1.05rem;color:rgba(255,255,255,.75);font-weight:700;margin-top:1.3rem;opacity:0;animation:gwFin .6s ease 2.1s forwards}
+.gw-tag b{background:linear-gradient(90deg,#FF2D9B,#9B2FFF);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+@keyframes gwFin{to{opacity:1}}
+.gw-btn{margin-top:2.2rem;padding:1.1rem 3rem;border:none;border-radius:100px;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:1.15rem;font-weight:800;color:#fff;cursor:pointer;background:linear-gradient(90deg,#FF2D9B,#9B2FFF);box-shadow:0 14px 40px rgba(255,45,155,.45);opacity:0;transform:translateY(24px) scale(.8);animation:gwBtnIn .55s cubic-bezier(.34,1.8,.5,1) 2.5s forwards;position:relative;overflow:hidden}
+@keyframes gwBtnIn{to{opacity:1;transform:translateY(0) scale(1)}}
+.gw-btn::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:gwShim 2.5s 3.2s infinite}
+@keyframes gwShim{to{left:170%}}
+.gw-cf{position:absolute;top:-20px;opacity:0;animation:gwFall 2.4s ease-in forwards}
+@keyframes gwFall{0%{opacity:0;transform:translateY(0) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translateY(860px) rotate(540deg)}}
+</style>
+<div id="gwWelcome">
+  <div class="gw-blob gw-b1"></div><div class="gw-blob gw-b2"></div><div class="gw-blob gw-b3"></div>
+  <div class="gw-wel">
+    <div class="gw-emojis"><span>🍓</span><span>🥑</span><span class="gw-wiggle">✨</span><span>🫐</span><span>🥝</span></div>
+    <div class="gw-kt gw-k1">Hey bestie</div>
+    <div class="gw-kt gw-k2">GlowBite</div>
+    <div class="gw-kt gw-k3">is here ✦</div>
+    <div class="gw-tag">your <b>glow-up</b> starts NOW 💅</div>
+    <button class="gw-btn" onclick="dismissWelcome()">let's gooo →</button>
+  </div>
+</div>
+
 <!-- INSTALL BANNER -->
 <div id="installBanner">
   <p>📲 Add GlowBite to your Home Screen for the full app experience!</p>
@@ -4461,6 +4510,30 @@ function onSignedIn(user){
   renderGreeting();
   updateHomeDashboard();
   cloudPull();
+  maybeShowWelcome();
+}
+
+function maybeShowWelcome(){
+  if(localStorage.getItem('glowbiteWelcomeSeen'))return;
+  const w=document.getElementById('gwWelcome');
+  if(!w)return;
+  // confetti in the app's accent palette
+  const cols=['#FF6B6B','#9B2FFF','#C8FF3D','#FF2D9B','#FFC857','#fff'];
+  for(let i=0;i<26;i++){
+    const c=document.createElement('span');c.className='gw-cf';
+    const shape=Math.random()>.5?'50%':'2px';
+    c.style.cssText=`left:${Math.random()*100}%;background:${cols[i%cols.length]};border-radius:${shape};animation-delay:${2.4+Math.random()*1.5}s;width:${6+Math.random()*7}px;height:${6+Math.random()*7}px`;
+    w.appendChild(c);
+  }
+  w.classList.add('show');
+}
+
+function dismissWelcome(){
+  localStorage.setItem('glowbiteWelcomeSeen','1');
+  const w=document.getElementById('gwWelcome');
+  if(!w)return;
+  w.classList.add('gw-out');
+  setTimeout(()=>{w.classList.remove('show','gw-out');},550);
 }
 
 function continueAsGuest(){

@@ -14,6 +14,8 @@
 <meta name="msapplication-TileColor" content="#C44DFF">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <title>GlowBite — Foods for Glowing Skin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
 <meta name="description" content="Eat your way to glowing skin. Free app with 50+ skin-loving foods, glow-boosting recipes, DIY face masks, cycle-phase guide and progress tracking. No ads.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GlowBite">
@@ -800,6 +802,39 @@ button,input,select{font-size:16px}
     <div class="gw-kt gw-k3">is here ✦</div>
     <div class="gw-tag">your <b>glow-up</b> starts NOW 💅</div>
     <button class="gw-btn" onclick="dismissWelcome()">let's gooo →</button>
+  </div>
+</div>
+
+<!-- FIRST-TIME HOME 'THANK YOU' -->
+<style>
+#gtThanks{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;text-align:center;padding:2.2rem;
+  background:rgba(8,4,14,.86);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+#gtThanks.show{display:flex}
+#gtThanks.gt-out{animation:gtOut .9s ease forwards}
+@keyframes gtOut{to{opacity:0;visibility:hidden}}
+.gt-wrap{position:relative;display:flex;flex-direction:column;align-items:center}
+.gt-top{font-family:'Fredoka',system-ui,sans-serif;font-size:1.5rem;font-weight:600;color:#fff;opacity:.92}
+.gt-top span{display:inline-block;opacity:0;transform:translateY(-16px) scale(0);animation:gtDrop .5s cubic-bezier(.34,1.8,.5,1) forwards}
+@keyframes gtDrop{to{opacity:1;transform:translateY(0) scale(1)}}
+.gt-big{font-family:'Fredoka',system-ui,sans-serif;font-weight:700;font-size:clamp(3rem,15vw,4rem);margin:.4rem 0 .2rem;line-height:1;display:flex;justify-content:center}
+.gt-big span{display:inline-block;opacity:0;transform:translateY(40px) scale(.3) rotate(-20deg);
+  background:linear-gradient(100deg,#FF2D9B,#FFC857 55%,#C6FF3D);-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:gtLetter .6s cubic-bezier(.34,1.9,.5,1) forwards}
+@keyframes gtLetter{60%{transform:translateY(-8px) scale(1.15) rotate(4deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+.gt-underline{height:10px;width:0;border-radius:6px;background:linear-gradient(90deg,#FF2D9B,#C6FF3D);margin:.2rem auto 0;
+  animation:gtSwipe .6s cubic-bezier(.4,0,.2,1) 2.6s forwards;box-shadow:0 0 14px rgba(255,45,155,.5)}
+@keyframes gtSwipe{to{width:230px}}
+.gt-sub{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:1rem;color:rgba(255,255,255,.6);font-weight:600;margin-top:1.6rem;opacity:0;transform:translateY(12px);animation:gtUp .7s ease 3.1s forwards}
+@keyframes gtUp{to{opacity:1;transform:translateY(0)}}
+.gt-pp{position:absolute;font-size:1.4rem;opacity:0;animation:gtPop 1.6s ease-out forwards}
+@keyframes gtPop{0%{opacity:0;transform:scale(0) translateY(0)}30%{opacity:1;transform:scale(1.2) translateY(-10px)}100%{opacity:0;transform:scale(.8) translateY(-70px)}}
+</style>
+<div id="gtThanks">
+  <div class="gt-wrap" id="gtWrap">
+    <div class="gt-top" id="gtTop"></div>
+    <div class="gt-big" id="gtBig"></div>
+    <div class="gt-underline"></div>
+    <div class="gt-sub">so glad you're here — let's glow together 💖</div>
   </div>
 </div>
 
@@ -4511,6 +4546,7 @@ function onSignedIn(user){
   updateHomeDashboard();
   cloudPull();
   maybeShowWelcome();
+  maybeShowThanks();
 }
 
 function maybeShowWelcome(){
@@ -4531,13 +4567,31 @@ function maybeShowWelcome(){
 function dismissWelcome(){
   localStorage.setItem('glowbiteWelcomeSeen','1');
   const w=document.getElementById('gwWelcome');
-  if(!w)return;
-  w.classList.add('gw-out');
-  setTimeout(()=>{w.classList.remove('show','gw-out');},550);
+  if(w){w.classList.add('gw-out');setTimeout(()=>{w.classList.remove('show','gw-out');},550);}
+  setTimeout(maybeShowThanks,650);
+}
+
+function maybeShowThanks(){
+  if(localStorage.getItem('glowbiteThanksSeen'))return;
+  const gw=document.getElementById('gwWelcome');
+  if(gw&&gw.classList.contains('show'))return; // wait for welcome to finish
+  const t=document.getElementById('gtThanks');
+  if(!t)return;
+  localStorage.setItem('glowbiteThanksSeen','1');
+  const topTxt='thanks for choosing',bigTxt='GlowBite';
+  const et=document.getElementById('gtTop'),eb=document.getElementById('gtBig');
+  et.innerHTML='';eb.innerHTML='';
+  topTxt.split('').forEach((ch,i)=>{const s=document.createElement('span');s.textContent=ch===' '?' ':ch;s.style.animationDelay=(.3+i*.03)+'s';et.appendChild(s);});
+  bigTxt.split('').forEach((ch,i)=>{const s=document.createElement('span');s.textContent=ch;s.style.animationDelay=(1.3+i*.11)+'s';eb.appendChild(s);});
+  const emo=['💖','✨','🍓','⭐','💫','🥝'],wrap=document.getElementById('gtWrap');
+  setTimeout(()=>{for(let i=0;i<10;i++){const p=document.createElement('span');p.className='gt-pp';p.textContent=emo[i%emo.length];p.style.cssText=`left:${10+Math.random()*80}%;top:${20+Math.random()*40}%;animation-delay:${Math.random()*.8}s`;wrap.appendChild(p);}},2600);
+  t.classList.add('show');
+  setTimeout(()=>{t.classList.add('gt-out');setTimeout(()=>t.classList.remove('show','gt-out'),900);},6000);
 }
 
 function continueAsGuest(){
   document.getElementById('loginScreen').classList.add('hidden');
+  setTimeout(maybeShowThanks,500);
 }
 
 function showAccountInfo(){

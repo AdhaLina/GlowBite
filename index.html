@@ -2718,11 +2718,17 @@ function closeNameModal(){
   document.getElementById('nameModalOverlay').classList.remove('open');
 }
 
+function journalDayTs(e){
+  let t=(typeof e.id==='number'&&e.id>1e12)?e.id:Date.parse(e.date||e.ts||0);
+  if(!t||isNaN(t))return 0;
+  const d=new Date(t);d.setHours(0,0,0,0);return d.getTime();
+}
+
 function updateHomeDashboard(){
   const favs=JSON.parse(localStorage.getItem('glowbiteFavs')||'[]');
   const entries=JSON.parse(localStorage.getItem('glowbiteJournal')||'[]');
   const today=new Date();today.setHours(0,0,0,0);
-  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
+  const dates=entries.map(journalDayTs).filter(Boolean);
   const unique=[...new Set(dates)].sort((a,b)=>b-a);
   let streak=0;
   for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
@@ -2795,10 +2801,10 @@ function renderWeeklyChart(){
 }
 
 function renderBadges(){
-  const favs=JSON.parse(localStorage.getItem('glowFavs')||'[]');
-  const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
+  const favs=JSON.parse(localStorage.getItem('glowbiteFavs')||'[]');
+  const entries=JSON.parse(localStorage.getItem('glowbiteJournal')||'[]');
   const today=new Date();today.setHours(0,0,0,0);
-  const dates=entries.map(e=>{const d=new Date(e.date||e.ts||0);d.setHours(0,0,0,0);return d.getTime()});
+  const dates=entries.map(journalDayTs).filter(Boolean);
   const unique=[...new Set(dates)].sort((a,b)=>b-a);
   let streak=0;
   for(let i=0;i<unique.length;i++){if(unique[i]===today.getTime()-i*86400000)streak++;else break;}
@@ -4118,6 +4124,7 @@ function saveJournalEntry(){
   localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));scheduleCloudPush();
   closeJournalModal();
   renderJournal();
+  updateHomeDashboard();
   vibe([30,20,60]);
 }
 
@@ -4126,6 +4133,7 @@ function deleteJournalEntry(id){
   journalEntries = journalEntries.filter(e=>e.id!==id);
   localStorage.setItem('glowbiteJournal', JSON.stringify(journalEntries));scheduleCloudPush();
   renderJournal();
+  updateHomeDashboard();
   vibe([20,10,20,10,40]);
 }
 
@@ -4280,27 +4288,8 @@ renderJournal();
 /* Update glow score widget counts */
 (function(){
   function updateGlowWidget(){
-    const favs=JSON.parse(localStorage.getItem('glowFavs')||'[]');
-    const sn=document.getElementById('savedNum');
-    if(sn)sn.textContent=favs.length;
-    // Simple streak: count consecutive days with journal entries
-    const entries=JSON.parse(localStorage.getItem('glowJournal')||'[]');
-    let streak=0;
-    if(entries.length){
-      const today=new Date();today.setHours(0,0,0,0);
-      const dates=entries.map(e=>new Date(e.date||e.ts||0)).map(d=>{d.setHours(0,0,0,0);return d.getTime()});
-      const unique=[...new Set(dates)].sort((a,b)=>b-a);
-      for(let i=0;i<unique.length;i++){
-        const expected=today.getTime()-i*86400000;
-        if(unique[i]===expected)streak++;else break;
-      }
-    }
-    const st=document.getElementById('streakNum');
-    if(st)st.textContent='🔥 '+streak;
-    // Glow dial score: 60 + (favs * 3) capped at 99
-    const score=Math.min(99,60+favs.length*3);
-    const dn=document.getElementById('glowDialNum');
-    if(dn)dn.textContent=score;
+    // single source of truth for streak/score/saved counts
+    updateHomeDashboard();
   }
   updateGlowWidget();
   window.updateGlowWidget=updateGlowWidget;

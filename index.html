@@ -1057,9 +1057,9 @@ button,input,select{font-size:16px}
       <div class="mni-text"><div class="mni-title" id="accountName">My Account</div><div class="mni-sub" id="accountEmail">Signed in with Google</div></div>
       <span class="mni-arrow">›</span>
     </button>
-    <button class="more-nav-item" onclick="signOut()" style="border-color:rgba(255,45,155,.2)">
+    <button class="more-nav-item" id="signOutBtn" onclick="signOut()" style="border-color:rgba(255,45,155,.2);display:none">
       <span class="mni-icon">🚪</span>
-      <div class="mni-text"><div class="mni-title" style="color:rgba(255,45,155,.8)">Sign Out</div><div class="mni-sub">You'll need to sign in again</div></div>
+      <div class="mni-text"><div class="mni-title" style="color:rgba(255,45,155,.8)">Log out</div><div class="mni-sub">You'll need to sign in again</div></div>
     </button>
     <a href="privacy.html" style="text-decoration:none">
       <div class="more-nav-item">
@@ -4702,6 +4702,8 @@ function onSignedIn(user){
       av.textContent=(firstName||'G')[0].toUpperCase();
     }
   }
+  const signOutBtn=document.getElementById('signOutBtn');
+  if(signOutBtn)signOutBtn.style.display='flex';
   const accountBtn=document.getElementById('accountBtn');
   if(accountBtn){
     accountBtn.style.display='flex';
@@ -4776,6 +4778,8 @@ function signOut(){
   clearSession();
   currentUser=null;
   localStorage.removeItem('glowbiteName');
+  const sb=document.getElementById('signOutBtn');if(sb)sb.style.display='none';
+  const ab=document.getElementById('accountBtn');if(ab)ab.style.display='none';
   document.getElementById('loginScreen').classList.remove('hidden');
 }
 

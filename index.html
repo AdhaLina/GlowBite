@@ -256,6 +256,11 @@ button,input,select{font-size:16px}
 .phase-tips-box li{padding:.28rem 0 .28rem 1.3rem;position:relative;font-size:.82rem;color:#fff;line-height:1.55}
 .phase-tips-box li::before{content:'✦';position:absolute;left:0;color:#FF3E9A;font-size:.55rem;top:.42rem}
 .disclaimer{font-size:.72rem;color:rgba(255,255,255,.4);text-align:center;padding:1rem;line-height:1.55}
+.disclaimer-body{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:1.2rem 1.3rem;margin:0 1rem 1.4rem;font-size:.86rem;color:rgba(255,255,255,.75);line-height:1.65}
+.disclaimer-body p{margin-bottom:.85rem}
+.disclaimer-body strong{color:#fff}
+.disclaimer-body ul{margin:0 0 .85rem 1.1rem}
+.disclaimer-body li{margin-bottom:.4rem}
 .phase-btn.sel .phase-moon{animation:moonBob .7s ease-in-out infinite alternate}
 @keyframes moonBob{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-5px) rotate(4deg)}}
 
@@ -724,7 +729,7 @@ button,input,select{font-size:16px}
   </button>
   <div class="login-loading" id="loginLoading">Signing you in…</div>
   <button class="login-guest-btn" onclick="continueAsGuest()">Continue without signing in</button>
-  <div class="login-terms">By continuing you agree to GlowBite's <a href="privacy.html" style="color:rgba(255,255,255,.45);text-underline-offset:2px">Privacy Policy</a>. Your data is saved securely and never sold.</div>
+  <div class="login-terms">By continuing you agree to GlowBite's <a href="privacy.html" style="color:rgba(255,255,255,.45);text-underline-offset:2px">Privacy Policy</a>. Your data is saved securely and never sold. GlowBite offers general wellness information, not medical advice.</div>
 </div>
 
 <!-- SPLASH SCREEN -->
@@ -840,6 +845,7 @@ button,input,select{font-size:16px}
   <div class="main-pad">
     <p class="results-count" id="resultsCount"></p>
     <div class="food-grid" id="foodGrid"></div>
+    <p class="disclaimer">ℹ️ General wellness information, not medical advice. See Health Disclaimer in More.</p>
   </div>
 </div>
 
@@ -890,6 +896,7 @@ button,input,select{font-size:16px}
       <div id="ulMeals"></div>
       <div class="concern-row" id="concernRow"></div>
       <div class="meal-grid" id="mealGrid"></div>
+      <p class="disclaimer">ℹ️ Recipes and masks are general suggestions, not medical advice. Patch-test masks on a small area of skin first.</p>
     </div>
   </div>
 </div>
@@ -914,6 +921,11 @@ button,input,select{font-size:16px}
     <button class="more-nav-item" onclick="switchMoreSub('journal',this)">
       <span class="mni-icon">📓</span>
       <div class="mni-text"><div class="mni-title">Skin Journal</div><div class="mni-sub">Track your skin's journey</div></div>
+      <span class="mni-arrow">›</span>
+    </button>
+    <button class="more-nav-item" onclick="switchMoreSub('disclaimer',this)">
+      <span class="mni-icon">⚕️</span>
+      <div class="mni-text"><div class="mni-title">Health Disclaimer</div><div class="mni-sub">What GlowBite is — and isn't</div></div>
       <span class="mni-arrow">›</span>
     </button>
     <button class="more-nav-item" onclick="toggleQrShare()">
@@ -995,6 +1007,26 @@ button,input,select{font-size:16px}
   </div>
 
   <!-- JOURNAL SUB-PANEL -->
+  <div class="msub" id="msub-disclaimer">
+    <div class="journal-wrap">
+      <div class="sec-hero" style="padding-top:.5rem">
+        <h2>⚕️ Health Disclaimer</h2>
+        <p>Please read — it keeps expectations honest</p>
+      </div>
+      <div class="disclaimer-body">
+        <p><strong>GlowBite provides general wellness and nutrition information for educational purposes only.</strong> It is not medical advice, and it is not a substitute for consultation with a qualified healthcare professional.</p>
+        <p>The foods, recipes, DIY masks and cycle-phase suggestions in this app describe general properties of everyday foods. Individual results vary — skin is affected by genetics, hormones, medication, environment and much more than diet alone.</p>
+        <p><strong>Always consult a doctor or dermatologist before:</strong></p>
+        <ul>
+          <li>Making significant changes to your diet</li>
+          <li>Using food-based masks if you have sensitive skin, eczema, or active acne</li>
+          <li>Acting on any suggestion if you are pregnant, breastfeeding, diabetic, or have a medical condition or food allergy</li>
+        </ul>
+        <p>If you have a persistent or worsening skin condition, please seek professional medical care — an app cannot diagnose or treat it.</p>
+        <p>By using GlowBite you acknowledge that you use its suggestions at your own discretion and risk.</p>
+      </div>
+    </div>
+  </div>
   <div class="msub" id="msub-journal">
     <div class="journal-wrap">
       <div class="sec-hero" style="padding-top:.5rem">

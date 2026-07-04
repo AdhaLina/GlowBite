@@ -3890,7 +3890,12 @@ async function cloudPush(){
       localStorage.setItem('glowbiteSyncAt',String(Date.parse(now)));
       setSyncStatus('☁️ synced');
     }else{
-      setSyncStatus('☁️ sync failed — will retry');
+      let msg='';
+      try{msg=(await r.json()).message||'';}catch(e){}
+      if(r.status===404)setSyncStatus('☁️ sync failed (404): storage table not found — the SQL may have run in a different Supabase project');
+      else if(r.status===401)setSyncStatus('☁️ sync failed (401): session rejected — try signing out and back in');
+      else if(r.status===403||r.status===42501)setSyncStatus('☁️ sync failed (403): permission denied — check the table policies');
+      else setSyncStatus('☁️ sync failed ('+r.status+(msg?': '+msg.slice(0,80):'')+')');
     }
   }catch(e){setSyncStatus('☁️ offline — will retry');}
 }

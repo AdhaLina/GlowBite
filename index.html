@@ -671,7 +671,7 @@ button,input,select{font-size:16px}
 
 /* ─── BOTTOM TABS ─── */
 .bottom-tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(9,3,18,.94);border-top:1px solid rgba(255,255,255,.07);padding:.42rem 0 calc(.42rem + env(safe-area-inset-bottom,0px));z-index:200;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
-.btab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.5rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:.2rem 0;font-family:inherit;}
+.btab{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;color:rgba(255,255,255,.3);font-size:.5rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:.2rem 0;font-family:inherit;}
 .btab.active{color:#FF2D9B;}
 .btab-scan-ico{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(120deg,#FF2D9B,#9B2FFF);box-shadow:0 4px 20px rgba(255,45,155,.45),0 0 0 4px rgba(9,3,18,.94);margin-top:-18px;font-size:1.25rem;}
 .btab-scan.active{color:#C8FF3D;}
@@ -683,6 +683,27 @@ button,input,select{font-size:16px}
 .home-brand-txt{font-size:1.1rem;font-weight:900;background:linear-gradient(100deg,#fff 20%,#FFB3DA 55%,#C8FF3D 90%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.01em;}
 .home-ava{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#FF2D9B,#9B2FFF);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:#fff;}
 .home-scroll{padding:0 1rem 6rem;}
+/* WHAT'S NEW */
+.home-actions{display:flex;align-items:center;gap:.55rem;}
+.home-bell{position:relative;width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.05rem;cursor:pointer;}
+.home-bell .bell-dot{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:#FF2D9B;border:2px solid #0D0618;box-shadow:0 0 8px #FF2D9B;display:none;}
+.home-bell.has-new .bell-dot{display:block;}
+.whatsnew{margin:0 0 1rem;border-radius:18px;padding:.95rem 1rem .9rem;position:relative;background:linear-gradient(135deg,rgba(255,45,155,.2),rgba(155,47,255,.2));border:1px solid rgba(255,200,87,.4);box-shadow:0 10px 30px rgba(155,47,255,.28);display:none;}
+.whatsnew.show{display:block;animation:fadeUp .35s ease;}
+.wn-x{position:absolute;top:.45rem;right:.6rem;color:rgba(255,255,255,.5);font-size:1.2rem;font-weight:700;cursor:pointer;line-height:1;background:none;border:none;font-family:inherit;}
+.wn-tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#0D0618;background:#FFC857;padding:.2rem .5rem;border-radius:20px;margin-bottom:.55rem;}
+.wn-title{color:#fff;font-weight:900;font-size:1rem;margin-bottom:.25rem;}
+.wn-body{color:rgba(255,255,255,.75);font-size:.8rem;line-height:1.4;margin-bottom:.7rem;}
+.wn-body b{color:#fff;}
+.wn-btn{display:inline-block;background:linear-gradient(120deg,#FF2D9B,#9B2FFF);color:#fff;font-weight:900;font-size:.8rem;padding:.55rem 1rem;border-radius:24px;border:none;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(255,45,155,.4);}
+.new-badge{position:absolute;top:0;left:50%;transform:translateX(-50%);background:linear-gradient(120deg,#FF2D9B,#9B2FFF);color:#fff;font-size:.5rem;font-weight:900;letter-spacing:.03em;padding:.08rem .28rem;border-radius:7px;box-shadow:0 0 8px rgba(255,45,155,.6);white-space:nowrap;}
+.wn-list{display:flex;flex-direction:column;gap:.65rem;margin-top:.2rem;}
+.wn-item{display:flex;gap:.8rem;align-items:flex-start;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:.75rem .85rem;text-align:left;}
+.wn-item .wi-e{font-size:1.6rem;flex-shrink:0;}
+.wn-item .wi-t{font-weight:800;color:#fff;font-size:.9rem;}
+.wn-item .wi-d{font-size:.75rem;color:rgba(255,255,255,.55);margin-top:.15rem;line-height:1.35;}
+.wn-item .wi-date{font-size:.62rem;color:#FFC857;font-weight:800;margin-top:.35rem;text-transform:uppercase;letter-spacing:.04em;}
+.wn-empty{text-align:center;color:rgba(255,255,255,.4);font-size:.85rem;padding:1.5rem 0;}
 .home-date-lbl{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:.15rem;}
 .home-greeting{font-size:1.55rem;font-weight:900;letter-spacing:-.02em;background:linear-gradient(90deg,#fff,#FFB3DA);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:.75rem;cursor:pointer;display:flex;align-items:center;gap:.45rem;}
 .home-greeting::after{content:'✎';font-size:.85rem;opacity:.35;font-style:normal;background:none;-webkit-background-clip:initial;background-clip:initial;color:rgba(255,255,255,.35);}
@@ -853,11 +874,21 @@ button,input,select{font-size:16px}
 <div class="section active" id="sec-home">
   <div class="home-top">
     <div class="home-brand-txt">GlowBite ✦</div>
-    <div class="home-ava">G</div>
+    <div class="home-actions">
+      <button class="home-bell" id="homeBell" onclick="openWhatsNew()" aria-label="What's new" title="What's new">🔔<span class="bell-dot"></span></button>
+      <div class="home-ava">G</div>
+    </div>
   </div>
   <div class="home-scroll">
     <div class="home-date-lbl" id="homeDate">Friday, July 4</div>
     <div class="home-greeting" id="homeGreeting" onclick="editGreetingName()" title="Tap to set your name"><span id="greetingText">Hey, you ✦</span></div>
+    <div class="whatsnew" id="whatsNew">
+      <button class="wn-x" onclick="dismissWhatsNew()" aria-label="Dismiss">×</button>
+      <span class="wn-tag">✨ What's New</span>
+      <div class="wn-title">Fresh glow just dropped 🎉</div>
+      <div class="wn-body" id="wnBody"></div>
+      <button class="wn-btn" onclick="seeWhatsNew()">See what's new →</button>
+    </div>
     <div class="glow-score-wrap" style="padding:0 0 .75rem">
       <div class="glow-score-card">
         <div class="glow-score-inner">
@@ -1156,6 +1187,19 @@ button,input,select{font-size:16px}
     <div class="name-modal-actions">
       <button class="name-save-btn" onclick="saveGreetingName()">Save ✦</button>
       <button class="name-cancel-btn" onclick="closeNameModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT'S NEW MODAL -->
+<div class="name-modal-overlay" id="whatsNewOverlay" onclick="if(event.target===this)closeWhatsNew()">
+  <div class="name-modal">
+    <div class="name-modal-handle"></div>
+    <h3>✨ What's New</h3>
+    <p>The latest glow additions to GlowBite</p>
+    <div class="wn-list" id="wnList"></div>
+    <div class="name-modal-actions" style="margin-top:1rem">
+      <button class="name-save-btn" onclick="closeWhatsNew()">Got it ✦</button>
     </div>
   </div>
 </div>
@@ -3458,6 +3502,7 @@ function switchMainTab(id,btn){
   document.getElementById('sec-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
   if(id==='progress')renderProgress();
+  markUpdatesSeen(unseenUpdates().filter(u=>u.tab===id).map(u=>u.id));
   window.scrollTo(0,0);
 }
 function switchSection(id,btn){switchMainTab(id,btn);}
@@ -3488,6 +3533,69 @@ function renderHomeDate(){
   const d=new Date();
   el.textContent=d.toLocaleDateString('en-GB',{weekday:'long',month:'long',day:'numeric'});
 }
+
+/* ══════════════════════════════════════
+   WHAT'S NEW  (in-app content updates)
+══════════════════════════════════════ */
+// ► When you add a recipe, mask or feature, add an entry at the TOP with a
+//   unique id. The bell dot, Home banner and tab "NEW" badge update themselves.
+const UPDATES=[
+  {id:'kiwi-chia-pudding',date:'2026-07-07',tab:'recipes',emoji:'🍮',
+   title:'Kiwi Chia Glow Pudding',
+   desc:'A new make-ahead recipe — Vitamin C for collagen plus omega-3 hydration.'}
+];
+
+function seenUpdateIds(){try{return JSON.parse(localStorage.getItem('glowbiteUpdatesSeen')||'[]');}catch(e){return[];}}
+function unseenUpdates(){const s=seenUpdateIds();return UPDATES.filter(u=>!s.includes(u.id));}
+function markUpdatesSeen(ids){
+  if(!ids.length)return;
+  const s=new Set(seenUpdateIds());
+  ids.forEach(i=>s.add(i));
+  localStorage.setItem('glowbiteUpdatesSeen',JSON.stringify([...s]));
+  refreshWhatsNew();
+}
+function niceUpdateDate(d){try{return new Date(d).toLocaleDateString('en-GB',{month:'short',day:'numeric'});}catch(e){return d;}}
+
+function refreshWhatsNew(){
+  const unseen=unseenUpdates();
+  const bell=document.getElementById('homeBell');
+  if(bell)bell.classList.toggle('has-new',unseen.length>0);
+  const banner=document.getElementById('whatsNew');
+  if(banner){
+    if(unseen.length){
+      const names=unseen.map(u=>`<b>${u.title}</b> ${u.emoji}`).join(' and ');
+      const body=document.getElementById('wnBody');
+      if(body)body.innerHTML='We added '+names+' since your last visit.';
+      banner.classList.add('show');
+    }else banner.classList.remove('show');
+  }
+  const unseenTabs=new Set(unseen.map(u=>u.tab));
+  document.querySelectorAll('.btab').forEach(b=>{
+    const has=unseenTabs.has(b.getAttribute('data-tab'));
+    b.classList.toggle('has-new',has);
+    let badge=b.querySelector('.new-badge');
+    if(has&&!badge){badge=document.createElement('span');badge.className='new-badge';badge.textContent='NEW';b.appendChild(badge);}
+    if(!has&&badge)badge.remove();
+  });
+}
+
+function openWhatsNew(){
+  const list=document.getElementById('wnList');
+  if(list){
+    list.innerHTML=UPDATES.length
+      ? UPDATES.map(u=>`<div class="wn-item"><span class="wi-e">${u.emoji}</span><div><div class="wi-t">${u.title}</div><div class="wi-d">${u.desc}</div><div class="wi-date">${niceUpdateDate(u.date)}</div></div></div>`).join('')
+      : '<div class="wn-empty">Nothing new right now — check back soon ✦</div>';
+  }
+  document.getElementById('whatsNewOverlay').classList.add('open');
+  markUpdatesSeen(UPDATES.map(u=>u.id));
+}
+function closeWhatsNew(){document.getElementById('whatsNewOverlay').classList.remove('open');}
+function seeWhatsNew(){
+  const target=unseenUpdates()[0];
+  if(target){switchMainTab(target.tab,document.querySelector('.btab[data-tab="'+target.tab+'"]'));}
+  markUpdatesSeen(UPDATES.map(u=>u.id));
+}
+function dismissWhatsNew(){markUpdatesSeen(unseenUpdates().map(u=>u.id));}
 
 function renderGreeting(){
   const name=localStorage.getItem('glowbiteName')||'';
@@ -4810,6 +4918,7 @@ initAuth();
 renderHomeDate();
 renderGreeting();
 updateHomeDashboard();
+refreshWhatsNew();
 renderGlowTip();
 renderFoods();
 renderGlowPicks();

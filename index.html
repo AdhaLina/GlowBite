@@ -5298,5 +5298,20 @@ if('serviceWorker' in navigator){
     <span class="btab-icon">⋯</span><span>More</span>
   </button>
 </nav>
+
+<!-- Cloudflare Web Analytics (privacy-friendly, cookieless, private to the owner) -->
+<script>
+  // ► Paste your Cloudflare Web Analytics token between the quotes to switch it on.
+  //   Get it free: dash.cloudflare.com → Web Analytics → Add a site → copy the token.
+  //   While this is empty, nothing loads and no data is sent.
+  var CF_ANALYTICS_TOKEN = "";
+  if (CF_ANALYTICS_TOKEN) {
+    var cfa = document.createElement('script');
+    cfa.defer = true;
+    cfa.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    cfa.setAttribute('data-cf-beacon', JSON.stringify({ token: CF_ANALYTICS_TOKEN }));
+    document.head.appendChild(cfa);
+  }
+</script>
 </body>
 </html>
